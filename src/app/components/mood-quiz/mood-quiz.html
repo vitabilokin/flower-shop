@@ -1,0 +1,21 @@
+<section class="quiz" id="quiz">
+  <div class="container">
+    <span class="quiz__eyebrow">Підбір букета</span>
+    <h2 class="quiz__title">Не знаєте, що обрати?</h2>
+
+    <div class="quiz__progress">
+      @for (q of questions; track $index) {
+        <span class="quiz__dot" [class.quiz__dot--active]="$index <= step()"></span>
+      }
+    </div>
+
+    <div class="quiz__card">
+      <h3 class="quiz__question">{{ questions[step()].question }}</h3>
+      <div class="quiz__options">
+        @for (option of questions[step()].options; track option) {
+          <button class="chip" (click)="select(option)">{{ option }}</button>
+        }
+      </div>
+    </div>
+  </div>
+</section>

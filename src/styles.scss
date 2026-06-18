@@ -1,0 +1,183 @@
+/* ===== Posy design tokens ===== */
+:root {
+  /* colors */
+  --paper: #f7f2ea;
+  --paper-2: #fffdf9;
+  --paper-3: #f1e9da;
+  --ink: #16241f;
+  --pine: #0f2c26;
+  --pine-2: #0a201b;
+  --muted: #6f6256;
+  --muted-2: #9b8e7e;
+  --line: #e9ddca;
+  --line-strong: #d9c9af;
+
+  --pink: #ff4d8d;
+  --pink-deep: #ec3b78;
+  --pink-press: #d12d66;
+  --pink-100: #ffe1ec;
+  --pink-300: #ff9cbf;
+
+  --teal: #07b3a3;
+  --teal-deep: #069488;
+  --teal-100: #c9f2ee;
+  --teal-300: #5fd6cb;
+
+  --yellow: #ffce3f;
+
+  --focus-ring: rgba(255, 77, 141, 0.45);
+  --text-on-dark: #f4efe6;
+
+  /* fonts */
+  --font-display: 'Syne', system-ui, sans-serif;
+  --font-body: 'Manrope', system-ui, sans-serif;
+
+  /* type scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.25rem;
+  --text-3xl: 3rem;
+  --text-4xl: 4rem;
+
+  /* spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+  --space-7: 4rem;
+  --space-8: 5rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  --section-y: 6rem;
+  --container: 1180px;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 2px 8px -3px rgba(22, 36, 31, 0.18);
+  --shadow-md: 0 10px 28px -16px rgba(22, 36, 31, 0.28);
+  --shadow-lg: 0 24px 60px -28px rgba(22, 36, 31, 0.38);
+  --shadow-accent: 0 14px 30px -12px rgba(255, 77, 141, 0.55);
+
+  /* motion */
+  --dur-fast: 140ms;
+  --dur-base: 240ms;
+  --dur-slow: 420ms;
+  --dur-reveal: 680ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bloom: cubic-bezier(0.34, 1.32, 0.5, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  margin: 0;
+  color: var(--ink);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+/* shared button styles, used across components */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.9rem 1.6rem;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  transition: background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--pink);
+  color: #fff;
+  box-shadow: var(--shadow-accent);
+}
+
+.btn-primary:hover {
+  background: var(--pink-deep);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  background: var(--pink-press);
+  transform: scale(0.97);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}

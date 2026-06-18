@@ -1,0 +1,37 @@
+<section class="contacts" id="contacts">
+  <div class="container contacts__grid">
+    <div class="contacts__info">
+      <span class="contacts__eyebrow">Контакти</span>
+      <h2 class="contacts__title">Завжди на зв'язку</h2>
+
+      <a class="contacts__phone" href="tel:+380670000000">+38 (067) 000-00-00</a>
+
+      <div class="contacts__socials">
+        <a href="#" aria-label="Viber"><img src="https://cdn.simpleicons.org/viber/07b3a3" alt="Viber" /></a>
+        <a href="#" aria-label="Telegram"><img src="https://cdn.simpleicons.org/telegram/07b3a3" alt="Telegram" /></a>
+        <a href="#" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/ff4d8d" alt="Instagram" /></a>
+      </div>
+    </div>
+
+    <form class="contacts__form" (ngSubmit)="submit()">
+      <h3 class="contacts__form-title">Нагадай мені про дату</h3>
+
+      <label>
+        Ім'я
+        <input type="text" name="name" [(ngModel)]="name" required placeholder="Ваше ім'я" />
+      </label>
+
+      <label>
+        Дата
+        <input type="date" name="date" [(ngModel)]="date" required />
+      </label>
+
+      <label>
+        Контакт (телефон або Telegram)
+        <input type="text" name="contact" [(ngModel)]="contact" required placeholder="+380... або @username" />
+      </label>
+
+      <button type="submit" class="btn btn-primary">Нагадати мені</button>
+    </form>
+  </div>
+</section>
