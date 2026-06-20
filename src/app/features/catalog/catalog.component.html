@@ -13,9 +13,11 @@
                 <span class="card__tag card__tag--{{ b.tagTone }}">{{ b.tag }}</span>
               }
             </div>
-            <h3 class="card__name">{{ b.name }}</h3>
-            <p class="card__price">{{ b.price }} ₴</p>
-            <p class="card__subtitle">{{ b.subtitle }}</p>
+            <div class="card__text">
+              <h3 class="card__name">{{ b.name }}</h3>
+              <p class="card__price">{{ b.price }} ₴</p>
+              <p class="card__subtitle">{{ b.subtitle }}</p>
+            </div>
           </a>
           <div class="card__actions">
             <button class="btn btn-primary card__btn" (click)="addToCart(b)">
