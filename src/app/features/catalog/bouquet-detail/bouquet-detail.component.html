@@ -1,0 +1,32 @@
+@if (bouquet) {
+  <section class="bouquet-detail">
+    <div class="container bouquet-detail__inner">
+      <div class="bouquet-detail__photo">
+        <img [src]="bouquet.photo" [alt]="bouquet.name" />
+        @if (bouquet.tag) {
+          <span class="bouquet-detail__tag bouquet-detail__tag--{{ bouquet.tagTone }}">{{ bouquet.tag }}</span>
+        }
+      </div>
+
+      <div class="bouquet-detail__info">
+        <a class="bouquet-detail__back" routerLink="/catalog">← Назад до каталогу</a>
+        <h1 class="bouquet-detail__name">{{ bouquet.name }}</h1>
+        <p class="bouquet-detail__subtitle">{{ bouquet.subtitle }}</p>
+        <p class="bouquet-detail__price">{{ bouquet.price }} ₴</p>
+        <div class="bouquet-detail__actions">
+          <button class="btn btn-primary" (click)="addToCart()">
+            {{ added() ? 'Додано ✓' : 'Додати в корзину' }}
+          </button>
+          <button class="btn btn-ghost-pink" (click)="quickOrder()">Швидке замовлення</button>
+        </div>
+      </div>
+    </div>
+  </section>
+} @else {
+  <section class="bouquet-detail bouquet-detail--empty">
+    <div class="container">
+      <p>Букет не знайдено.</p>
+      <a class="btn btn-primary" routerLink="/catalog">До каталогу</a>
+    </div>
+  </section>
+}

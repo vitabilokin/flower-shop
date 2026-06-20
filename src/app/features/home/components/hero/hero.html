@@ -1,0 +1,28 @@
+<section class="hero" id="hero">
+  <div class="hero__bg"></div>
+  <div class="hero__veil"></div>
+
+  <div class="hero__blooms">
+    @for (f of flowers; track f) {
+      <svg class="bloom bloom--{{ f }}" viewBox="0 0 100 100">
+        <circle class="bloom__petal" cx="50" cy="28" r="16" />
+        <circle class="bloom__petal" cx="69" cy="40" r="16" />
+        <circle class="bloom__petal" cx="62" cy="62" r="16" />
+        <circle class="bloom__petal" cx="38" cy="62" r="16" />
+        <circle class="bloom__petal" cx="31" cy="40" r="16" />
+        <circle class="bloom__center" cx="50" cy="50" r="10" />
+      </svg>
+    }
+  </div>
+
+  <div class="hero__content">
+    <h1 class="hero__title">Квіти, що говорять за вас</h1>
+    <p class="hero__subtitle">
+      Свіжі букети ручної роботи — збираємо щоранку й доставляємо по місту за годину.
+    </p>
+    <div class="hero__actions">
+      <button class="btn btn-primary" routerLink="/catalog">Дивитись каталог</button>
+      <button class="btn btn-ghost" routerLink="/quiz">Підібрати за настроєм</button>
+    </div>
+  </div>
+</section>

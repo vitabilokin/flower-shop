@@ -1,0 +1,23 @@
+<section class="top-bouquets">
+  <div class="container">
+    <span class="top-bouquets__eyebrow">Топ продажів</span>
+    <h2 class="top-bouquets__title">Найулюбленіші букети</h2>
+
+    <div class="top-bouquets__grid">
+      @for (b of bouquets; track b.id) {
+        <a class="top-card" [routerLink]="['/catalog', b.id]">
+          <div class="top-card__photo">
+            <img [src]="b.photo" [alt]="b.name" loading="lazy" />
+            @if (b.tag) {
+              <span class="top-card__tag top-card__tag--{{ b.tagTone }}">{{ b.tag }}</span>
+            }
+          </div>
+          <h3 class="top-card__name">{{ b.name }}</h3>
+          <p class="top-card__price">{{ b.price }} ₴</p>
+        </a>
+      }
+    </div>
+
+    <a class="top-bouquets__more" routerLink="/catalog">Дивитись весь каталог →</a>
+  </div>
+</section>

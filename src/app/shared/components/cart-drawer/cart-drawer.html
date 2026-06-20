@@ -1,0 +1,70 @@
+<div class="cart-overlay" [class.cart-overlay--closing]="closing()" (click)="requestClose()"></div>
+
+<aside class="cart-drawer" [class.cart-drawer--closing]="closing()">
+  <header class="cart-drawer__header">
+    <h2>Моє замовлення</h2>
+    <button class="cart-drawer__close" (click)="requestClose()" aria-label="Закрити">×</button>
+  </header>
+
+  @if (cartService.cartItems().length === 0) {
+    <div class="cart-drawer__empty">
+      <svg width="80" height="80" viewBox="0 0 100 100" fill="none">
+        <g fill="#ff9cbf">
+          <circle cx="50" cy="28" r="16" />
+          <circle cx="69" cy="40" r="16" />
+          <circle cx="62" cy="62" r="16" />
+          <circle cx="38" cy="62" r="16" />
+          <circle cx="31" cy="40" r="16" />
+        </g>
+        <circle cx="50" cy="50" r="10" fill="#ffce3f" />
+      </svg>
+      <p>Тут поки порожньо</p>
+      <a class="btn btn-primary" routerLink="/catalog" (click)="requestClose()">Перейти до каталогу</a>
+    </div>
+  } @else {
+    <div class="cart-drawer__list">
+      @for (item of cartService.cartItems(); track item.id) {
+        <div class="cart-item">
+          @if (item.imageUrl) {
+            <img class="cart-item__photo" [src]="item.imageUrl" [alt]="item.name" />
+          }
+          <div class="cart-item__info">
+            <p class="cart-item__name">{{ item.name }}</p>
+            <p class="cart-item__price">{{ item.price }} ₴ / шт</p>
+
+            <div class="cart-item__qty">
+              <button (click)="decrement(item)" aria-label="Зменшити">−</button>
+              <span>{{ item.quantity }}</span>
+              <button (click)="increment(item)" aria-label="Збільшити">+</button>
+            </div>
+          </div>
+          <button class="cart-item__remove" (click)="remove(item)" aria-label="Видалити">×</button>
+        </div>
+      }
+    </div>
+
+    <footer class="cart-drawer__footer">
+      <p class="cart-drawer__total">Разом: {{ cartService.totalPrice() }} грн</p>
+
+      <a
+        class="btn cart-drawer__btn cart-drawer__btn--telegram"
+        [href]="telegramUrl(cartService.getTelegramMessage())"
+        target="_blank"
+        rel="noopener"
+      >
+        Замовити в Telegram
+      </a>
+
+      <a
+        class="btn cart-drawer__btn cart-drawer__btn--viber"
+        [href]="viberUrl(cartService.getViberMessage())"
+        target="_blank"
+        rel="noopener"
+      >
+        Замовити у Viber
+      </a>
+
+      <a class="btn btn-primary cart-drawer__btn" href="tel:+380670000000">Подзвонити</a>
+    </footer>
+  }
+</aside>
