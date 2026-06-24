@@ -30,6 +30,10 @@ export const routes: Routes = [
       import('./features/constructor/constructor.component').then((m) => m.ConstructorComponent),
   },
   {
+    path: 'reminder',
+    loadComponent: () => import('./features/reminder/reminder.component').then((m) => m.ReminderComponent),
+  },
+  {
     path: '**',
     loadComponent: () => import('./features/not-found/not-found.component').then((m) => m.NotFoundComponent),
   },

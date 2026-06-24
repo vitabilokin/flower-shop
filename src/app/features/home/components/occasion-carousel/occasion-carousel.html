@@ -1,0 +1,22 @@
+<section class="occasions">
+  <div class="container occasions__head">
+    <h2 class="occasions__title">Квіти для кожного приводу</h2>
+  </div>
+
+  <div class="container occasions__body">
+    <button class="occasions__arrow occasions__arrow--prev" (click)="scroll(-1)" aria-label="Назад">‹</button>
+
+    <div class="occasions__track" #track>
+      @for (card of occasions; track card.id) {
+        <button class="occasion-card" (click)="open(card)">
+          <span class="occasion-card__photo">
+            <img [src]="card.img" [alt]="card.name" loading="lazy" />
+          </span>
+          <span class="occasion-card__name">{{ card.name }}</span>
+        </button>
+      }
+    </div>
+
+    <button class="occasions__arrow occasions__arrow--next" (click)="scroll(1)" aria-label="Далі">›</button>
+  </div>
+</section>

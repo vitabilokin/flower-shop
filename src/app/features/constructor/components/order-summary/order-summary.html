@@ -1,0 +1,56 @@
+<div class="summary">
+  <h2 class="summary__title">Ваше замовлення</h2>
+
+  @if (constructorService.totalCount() === 0) {
+    <p class="summary__empty">Додай квіти щоб побачити вартість</p>
+  } @else {
+    <div class="summary__list">
+      @for (group of groupedFlowers(); track group.flower.id) {
+        <div class="summary-item">
+          <span class="summary-item__dot" [style.background]="group.flower.petalColor"></span>
+          <div class="summary-item__info">
+            <span class="summary-item__name">
+              {{ group.flower.name }} @if (group.count > 1) {
+                × {{ group.count }}
+              }
+            </span>
+            <span class="summary-item__price">{{ group.totalPrice }} ₴</span>
+          </div>
+
+          @if (group.count > 1) {
+            <div class="summary-item__qty">
+              <button (click)="removeOne(group.flower.id)" aria-label="Зменшити">−</button>
+              <button (click)="addOne(group.flower)" aria-label="Збільшити" [disabled]="!constructorService.canAddMore()">+</button>
+            </div>
+          } @else {
+            <button class="summary-item__remove" (click)="removeOne(group.flower.id)" aria-label="Видалити">×</button>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="summary__extras">
+      <div class="summary__extra-row">
+        <span>Упаковка: {{ constructorService.selectedWrapping().name }}</span>
+        <span>{{ constructorService.selectedWrapping().price > 0 ? '+' + constructorService.selectedWrapping().price + ' грн' : 'безкоштовно' }}</span>
+      </div>
+      <div class="summary__extra-row">
+        <span>Стрічка: {{ constructorService.selectedRibbon().name }}</span>
+      </div>
+    </div>
+
+    <div class="summary__total">Разом: {{ constructorService.totalPrice() }} грн</div>
+
+    <div class="summary__actions">
+      <a class="btn summary__btn summary__btn--telegram" [href]="telegramUrl()" target="_blank" rel="noopener">
+        Замовити в Telegram
+      </a>
+      <a class="btn summary__btn summary__btn--viber" [href]="viberUrl()" target="_blank" rel="noopener">
+        Замовити у Viber
+      </a>
+      <button class="btn btn-ghost-pink summary__btn" (click)="addToCart()">
+        {{ addedToCart() ? 'Додано ✓' : 'Додати до кошика' }}
+      </button>
+    </div>
+  }
+</div>

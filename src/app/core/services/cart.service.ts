@@ -1,5 +1,4 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { Bouquet } from './bouquet.service';
 
 export interface CartItem {
   id: number;
@@ -7,6 +6,14 @@ export interface CartItem {
   price: number;
   quantity: number;
   imageUrl?: string;
+}
+
+/** Anything addable to the cart only needs to look like this — a catalog Bouquet already does. */
+export interface CartAddable {
+  id: number;
+  name: string;
+  price: number;
+  photo?: string;
 }
 
 // TODO: replace with the real Telegram username before going live.
@@ -29,7 +36,7 @@ export class CartService {
   readonly telegramUsername = TELEGRAM_USERNAME;
   readonly viberPhone = VIBER_PHONE;
 
-  add(bouquet: Bouquet): void {
+  add(bouquet: CartAddable): void {
     const existing = this.items().find((i) => i.id === bouquet.id);
     if (existing) {
       this.items.update((items) =>
@@ -80,7 +87,7 @@ export class CartService {
     return this.getTelegramMessage();
   }
 
-  getSingleItemMessage(bouquet: Bouquet): string {
+  getSingleItemMessage(bouquet: CartAddable): string {
     return encodeURIComponent(
       `Привіт! Хочу замовити:\n— "${bouquet.name}" × 1 — ${bouquet.price} грн\nРазом: ${bouquet.price} грн`,
     );

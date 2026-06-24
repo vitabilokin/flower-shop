@@ -1,0 +1,101 @@
+<div class="palette">
+  <div class="palette__tabs">
+    @for (tab of tabs; track tab.id) {
+      <button class="palette__tab" [class.palette__tab--active]="activeTab() === tab.id" (click)="setTab(tab.id)">
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+
+  <div class="palette__body">
+    @if (activeTab() === 'flowers') {
+      @for (group of constructorService.flowerGroups; track group.type) {
+        <div class="flower-group" [class.flower-group--open]="isGroupOpen(group.type)">
+          <button class="flower-group__head" (click)="toggleGroup(group.type)">
+            <span>{{ group.label }}</span>
+            <span class="flower-group__chevron">⌄</span>
+          </button>
+
+          @if (isGroupOpen(group.type)) {
+            <div class="flower-group__grid">
+              @for (flower of flowersOf(group.type); track flower.id) {
+                <button
+                  class="flower-card"
+                  [class.flower-card--disabled]="!constructorService.canAddMore()"
+                  [disabled]="!constructorService.canAddMore()"
+                  (click)="addFlower(flower)"
+                >
+                  <svg
+                    class="flower-card__icon"
+                    viewBox="-25 -25 50 50"
+                    appFlowerIcon
+                    [type]="flower.type"
+                    [petalColor]="flower.petalColor"
+                    [centerColor]="flower.centerColor"
+                    [showStem]="false"
+                  ></svg>
+                  <span class="flower-card__name">{{ flower.name }}</span>
+                  <span class="flower-card__price">{{ flower.price }} ₴</span>
+                </button>
+              }
+            </div>
+          }
+        </div>
+      }
+    }
+
+    @if (activeTab() === 'wrapping') {
+      <div class="wrapping-list">
+        @for (option of constructorService.wrappingOptions; track option.id) {
+          <button
+            class="wrapping-card"
+            [class.wrapping-card--active]="constructorService.selectedWrapping().id === option.id"
+            (click)="selectWrapping(option)"
+          >
+            <span class="wrapping-card__swatch" [style.background]="option.color"></span>
+            <span class="wrapping-card__info">
+              <span class="wrapping-card__name">{{ option.name }}</span>
+              <span class="wrapping-card__desc">{{ option.description }}</span>
+            </span>
+            <span class="wrapping-card__price">{{ option.price > 0 ? '+' + option.price + ' грн' : 'безкоштовно' }}</span>
+          </button>
+        }
+      </div>
+    }
+
+    @if (activeTab() === 'ribbon') {
+      <div class="ribbon-grid">
+        @for (option of constructorService.ribbonOptions; track option.id) {
+          <button class="ribbon-swatch" [title]="option.name" (click)="selectRibbon(option)">
+            <span
+              class="ribbon-swatch__circle"
+              [class.ribbon-swatch__circle--active]="constructorService.selectedRibbon().id === option.id"
+              [class.ribbon-swatch__circle--border]="option.id === 'white' || option.id === 'none'"
+              [style.background]="option.color"
+            >
+              @if (constructorService.selectedRibbon().id === option.id) {
+                <span class="ribbon-swatch__check">✓</span>
+              }
+            </span>
+            <span class="ribbon-swatch__label">{{ option.name }}</span>
+          </button>
+        }
+      </div>
+    }
+
+    @if (activeTab() === 'size') {
+      <div class="size-list">
+        @for (option of constructorService.sizeOptions; track option.id) {
+          <button
+            class="size-card"
+            [class.size-card--active]="constructorService.selectedSize().id === option.id"
+            (click)="selectSize(option)"
+          >
+            <span class="size-card__name">{{ option.name }}</span>
+            <span class="size-card__label">{{ option.label }}</span>
+          </button>
+        }
+      </div>
+    }
+  </div>
+</div>

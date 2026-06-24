@@ -1,8 +1,8 @@
 import { Component, HostListener, computed, effect, inject, signal } from '@angular/core';
-import { ViewportScroller } from '@angular/common';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
 import { CartService } from '../../../core/services/cart.service';
+import { CatalogFilterService } from '../../../core/services/catalog-filter.service';
 
 @Component({
   selector: 'app-nav',
@@ -12,7 +12,7 @@ import { CartService } from '../../../core/services/cart.service';
 })
 export class Nav {
   private readonly router = inject(Router);
-  private readonly viewportScroller = inject(ViewportScroller);
+  private readonly filterService = inject(CatalogFilterService);
   readonly cartService = inject(CartService);
 
   readonly scrolled = signal(false);
@@ -21,11 +21,6 @@ export class Nav {
 
   // Solid (ivory) header everywhere except the home page's transparent hero overlay.
   readonly solid = computed(() => this.scrolled() || !this.isHome());
-
-  readonly sectionLinks = [
-    { id: 'about', label: 'Про нас' },
-    { id: 'contacts', label: 'Контакти' },
-  ];
 
   private previousCount = 0;
   private bumpTimeout?: ReturnType<typeof setTimeout>;
@@ -54,17 +49,10 @@ export class Nav {
     this.scrolled.set(window.scrollY > 12);
   }
 
-  goToSection(id: string): void {
-    if (this.router.url === '/' || this.router.url.startsWith('/#')) {
-      this.viewportScroller.scrollToAnchor(id);
-    } else {
-      this.router.navigate(['/']).then(() => {
-        setTimeout(() => this.viewportScroller.scrollToAnchor(id));
-      });
-    }
-  }
-
   toggleCart(): void {
+    if (!this.cartService.isOpen()) {
+      this.filterService.closeDrawer();
+    }
     this.cartService.toggleDrawer();
   }
 }

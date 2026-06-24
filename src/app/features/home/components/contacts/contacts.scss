@@ -1,11 +1,13 @@
 .contacts {
   padding: var(--section-y) 0;
+  background: var(--paper-3);
 }
 
 .contacts__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-7);
+  align-items: center;
 
   @media (max-width: 860px) {
     grid-template-columns: 1fr;
@@ -64,15 +66,13 @@
   }
 }
 
-.contacts__form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+.contacts__reminder-card {
   background: var(--paper-2);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   padding: var(--space-6);
   box-shadow: var(--shadow-sm);
+  text-align: left;
 }
 
 .contacts__form-title {
@@ -80,49 +80,14 @@
   font-weight: 700;
 }
 
-label {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  font-weight: 600;
-  font-size: var(--text-sm);
+.contacts__reminder-text {
+  margin-top: var(--space-3);
   color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.5;
 }
 
-input:not([matInput]) {
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  color: var(--ink);
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius-sm);
-  border: 1.5px solid var(--line-strong);
-  background: var(--paper-2);
-  transition: border-color var(--dur-fast) var(--ease-out);
-
-  &:focus {
-    border-color: var(--pink);
-  }
-}
-
-button[type="submit"] {
-  margin-top: var(--space-2);
-}
-
-.posy-datepicker {
+.contacts__reminder-card .btn {
+  margin-top: var(--space-5);
   width: 100%;
-  font-family: var(--font-body);
-
-  ::ng-deep .mat-mdc-form-field-flex {
-    border-radius: var(--radius-md);
-  }
-
-  ::ng-deep .mdc-text-field--outlined .mdc-notched-outline__leading,
-  ::ng-deep .mdc-text-field--outlined .mdc-notched-outline__notch,
-  ::ng-deep .mdc-text-field--outlined .mdc-notched-outline__trailing {
-    border-color: var(--line-strong);
-  }
-}
-
-::ng-deep .mat-datepicker-toggle {
-  color: var(--pink);
 }

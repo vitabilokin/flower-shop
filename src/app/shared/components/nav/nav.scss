@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   width: 100%;
-  z-index: 100;
+  z-index: 1100;
   background: transparent;
   border-bottom: 1px solid transparent;
   transition: background-color var(--dur-base) var(--ease-out),
@@ -42,6 +42,11 @@
   gap: var(--space-4);
   width: 100%;
   padding: var(--space-3) clamp(20px, 5vw, 56px);
+
+  @media (max-width: 480px) {
+    gap: var(--space-2);
+    padding: var(--space-3) 16px;
+  }
 }
 
 .nav__logo {
@@ -53,9 +58,19 @@
   font-size: 28px;
   color: #ff4d8d;
   letter-spacing: -0.01em;
+  flex-shrink: 0;
 
   svg {
     flex-shrink: 0;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 22px;
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
   }
 }
 
@@ -113,6 +128,27 @@
   display: flex;
   align-items: center;
   gap: var(--space-4);
+  flex-shrink: 0;
+
+  .btn-primary {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 480px) {
+    gap: var(--space-2);
+
+    .btn-primary {
+      padding: 0.6rem 0.9rem;
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .btn-primary {
+      padding: 0.55rem 0.7rem;
+      font-size: 11px;
+    }
+  }
 }
 
 .cart-btn {
@@ -122,6 +158,7 @@
   justify-content: center;
   width: 40px;
   height: 40px;
+  flex-shrink: 0;
   color: var(--paper);
   transition: color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 
@@ -131,6 +168,16 @@
 
   &:active {
     transform: scale(0.92);
+  }
+
+  @media (max-width: 480px) {
+    width: 32px;
+    height: 32px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 

@@ -13,27 +13,12 @@
       </div>
     </div>
 
-    <form class="contacts__form" (ngSubmit)="submit()">
+    <div class="contacts__reminder-card">
       <h3 class="contacts__form-title">Нагадай мені про дату</h3>
-
-      <label>
-        Ім'я
-        <input type="text" name="name" [(ngModel)]="name" required placeholder="Ваше ім'я" />
-      </label>
-
-      <mat-form-field appearance="outline" class="posy-datepicker">
-        <mat-label>Дата</mat-label>
-        <input matInput [matDatepicker]="picker" name="date" [(ngModel)]="date" required placeholder="дд.мм.рррр" />
-        <mat-datepicker-toggle matIconSuffix [for]="picker" />
-        <mat-datepicker #picker />
-      </mat-form-field>
-
-      <label>
-        Контакт (телефон або Telegram)
-        <input type="text" name="contact" [(ngModel)]="contact" required placeholder="+380... або @username" />
-      </label>
-
-      <button type="submit" class="btn btn-primary">Нагадати мені</button>
-    </form>
+      <p class="contacts__reminder-text">
+        Не хочеш забути про важливу дату? Залиш контакт — і ми нагадаємо завчасно.
+      </p>
+      <a class="btn btn-primary" routerLink="/reminder">Нагадати мені</a>
+    </div>
   </div>
 </section>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Hero } from './components/hero/hero';
+import { OccasionCarousel } from './components/occasion-carousel/occasion-carousel';
 import { SeasonHit } from './components/season-hit/season-hit';
 import { TopBouquets } from './components/top-bouquets/top-bouquets';
 import { MoodQuizPreview } from './components/mood-quiz-preview/mood-quiz-preview';
@@ -8,7 +9,7 @@ import { Contacts } from './components/contacts/contacts';
 
 @Component({
   selector: 'app-home',
-  imports: [Hero, SeasonHit, TopBouquets, MoodQuizPreview, About, Contacts],
+  imports: [Hero, OccasionCarousel, SeasonHit, TopBouquets, MoodQuizPreview, About, Contacts],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

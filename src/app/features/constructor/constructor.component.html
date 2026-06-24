@@ -1,6 +1,20 @@
-<section class="stub-page">
-  <div class="container">
-    <h1>Конструктор букета</h1>
-    <p>Незабаром тут з'явиться конструктор букета</p>
+<section class="constructor-page">
+  <div class="constructor-page__head">
+    <span class="constructor-page__eyebrow">Конструктор</span>
+    <h1 class="constructor-page__title">Зберіть свій букет</h1>
+  </div>
+
+  <div class="constructor-page__layout">
+    <aside class="constructor-page__pane constructor-page__pane--palette">
+      <app-flower-palette />
+    </aside>
+
+    <div class="constructor-page__pane constructor-page__pane--canvas">
+      <app-bouquet-canvas />
+    </div>
+
+    <aside class="constructor-page__pane constructor-page__pane--summary">
+      <app-order-summary />
+    </aside>
   </div>
 </section>

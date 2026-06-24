@@ -153,7 +153,10 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  /* clip (not hidden) avoids implicitly setting overflow-y: auto on these elements,
+     which would otherwise turn body into its own scroll container and break
+     window-scroll detection (e.g. the sticky header's scrolled state). */
+  overflow-x: clip;
 }
 
 body {
@@ -163,6 +166,17 @@ body {
   font-size: var(--text-base);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Pin the footer to the bottom of the viewport even when page content is short. */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+app-root > main {
+  flex: 1 0 auto;
 }
 
 h1,

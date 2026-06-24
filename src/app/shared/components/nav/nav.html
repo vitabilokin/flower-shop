@@ -18,9 +18,7 @@
     <nav class="nav__links">
       <a routerLink="/catalog" routerLinkActive="nav__link--active">Каталог</a>
       <a routerLink="/quiz" routerLinkActive="nav__link--active">Підбір букета</a>
-      @for (link of sectionLinks; track link.id) {
-        <a href="#{{ link.id }}" (click)="$event.preventDefault(); goToSection(link.id)">{{ link.label }}</a>
-      }
+      <a routerLink="/constructor" routerLinkActive="nav__link--active">Конструктор</a>
     </nav>
 
     <div class="nav__actions">

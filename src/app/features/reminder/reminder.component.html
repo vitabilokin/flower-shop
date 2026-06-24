@@ -1,0 +1,69 @@
+<section class="reminder">
+  <div class="container reminder__inner">
+    <span class="reminder__eyebrow">Не пропустіть дату</span>
+    <h1 class="reminder__title">Нагадай мені про дату</h1>
+    <p class="reminder__subtitle">
+      Залиш контакт — і ми нагадаємо завчасно, щоб букет встиг приїхати вчасно.
+    </p>
+
+    <form class="reminder__form" (ngSubmit)="submit()">
+      <label class="field">
+        <span class="field__label">Ім'я</span>
+        <input type="text" name="name" [(ngModel)]="name" required placeholder="Ваше ім'я" />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Дата</span>
+        <mat-form-field appearance="outline" class="posy-datepicker">
+          <input
+            matInput
+            readonly
+            [matDatepicker]="picker"
+            name="date"
+            [(ngModel)]="date"
+            required
+            placeholder="Оберіть дату в календарі"
+            (click)="picker.open()"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="picker" />
+          <mat-datepicker #picker />
+        </mat-form-field>
+      </label>
+
+      <div class="field">
+        <span class="field__label">Як з вами зв'язатись?</span>
+        <div class="method-switch">
+          <button
+            type="button"
+            class="method-switch__btn"
+            [class.method-switch__btn--active]="contactMethod() === 'phone'"
+            (click)="setContactMethod('phone')"
+          >
+            Телефон
+          </button>
+          <button
+            type="button"
+            class="method-switch__btn"
+            [class.method-switch__btn--active]="contactMethod() === 'telegram'"
+            (click)="setContactMethod('telegram')"
+          >
+            Telegram
+          </button>
+        </div>
+      </div>
+
+      <label class="field">
+        <span class="field__label">{{ contactMethod() === 'phone' ? 'Номер телефону' : 'Telegram-тег' }}</span>
+        <input
+          type="text"
+          name="contact"
+          [(ngModel)]="contact"
+          required
+          [placeholder]="contactMethod() === 'phone' ? '+380...' : '@username'"
+        />
+      </label>
+
+      <button type="submit" class="btn btn-primary reminder__submit">Нагадати мені</button>
+    </form>
+  </div>
+</section>

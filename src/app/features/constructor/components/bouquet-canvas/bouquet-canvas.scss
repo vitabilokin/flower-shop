@@ -1,0 +1,83 @@
+.canvas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  padding: var(--space-4);
+}
+
+.canvas__toolbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 600px;
+}
+
+.canvas__count {
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--ink);
+}
+
+.canvas__svg {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  margin-top: var(--space-2);
+}
+
+.vase,
+.box {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.canvas__svg--idle .vase,
+.canvas__svg--idle .box {
+  animation: vase-sway 4.5s ease-in-out infinite;
+}
+
+@keyframes vase-sway {
+  0%, 100% {
+    rotate: -2deg;
+  }
+  50% {
+    rotate: 2deg;
+  }
+}
+
+.flower-instance__bloom {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: flower-bloom-in 0.5s var(--ease-bloom) both;
+
+  &--removing {
+    animation: flower-fade-out 0.3s var(--ease-out) forwards;
+  }
+}
+
+@keyframes flower-fade-out {
+  to {
+    opacity: 0;
+    scale: 0.1;
+  }
+}
+
+@keyframes flower-bloom-in {
+  0% {
+    opacity: 0;
+    scale: 0.1;
+    rotate: -180deg;
+  }
+  60% {
+    opacity: 1;
+    scale: 1.15;
+    rotate: 10deg;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+    rotate: 0deg;
+  }
+}
