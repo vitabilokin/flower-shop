@@ -18,6 +18,7 @@ export class Nav {
   readonly scrolled = signal(false);
   readonly isHome = signal(this.router.url === '/');
   readonly badgeBump = signal(false);
+  readonly menuOpen = signal(false);
 
   // Solid (ivory) header everywhere except the home page's transparent hero overlay.
   readonly solid = computed(() => this.scrolled() || !this.isHome());
@@ -28,6 +29,7 @@ export class Nav {
   constructor() {
     this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe(() => {
       this.isHome.set(this.router.url === '/');
+      this.menuOpen.set(false);
     });
 
     effect(() => {
@@ -54,5 +56,13 @@ export class Nav {
       this.filterService.closeDrawer();
     }
     this.cartService.toggleDrawer();
+  }
+
+  toggleMenu(): void {
+    this.menuOpen.update((v) => !v);
+  }
+
+  closeMenu(): void {
+    this.menuOpen.set(false);
   }
 }

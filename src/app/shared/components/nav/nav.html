@@ -41,7 +41,23 @@
         }
       </button>
 
-      <button class="btn btn-primary" routerLink="/order">Замовити букет</button>
+      <button class="btn btn-primary nav__order-btn" routerLink="/order">Замовити букет</button>
+
+      <button class="nav__burger" [class.nav__burger--open]="menuOpen()" (click)="toggleMenu()" aria-label="Меню">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </div>
+
+  @if (menuOpen()) {
+    <div class="nav__mobile-overlay" (click)="closeMenu()"></div>
+    <nav class="nav__mobile-menu">
+      <a routerLink="/catalog" routerLinkActive="nav__link--active" (click)="closeMenu()">Каталог</a>
+      <a routerLink="/quiz" routerLinkActive="nav__link--active" (click)="closeMenu()">Підбір букета</a>
+      <a routerLink="/constructor" routerLinkActive="nav__link--active" (click)="closeMenu()">Конструктор</a>
+      <button class="btn btn-primary" routerLink="/order" (click)="closeMenu()">Замовити букет</button>
+    </nav>
+  }
 </header>
