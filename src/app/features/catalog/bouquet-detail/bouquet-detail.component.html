@@ -1,23 +1,34 @@
-@if (bouquet) {
+@if (bouquet(); as b) {
   <section class="bouquet-detail">
     <div class="container bouquet-detail__inner">
       <div class="bouquet-detail__photo">
-        <img [src]="bouquet.photo" [alt]="bouquet.name" />
-        @if (bouquet.tag) {
-          <span class="bouquet-detail__tag bouquet-detail__tag--{{ bouquet.tagTone }}">{{ bouquet.tag }}</span>
+        <img [src]="b.photo" [alt]="b.name" />
+        @if (isOutOfStock()) {
+          <span class="bouquet-detail__tag bouquet-detail__tag--oos">Немає в наявності</span>
+        } @else if (b.tag) {
+          <span class="bouquet-detail__tag bouquet-detail__tag--{{ b.tagTone }}">{{ b.tag }}</span>
         }
       </div>
 
       <div class="bouquet-detail__info">
         <a class="bouquet-detail__back" routerLink="/catalog">← Назад до каталогу</a>
-        <h1 class="bouquet-detail__name">{{ bouquet.name }}</h1>
-        <p class="bouquet-detail__subtitle">{{ bouquet.subtitle }}</p>
-        <p class="bouquet-detail__price">{{ bouquet.price }} ₴</p>
+        <h1 class="bouquet-detail__name">{{ b.name }}</h1>
+        <p class="bouquet-detail__subtitle">{{ b.subtitle }}</p>
+        <p class="bouquet-detail__price">{{ b.price }} ₴</p>
+
+        @if (b.composition.length > 0) {
+          <ul class="bouquet-detail__composition">
+            @for (item of b.composition; track item.type) {
+              <li>{{ typeLabel(item.type) }} × {{ item.count }}</li>
+            }
+          </ul>
+        }
+
         <div class="bouquet-detail__actions">
-          <button class="btn btn-primary" (click)="addToCart()">
-            {{ added() ? 'Додано ✓' : 'Додати в корзину' }}
+          <button class="btn btn-primary" [disabled]="isOutOfStock()" (click)="addToCart()">
+            {{ isOutOfStock() ? 'Немає в наявності' : added() ? 'Додано ✓' : 'Додати в корзину' }}
           </button>
-          <button class="btn btn-ghost-pink" (click)="quickOrder()">Швидке замовлення</button>
+          <button class="btn btn-ghost-pink" [disabled]="isOutOfStock()" (click)="quickOrder()">Швидке замовлення</button>
         </div>
       </div>
     </div>

@@ -1,0 +1,26 @@
+<div class="login">
+  <div class="login__card">
+    <app-logo [size]="32" />
+    <h1 class="login__title">Адмін панель</h1>
+
+    <form class="login__form" (ngSubmit)="login()" novalidate>
+      <mat-form-field appearance="outline" class="login__field">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" name="email" [ngModel]="email()" (ngModelChange)="email.set($event)" required autocomplete="username" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="login__field">
+        <mat-label>Пароль</mat-label>
+        <input matInput type="password" name="password" [ngModel]="password()" (ngModelChange)="password.set($event)" required autocomplete="current-password" />
+      </mat-form-field>
+
+      <button type="submit" class="login__submit" [disabled]="loading()">
+        {{ loading() ? 'Вхід...' : 'Увійти' }}
+      </button>
+
+      @if (error()) {
+        <p class="login__error">{{ error() }}</p>
+      }
+    </form>
+  </div>
+</div>

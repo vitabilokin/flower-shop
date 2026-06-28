@@ -2,6 +2,8 @@ import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { BouquetService, OccasionCard } from '../../../../core/services/bouquet.service';
 
+const END_EPSILON = 4;
+
 @Component({
   selector: 'app-occasion-carousel',
   imports: [],
@@ -18,6 +20,19 @@ export class OccasionCarousel {
 
   scroll(direction: -1 | 1): void {
     const track = this.trackRef.nativeElement;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const atEnd = track.scrollLeft >= maxScroll - END_EPSILON;
+    const atStart = track.scrollLeft <= END_EPSILON;
+
+    if (direction === 1 && atEnd) {
+      track.scrollTo({ left: 0, behavior: 'smooth' });
+      return;
+    }
+    if (direction === -1 && atStart) {
+      track.scrollTo({ left: maxScroll, behavior: 'smooth' });
+      return;
+    }
+
     const amount = track.clientWidth * 0.8 * direction;
     track.scrollBy({ left: amount, behavior: 'smooth' });
   }

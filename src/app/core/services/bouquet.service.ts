@@ -1,4 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Firestore, addDoc, collection, deleteDoc, doc, updateDoc } from '@angular/fire/firestore';
+import { collectionDataPlain } from './firestore-helpers';
 
 export type Occasion =
   | 'birthday'
@@ -23,6 +26,12 @@ export type BouquetType =
   | 'wildflowers'
   | 'gerberas'
   | 'lilies'
+  | 'irises'
+  | 'hydrangeas'
+  | 'carnations'
+  | 'ranunculus'
+  | 'eustoma'
+  | 'eucalyptus'
   | 'mixed';
 
 export type BouquetColor =
@@ -34,10 +43,22 @@ export type BouquetColor =
   | 'green'
   | 'orange'
   | 'teal'
+  | 'blue'
+  | 'burgundy'
+  | 'lilac'
+  | 'coral'
   | 'mixed';
 
+/** active = shown and orderable; out_of_stock = shown with a badge but can't be ordered; hidden = not shown at all. */
+export type BouquetStatus = 'active' | 'out_of_stock' | 'hidden';
+
+export interface CompositionItem {
+  type: BouquetType;
+  count: number;
+}
+
 export interface Bouquet {
-  id: number;
+  id: string;
   name: string;
   subtitle: string;
   price: number;
@@ -49,6 +70,12 @@ export interface Bouquet {
   tagTone?: 'pink' | 'teal' | 'spark';
   /** Used by the mood quiz to score how well a bouquet matches the answers. */
   tags: string[];
+  status: BouquetStatus;
+  /** Soft-deleted bouquets are kept around (in an admin "archive") so they can be restored. */
+  deleted: boolean;
+  /** What's actually in the bouquet, e.g. "Троянди" x11, "Гіпсофіла" x5. */
+  composition: CompositionItem[];
+  createdAt?: unknown;
 }
 
 export interface OccasionCard {
@@ -62,237 +89,6 @@ export interface FilterOption {
   value: string;
   label: string;
 }
-
-const BOUQUETS: Bouquet[] = [
-  {
-    id: 1,
-    name: 'Для найкращої мами',
-    subtitle: 'На день народження, 8 березня або просто так — бо мама завжди заслуговує на квіти.',
-    price: 850,
-    photo: 'https://images.unsplash.com/photo-1623406795110-99f1c4325084?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Ym91cXVldCUyMGZvciUyMG1vbXxlbnwwfHwwfHx8MA%3D%3D',
-    occasion: 'birthday',
-    type: 'roses',
-    color: 'pink',
-    tag: 'Хіт',
-    tagTone: 'pink',
-    tags: ['birthday', 'gentle', 'mid'],
-  },
-  {
-    id: 2,
-    name: 'В любові по вуха',
-    subtitle: 'Коли слова застрягають у горлі, а серце готове вибухнути. Для того хто зробив тебе щасливим.',
-    price: 1200,
-    photo: 'https://images.unsplash.com/photo-1620142828449-203a4979d9c3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Ym91cXVldCUyMG9mJTIwcmVkJTIwZmxvd2Vyc3xlbnwwfHwwfHx8MA%3D%3D',
-    occasion: 'anniversary',
-    type: 'roses',
-    color: 'red',
-    tags: ['anniversary', 'romantic', 'premium'],
-  },
-  {
-    id: 3,
-    name: 'Без приводу, просто так',
-    subtitle: 'Найкращий подарунок — той якого не чекають. Для людини яку хочеться порадувати без жодної причини.',
-    price: 950,
-    photo: 'https://plus.unsplash.com/premium_photo-1661659745326-d2535dfd268c?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEyfHx8ZW58MHx8fHx8',
-    occasion: 'justbecause',
-    type: 'mixed',
-    color: 'teal',
-    tag: 'Сезонне',
-    tagTone: 'teal',
-    tags: ['justbecause', 'calm', 'mid'],
-  },
-  {
-    id: 4,
-    name: "Коли настрій кращий за погоду",
-    subtitle: "Для святкування маленьких перемог, гарних новин або просто вдалого дня що хочеться запам'ятати.",
-    price: 780,
-    photo: 'https://images.unsplash.com/photo-1679502460180-f9f0c75267c2?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    occasion: 'birthday',
-    type: 'mixed',
-    color: 'yellow',
-    tags: ['birthday', 'bright', 'fun', 'mid'],
-  },
-  {
-    id: 5,
-    name: 'Коли серце завмирає',
-    subtitle: 'На річницю, весілля або коли хочеш нагадати коханій людині що почуття нікуди не зникли.',
-    price: 1450,
-    photo: 'https://images.unsplash.com/photo-1678043639749-fb3c5c0314ce?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDM3fHx8ZW58MHx8fHx8',
-    occasion: 'anniversary',
-    type: 'mixed',
-    color: 'pink',
-    tags: ['anniversary', 'romantic', 'premium'],
-  },
-  {
-    id: 6,
-    name: 'Без причини — це і є причина',
-    subtitle: 'Бо іноді найважливіше — просто показати що думаєш про людину. Без свят і приводів.',
-    price: 690,
-    photo: 'https://images.unsplash.com/photo-1584798962082-790d3f40fa04?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDcxfHx8ZW58MHx8fHx8',
-    occasion: 'justbecause',
-    type: 'mixed',
-    color: 'green',
-    tags: ['justbecause', 'calm', 'budget'],
-  },
-  {
-    id: 7,
-    name: 'Для тих хто мріє',
-    subtitle: 'Для людини яка завжди дивиться трохи далі горизонту. На підтримку, натхнення або великий крок вперед.',
-    price: 1100,
-    photo: 'https://plus.unsplash.com/premium_photo-1678115816034-8bce8ae163af?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDgwfHx8ZW58MHx8fHx8',
-    occasion: 'support',
-    type: 'mixed',
-    color: 'purple',
-    tags: ['elegant', 'premium'],
-  },
-  {
-    id: 8,
-    name: 'Хочу справити враження',
-    subtitle: 'Для першого побачення, важливої зустрічі або моменту коли хочеться щоб тебе запам\'ятали.',
-    price: 990,
-    photo: 'https://plus.unsplash.com/premium_photo-1668073436953-492767f88b8d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym91cXVldCUyMG9mJTIwYmx1ZSUyMGZsb3dlcnN8ZW58MHx8MHx8fDA%3D',
-    occasion: 'date',
-    type: 'roses',
-    color: 'pink',
-    tag: 'Новинка',
-    tagTone: 'spark',
-    tags: ['date', 'romantic', 'mid'],
-  },
-  {
-    id: 9,
-    name: 'Спасибі, що ти поруч',
-    subtitle: 'Для людини яка була поруч коли було важко. Бо «дякую» іноді треба говорити квітами.',
-    price: 720,
-    photo: 'https://images.unsplash.com/photo-1678043639841-0dd13f8b1f1b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDg2fHx8ZW58MHx8fHx8',
-    occasion: 'thankyou',
-    type: 'mixed',
-    color: 'yellow',
-    tags: ['thankyou', 'gentle', 'mid'],
-  },
-  {
-    id: 10,
-    name: 'Слова скінчились — залишились квіти',
-    subtitle: 'Коли посварились і не знаєш з чого почати. Квіти скажуть те що важко вимовити вголос.',
-    price: 880,
-    photo: 'https://images.unsplash.com/photo-1554742896-b3b354bd59f0?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDM1fHx8ZW58MHx8fHx8',
-    occasion: 'sorry',
-    type: 'roses',
-    color: 'pink',
-    tags: ['sorry', 'gentle', 'mid'],
-  },
-  {
-    id: 11,
-    name: 'Троянди класичні',
-    subtitle: 'Вічна класика для тих хто цінує традиції.',
-    price: 1100,
-    photo: 'https://plus.unsplash.com/premium_photo-1677005659579-dfdefd6e6c09?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    occasion: 'anniversary',
-    type: 'roses',
-    color: 'red',
-    tags: ['anniversary', 'romantic', 'premium'],
-  },
-  {
-    id: 12,
-    name: 'Тюльпани весняні',
-    subtitle: 'Свіжість весни у кожній пелюстці.',
-    price: 650,
-    photo: 'https://images.unsplash.com/photo-1589994160839-163cd867cfe8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGJvdXF1ZXQlMjBvZiUyMHR1bGlwc3xlbnwwfHwwfHx8MA%3D%3D',
-    occasion: 'birthday',
-    type: 'tulips',
-    color: 'pink',
-    tags: ['birthday', 'gentle', 'budget'],
-  },
-  {
-    id: 13,
-    name: 'Соняхи яскраві',
-    subtitle: 'Тепло і радість — як сонце в букеті.',
-    price: 720,
-    photo: 'https://plus.unsplash.com/premium_photo-1676692121474-a3e3890d39f4?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    occasion: 'justbecause',
-    type: 'sunflowers',
-    color: 'yellow',
-    tags: ['justbecause', 'bright', 'fun', 'mid'],
-  },
-  {
-    id: 14,
-    name: 'Півонії ніжні',
-    subtitle: "М'якість і розкіш для особливого моменту.",
-    price: 1350,
-    photo: 'https://images.unsplash.com/photo-1560583035-657b74826ec9?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D',
-    occasion: 'wedding',
-    type: 'peonies',
-    color: 'pink',
-    tags: ['anniversary', 'romantic', 'elegant', 'premium'],
-  },
-  {
-    id: 15,
-    name: 'Лаванда прованс',
-    subtitle: 'Спокій і аромат французького Провансу.',
-    price: 890,
-    photo: 'https://images.unsplash.com/photo-1635692027511-bea646416e86?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGJvdXF1ZXQlMjBvZiUyMGxhdmFuZGVyfGVufDB8fDB8fHww',
-    occasion: 'thankyou',
-    type: 'lavender',
-    color: 'purple',
-    tags: ['thankyou', 'calm', 'elegant', 'mid'],
-  },
-  {
-    id: 16,
-    name: 'Хризантеми білі',
-    subtitle: 'Чистота і елегантність у кожній квітці.',
-    price: 780,
-    photo: 'https://images.unsplash.com/photo-1767797285478-ad1c6241c839?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    occasion: 'support',
-    type: 'chrysanthemums',
-    color: 'white',
-    tags: ['calm', 'elegant', 'mid'],
-  },
-  {
-    id: 17,
-    name: 'Орхідеї преміум',
-    subtitle: 'Вишуканість для тих хто цінує красу.',
-    price: 1800,
-    photo: 'https://images.unsplash.com/photo-1729603369767-3d151219fe75?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDI3fHx8ZW58MHx8fHx8',
-    occasion: 'anniversary',
-    type: 'orchids',
-    color: 'white',
-    tag: 'Преміум',
-    tagTone: 'pink',
-    tags: ['anniversary', 'elegant', 'luxury'],
-  },
-  {
-    id: 18,
-    name: 'Польові квіти',
-    subtitle: 'Натуральна краса лугів і полів.',
-    price: 590,
-    photo: 'https://images.unsplash.com/photo-1596238276574-b3e8d40fbafb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Ym91cXVldCUyMG9mJTIwd2lsZGZsb3dlcnN8ZW58MHx8MHx8fDA%3D',
-    occasion: 'justbecause',
-    type: 'wildflowers',
-    color: 'mixed',
-    tags: ['justbecause', 'bright', 'fun', 'budget'],
-  },
-  {
-    id: 19,
-    name: 'Гербери сонячні',
-    subtitle: 'Яскравість і позитив на весь день.',
-    price: 680,
-    photo: 'https://plus.unsplash.com/premium_photo-1692394464308-5f876cfbae69?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Ym91cXVldCUyMG9mJTIwYnJpZ2h0JTIwZmxvd2Vyc3xlbnwwfHwwfHx8MA%3D%3D',
-    occasion: 'birthday',
-    type: 'gerberas',
-    color: 'orange',
-    tags: ['birthday', 'bright', 'fun', 'budget'],
-  },
-  {
-    id: 20,
-    name: 'Лілії білі',
-    subtitle: 'Ніжний аромат і чиста елегантність.',
-    price: 950,
-    photo: 'https://images.unsplash.com/photo-1772211505818-c15eecf8e3c9?q=80&w=790&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    occasion: 'wedding',
-    type: 'lilies',
-    color: 'white',
-    tags: ['elegant', 'calm', 'mid'],
-  },
-];
 
 const OCCASION_CARDS: OccasionCard[] = [
   { id: 1, name: 'День народження', img: 'https://plus.unsplash.com/premium_photo-1676475964992-6404b8db0b53?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', filter: 'birthday' },
@@ -320,6 +116,12 @@ const TYPE_OPTIONS: FilterOption[] = [
   { value: 'wildflowers', label: 'Польові' },
   { value: 'gerberas', label: 'Гербери' },
   { value: 'lilies', label: 'Лілії' },
+  { value: 'irises', label: 'Іриси' },
+  { value: 'hydrangeas', label: 'Гортензії' },
+  { value: 'carnations', label: 'Гвоздики' },
+  { value: 'ranunculus', label: 'Ранункулюси' },
+  { value: 'eustoma', label: 'Еустома' },
+  { value: 'eucalyptus', label: 'Евкаліпт (зелень)' },
   { value: 'mixed', label: 'Змішані' },
 ];
 
@@ -337,23 +139,63 @@ const COLOR_OPTIONS: ColorOption[] = [
   { value: 'purple', label: 'Фіолетовий', swatch: '#7b2ff7' },
   { value: 'green', label: 'Зелений', swatch: '#6fce8f' },
   { value: 'orange', label: 'Помаранчевий', swatch: '#ff8a1e' },
+  { value: 'teal', label: 'Бірюзовий', swatch: '#07b3a3' },
+  { value: 'blue', label: 'Синій', swatch: '#4a7fe0' },
+  { value: 'burgundy', label: 'Бордовий', swatch: '#6e1423' },
+  { value: 'lilac', label: 'Ліловий', swatch: '#c9a6e8' },
+  { value: 'coral', label: 'Кораловий', swatch: '#ff7f6b' },
   { value: 'mixed', label: 'Змішаний', swatch: 'linear-gradient(135deg, #ff7eb0, #7b2ff7, #ffd84d)', gradient: true },
 ];
 
+export const STATUS_OPTIONS: { value: BouquetStatus; label: string }[] = [
+  { value: 'active', label: 'Активний' },
+  { value: 'out_of_stock', label: 'Немає в наявності' },
+  { value: 'hidden', label: 'Прихований' },
+];
+
+const COLLECTION = 'bouquets';
+
 @Injectable({ providedIn: 'root' })
 export class BouquetService {
-  private readonly bouquets = BOUQUETS;
+  private readonly firestore = inject(Firestore);
+
+  // Normalizes documents written before status/deleted/composition existed (they only had
+  // a legacy boolean `active` field), so older data doesn't crash or silently disappear.
+  private readonly allDocs = computed(() =>
+    this.rawDocs().map((b) => ({
+      ...b,
+      status: b.status ?? ((b as unknown as { active?: boolean }).active === false ? 'hidden' : 'active'),
+      deleted: b.deleted ?? false,
+      composition: b.composition ?? [],
+      tags: b.tags ?? [],
+    })),
+  );
+
+  private readonly rawDocs = toSignal(collectionDataPlain<Bouquet>(collection(this.firestore, COLLECTION)), {
+    initialValue: [] as Bouquet[],
+  });
+
+  /** Non-deleted bouquets, regardless of status — used by the admin panel. */
+  readonly active = computed(() => this.allDocs().filter((b) => !b.deleted));
+
+  /** Soft-deleted bouquets, kept for the admin archive/restore view. */
+  readonly archived = computed(() => this.allDocs().filter((b) => b.deleted));
+
+  /** What the public site is allowed to show: not deleted, not hidden. */
+  readonly publicBouquets = computed(() => this.active().filter((b) => b.status !== 'hidden'));
 
   getAll(): Bouquet[] {
-    return this.bouquets;
+    return this.publicBouquets();
   }
 
-  getById(id: number): Bouquet | undefined {
-    return this.bouquets.find((b) => b.id === id);
+  getById(id: string): Bouquet | undefined {
+    return this.publicBouquets().find((b) => b.id === id);
   }
 
   getTop(n: number = 4): Bouquet[] {
-    return this.bouquets.filter((b) => b.tag === 'Хіт' || b.tag === 'Новинка').slice(0, n);
+    return this.getAll()
+      .filter((b) => b.tag === 'Хіт' || b.tag === 'Новинка')
+      .slice(0, n);
   }
 
   getOccasionCards(): OccasionCard[] {
@@ -370,5 +212,33 @@ export class BouquetService {
 
   getColorOptions(): ColorOption[] {
     return COLOR_OPTIONS;
+  }
+
+  getStatusOptions() {
+    return STATUS_OPTIONS;
+  }
+
+  // ---- Admin CRUD (operates on the same Firestore collection as the public reads above) ----
+
+  async addBouquet(data: Omit<Bouquet, 'id'>): Promise<void> {
+    await addDoc(collection(this.firestore, COLLECTION), { ...data, createdAt: new Date() });
+  }
+
+  async updateBouquet(id: string, data: Partial<Bouquet>): Promise<void> {
+    await updateDoc(doc(this.firestore, COLLECTION, id), data);
+  }
+
+  /** Soft delete — moves the bouquet into the admin archive instead of erasing it. */
+  async archiveBouquet(id: string): Promise<void> {
+    await updateDoc(doc(this.firestore, COLLECTION, id), { deleted: true });
+  }
+
+  async restoreBouquet(id: string): Promise<void> {
+    await updateDoc(doc(this.firestore, COLLECTION, id), { deleted: false });
+  }
+
+  /** Permanently erases a bouquet — only meant to be called from the archive view. */
+  async deleteForever(id: string): Promise<void> {
+    await deleteDoc(doc(this.firestore, COLLECTION, id));
   }
 }

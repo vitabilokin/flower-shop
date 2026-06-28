@@ -1,0 +1,49 @@
+<div class="admin">
+  <aside class="admin__sidebar">
+    <button class="admin__hamburger" (click)="toggleMobileMenu()" aria-label="Меню">
+      <mat-icon>{{ mobileMenuOpen() ? 'close' : 'menu' }}</mat-icon>
+    </button>
+
+    <app-logo class="admin__logo" [size]="26" color="#ff4d8d" />
+
+    <nav class="admin__nav" [class.admin__nav--open]="mobileMenuOpen()">
+      @for (item of navItems; track item.path) {
+        <a
+          class="admin__nav-item"
+          [routerLink]="item.path"
+          routerLinkActive="admin__nav-item--active"
+          [title]="item.label"
+          (click)="closeMobileMenu()"
+        >
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span class="admin__nav-label">{{ item.label }}</span>
+          @if (item.path === 'reminders' && newReminderCount() > 0) {
+            <span class="admin__nav-badge">{{ newReminderCount() }}</span>
+          }
+        </a>
+      }
+      <div class="admin__nav-email">{{ authService.user()?.email }}</div>
+    </nav>
+
+    <div class="admin__account">
+      <span class="admin__email">{{ authService.user()?.email }}</span>
+    </div>
+
+    <button class="admin__logout" (click)="logout()">Вийти</button>
+  </aside>
+
+  @if (mobileMenuOpen()) {
+    <div class="admin__nav-backdrop" (click)="closeMobileMenu()"></div>
+  }
+
+  <div class="admin__main">
+    <header class="admin__header">
+      <h1 class="admin__header-title">{{ currentLabel() }}</h1>
+      <span class="admin__header-date">{{ today }}</span>
+    </header>
+
+    <div class="admin__content">
+      <router-outlet />
+    </div>
+  </div>
+</div>

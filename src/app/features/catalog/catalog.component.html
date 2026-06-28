@@ -58,13 +58,21 @@
       </div>
     }
 
+    @if (isFallback()) {
+      <p class="catalog__fallback-note">
+        Точних збігів за обраними фільтрами немає — ось найближчі варіанти, які можуть сподобатись.
+      </p>
+    }
+
     <div class="catalog__grid" [style.--cols]="filterService.gridColumns()">
       @for (b of bouquets(); track b.id) {
         <article class="card" [class.card--highlight]="highlightedId() === b.id">
           <a [routerLink]="['/catalog', b.id]" class="card__link">
             <div class="card__photo">
               <img [src]="b.photo" [alt]="b.name" loading="lazy" />
-              @if (b.tag) {
+              @if (isOutOfStock(b)) {
+                <span class="card__tag card__tag--oos">Немає в наявності</span>
+              } @else if (b.tag) {
                 <span class="card__tag card__tag--{{ b.tagTone }}">{{ b.tag }}</span>
               }
             </div>
@@ -75,10 +83,10 @@
             </div>
           </a>
           <div class="card__actions">
-            <button class="btn btn-primary card__btn" (click)="addToCart(b)">
-              {{ addedIds().has(b.id) ? 'Додано ✓' : 'Додати в корзину' }}
+            <button class="btn btn-primary card__btn" [disabled]="isOutOfStock(b)" (click)="addToCart(b)">
+              {{ isOutOfStock(b) ? 'Немає в наявності' : addedIds().has(b.id) ? 'Додано ✓' : 'Додати в корзину' }}
             </button>
-            <button class="btn btn-ghost-pink card__btn" (click)="quickOrder(b)">Швидке замовлення</button>
+            <button class="btn btn-ghost-pink card__btn" [disabled]="isOutOfStock(b)" (click)="quickOrder(b)">Швидке замовлення</button>
           </div>
         </article>
       } @empty {

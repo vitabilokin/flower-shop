@@ -6,72 +6,88 @@
     </span>
   </div>
 
-  <svg class="canvas__svg" viewBox="0 0 600 500" [class.canvas__svg--idle]="isEmpty()">
-    <!-- stems -->
-    @for (item of placedFlowers(); track item.id) {
-      <line
-        [attr.x1]="item.x"
-        [attr.y1]="item.y + 14"
-        [attr.x2]="300"
-        [attr.y2]="360"
-        stroke="#4caf50"
-        stroke-width="2"
-        opacity="0.55"
-      />
-    }
+  <div class="canvas__stage">
+    <svg class="canvas__svg" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid meet" [class.canvas__svg--idle]="isEmpty()">
+      @if (isBoxWrapping()) {
+        <g class="box">
+          <rect x="200" y="460" width="200" height="190" rx="6" [attr.fill]="constructorService.selectedWrapping().color" stroke="#c9a063" stroke-width="2" />
+          <rect x="185" y="425" width="230" height="35" rx="8" [attr.fill]="constructorService.selectedWrapping().color" stroke="#c9a063" stroke-width="2" />
+        </g>
+      } @else {
+        <!-- the one and only vase, always centered at cx=300 -->
+        <g class="vase" transform="translate(300, 650)">
+          <ellipse cx="0" cy="10" rx="90" ry="15" fill="rgba(0,0,0,0.08)" />
 
-    @if (isBoxWrapping()) {
-      <g class="box">
-        <rect x="190" y="388" width="220" height="68" rx="4" [attr.fill]="constructorService.selectedWrapping().color" stroke="#c9a063" stroke-width="2" />
-        <rect x="178" y="362" width="244" height="28" rx="5" [attr.fill]="constructorService.selectedWrapping().color" stroke="#c9a063" stroke-width="2" />
-      </g>
-    } @else {
-      <g class="vase">
-        <path d="M220 420 L180 350 L420 350 L380 420 Z" fill="#f0e6d3" stroke="#d4a574" stroke-width="2" />
-        <rect x="260" y="320" width="80" height="35" rx="5" fill="#f0e6d3" stroke="#d4a574" stroke-width="2" />
-        <path d="M220 420 L185 370 L415 370 L380 420 Z" fill="rgba(135,206,235,0.3)" />
-        <path d="M200 380 Q210 360 215 375" stroke="white" stroke-width="3" fill="none" opacity="0.6" />
-      </g>
+          <path
+            d="M-80,-220 C-82,-220 -90,-180 -90,-100 C-90,0 -85,10 0,10 C85,10 90,0 90,-100 C90,-180 82,-220 80,-220 Z"
+            fill="#e8ddd0"
+            stroke="#c4a882"
+            stroke-width="1.5"
+          />
+
+          <ellipse cx="0" cy="-220" rx="80" ry="12" fill="#d4c4b0" stroke="#c4a882" stroke-width="1" />
+
+          <path d="M-88,-120 C-88,-120 -85,8 0,8 C85,8 88,-120 88,-120 Z" fill="rgba(180,220,240,0.25)" />
+
+          <path d="M-65,-200 C-72,-160 -74,-80 -68,-20" stroke="rgba(255,255,255,0.6)" stroke-width="8" fill="none" stroke-linecap="round" />
+          <path d="M-50,-210 C-54,-190 -55,-170 -52,-150" stroke="rgba(255,255,255,0.4)" stroke-width="4" fill="none" stroke-linecap="round" />
+        </g>
+      }
+
+      <!-- stems + leaves emerge from the vase opening, under every flower -->
+      @for (item of placedFlowers(); track item.id) {
+        <path [attr.d]="item.stemPath" stroke="#5a8a3c" stroke-width="3" fill="none" stroke-linecap="round" />
+        @for (leaf of item.leafPaths; track $index) {
+          <path [attr.d]="leaf" fill="#6fae46" opacity="0.85" />
+        }
+      }
 
       @if (isKraftWrapping()) {
-        <path
-          d="M190 345 L410 345 L372 458 L228 458 Z"
-          [attr.fill]="constructorService.selectedWrapping().color"
-          opacity="0.95"
-        />
+        <path d="M215 470 L385 470 L350 665 L250 665 Z" [attr.fill]="constructorService.selectedWrapping().color" opacity="0.95" />
       }
 
       @if (isOrganzaWrapping()) {
-        <path
-          d="M188 340 L412 340 L378 460 L222 460 Z"
-          [attr.fill]="constructorService.selectedWrapping().color"
-          opacity="0.45"
-        />
+        <path d="M210 465 L390 465 L358 668 L242 668 Z" [attr.fill]="constructorService.selectedWrapping().color" opacity="0.45" />
       }
-    }
 
-    @if (showRibbon()) {
-      <g class="ribbon">
-        <rect x="185" y="392" width="230" height="14" [attr.fill]="constructorService.selectedRibbon().color" />
-        <path d="M280 380 L300 400 L280 416 Z" [attr.fill]="constructorService.selectedRibbon().color" />
-        <path d="M320 380 L300 400 L320 416 Z" [attr.fill]="constructorService.selectedRibbon().color" />
-        <circle cx="300" cy="400" r="7" [attr.fill]="constructorService.selectedRibbon().color" stroke="#0003" stroke-width="1" />
-      </g>
-    }
+      @if (showRibbon()) {
+        <g class="ribbon">
+          <rect x="220" y="495" width="160" height="14" [attr.fill]="constructorService.selectedRibbon().color" />
+          <path d="M280 483 L300 502 L280 518 Z" [attr.fill]="constructorService.selectedRibbon().color" />
+          <path d="M320 483 L300 502 L320 518 Z" [attr.fill]="constructorService.selectedRibbon().color" />
+          <circle cx="300" cy="502" r="7" [attr.fill]="constructorService.selectedRibbon().color" stroke="#0003" stroke-width="1" />
+        </g>
+      }
 
-    <!-- flowers -->
-    @for (item of placedFlowers(); track item.id) {
-      <g class="flower-instance" [attr.transform]="'translate(' + item.x + ',' + item.y + ') rotate(' + item.rotation + ')'">
-        <g
-          class="flower-instance__bloom"
-          [class.flower-instance__bloom--removing]="constructorService.removingIds().has(item.id)"
-          appFlowerIcon
-          [type]="item.flower.type"
-          [petalColor]="item.flower.petalColor"
-          [centerColor]="item.flower.centerColor"
-          [showStem]="false"
-        ></g>
-      </g>
-    }
-  </svg>
+      <!-- flowers as real photos in a round mask, lowest first so higher ones overlap them naturally -->
+      @for (item of placedFlowers(); track item.id) {
+        <g class="flower-instance" [attr.transform]="'translate(' + item.x + ',' + item.y + ') rotate(' + item.rotation + ')'">
+          <g
+            class="flower-instance__bloom"
+            [class.flower-instance__bloom--removing]="constructorService.removingIds().has(item.id)"
+          >
+            <ellipse [attr.cy]="item.radius * 0.15" [attr.rx]="item.radius * 0.9" [attr.ry]="item.radius * 0.3" fill="rgba(0,0,0,0.12)" />
+            <defs>
+              <clipPath [attr.id]="'clip-' + item.id">
+                <circle cx="0" cy="0" [attr.r]="item.radius" />
+              </clipPath>
+            </defs>
+            <image
+              [attr.href]="item.flower.img"
+              [attr.x]="-item.radius"
+              [attr.y]="-item.radius"
+              [attr.width]="item.radius * 2"
+              [attr.height]="item.radius * 2"
+              [attr.clip-path]="'url(#clip-' + item.id + ')'"
+              preserveAspectRatio="xMidYMid slice"
+            />
+            <circle cx="0" cy="0" [attr.r]="item.radius" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2" />
+          </g>
+        </g>
+      } @empty {
+        <text x="300" y="280" text-anchor="middle" font-family="Manrope, sans-serif" font-size="15" fill="#9b8e7e">Обери квіти зліва</text>
+        <text x="300" y="305" text-anchor="middle" font-family="Manrope, sans-serif" font-size="13" fill="#b8a898">щоб зібрати свій букет</text>
+      }
+    </svg>
+  </div>
 </div>

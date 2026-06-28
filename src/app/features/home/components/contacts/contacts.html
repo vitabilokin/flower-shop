@@ -4,12 +4,12 @@
       <span class="contacts__eyebrow">Контакти</span>
       <h2 class="contacts__title">Завжди на зв'язку</h2>
 
-      <a class="contacts__phone" href="tel:+380670000000">+38 (067) 000-00-00</a>
+      <a class="contacts__phone" [href]="telHref()">{{ settingsService.settings().phone }}</a>
 
       <div class="contacts__socials">
-        <a href="#" aria-label="Viber"><img src="https://cdn.simpleicons.org/viber/07b3a3" alt="Viber" /></a>
-        <a href="#" aria-label="Telegram"><img src="https://cdn.simpleicons.org/telegram/07b3a3" alt="Telegram" /></a>
-        <a href="#" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/ff4d8d" alt="Instagram" /></a>
+        <a [href]="viberHref()" aria-label="Viber"><img src="https://cdn.simpleicons.org/viber/07b3a3" alt="Viber" /></a>
+        <a [href]="telegramHref()" aria-label="Telegram"><img src="https://cdn.simpleicons.org/telegram/07b3a3" alt="Telegram" /></a>
+        <a [href]="instagramHref()" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/ff4d8d" alt="Instagram" /></a>
       </div>
     </div>
 

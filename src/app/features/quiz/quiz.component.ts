@@ -15,7 +15,7 @@ export class QuizComponent {
   readonly quizService = inject(QuizService);
   private readonly cartService = inject(CartService);
 
-  readonly addedIds = signal<ReadonlySet<number>>(new Set());
+  readonly addedIds = signal<ReadonlySet<string>>(new Set());
 
   readonly result = computed<Bouquet[]>(() => (this.quizService.showResult() ? this.quizService.getResult() : []));
 

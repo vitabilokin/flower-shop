@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './features/home/home.component';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -32,6 +33,43 @@ export const routes: Routes = [
   {
     path: 'reminder',
     loadComponent: () => import('./features/reminder/reminder.component').then((m) => m.ReminderComponent),
+  },
+  {
+    path: 'admin',
+    children: [
+      {
+        path: 'login',
+        loadComponent: () => import('./features/admin/login/login.component').then((m) => m.LoginComponent),
+      },
+      {
+        path: '',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/admin/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+        children: [
+          { path: '', redirectTo: 'catalog', pathMatch: 'full' },
+          {
+            path: 'catalog',
+            loadComponent: () =>
+              import('./features/admin/catalog/catalog-admin.component').then((m) => m.CatalogAdminComponent),
+          },
+          {
+            path: 'settings',
+            loadComponent: () =>
+              import('./features/admin/settings/settings.component').then((m) => m.SettingsComponent),
+          },
+          {
+            path: 'season',
+            loadComponent: () => import('./features/admin/season/season.component').then((m) => m.SeasonComponent),
+          },
+          {
+            path: 'reminders',
+            loadComponent: () =>
+              import('./features/admin/reminders/reminders.component').then((m) => m.RemindersComponent),
+          },
+        ],
+      },
+    ],
   },
   {
     path: '**',

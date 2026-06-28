@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BouquetService } from '../../../../core/services/bouquet.service';
 
@@ -11,5 +11,5 @@ import { BouquetService } from '../../../../core/services/bouquet.service';
 export class TopBouquets {
   private readonly bouquetService = inject(BouquetService);
 
-  readonly bouquets = this.bouquetService.getTop(4);
+  readonly bouquets = computed(() => this.bouquetService.getTop(4));
 }

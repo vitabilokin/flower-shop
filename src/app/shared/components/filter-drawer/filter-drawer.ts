@@ -32,6 +32,13 @@ export class FilterDrawer {
   readonly priceMinLimit = PRICE_MIN;
   readonly priceMaxLimit = PRICE_MAX;
 
+  readonly minPercent = computed(
+    () => ((this.filterService.priceMin() - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100,
+  );
+  readonly maxPercent = computed(
+    () => ((this.filterService.priceMax() - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100,
+  );
+
   readonly resultCount = computed(() => this.filterService.apply(this.bouquetService.getAll()).length);
 
   @HostListener('document:keydown.escape')

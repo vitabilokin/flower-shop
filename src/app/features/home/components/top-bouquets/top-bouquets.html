@@ -4,7 +4,7 @@
     <h2 class="top-bouquets__title">Найулюбленіші букети</h2>
 
     <div class="top-bouquets__grid">
-      @for (b of bouquets; track b.id) {
+      @for (b of bouquets(); track b.id) {
         <a class="top-card" [routerLink]="['/catalog', b.id]">
           <div class="top-card__photo">
             <img [src]="b.photo" [alt]="b.name" loading="lazy" />

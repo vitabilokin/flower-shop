@@ -1,7 +1,8 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { SettingsService } from './settings.service';
 
 export interface CartItem {
-  id: number;
+  id: string;
   name: string;
   price: number;
   quantity: number;
@@ -10,19 +11,16 @@ export interface CartItem {
 
 /** Anything addable to the cart only needs to look like this — a catalog Bouquet already does. */
 export interface CartAddable {
-  id: number;
+  id: string;
   name: string;
   price: number;
   photo?: string;
 }
 
-// TODO: replace with the real Telegram username before going live.
-const TELEGRAM_USERNAME = 'YOUR_USERNAME';
-// TODO: replace with the real phone number (international format, digits only) before going live.
-const VIBER_PHONE = '380670000000';
-
 @Injectable({ providedIn: 'root' })
 export class CartService {
+  private readonly settingsService = inject(SettingsService);
+
   private readonly items = signal<CartItem[]>([]);
   private readonly open = signal(false);
 
@@ -33,8 +31,14 @@ export class CartService {
 
   readonly totalPrice = computed(() => this.items().reduce((sum, i) => sum + i.price * i.quantity, 0));
 
-  readonly telegramUsername = TELEGRAM_USERNAME;
-  readonly viberPhone = VIBER_PHONE;
+  // Always reflects whatever the admin has saved in Налаштування — never a stale hardcoded value.
+  get telegramUsername(): string {
+    return this.settingsService.settings().telegram.replace('@', '');
+  }
+
+  get viberPhone(): string {
+    return this.settingsService.settings().viber;
+  }
 
   add(bouquet: CartAddable): void {
     const existing = this.items().find((i) => i.id === bouquet.id);
@@ -50,11 +54,11 @@ export class CartService {
     }
   }
 
-  remove(id: number): void {
+  remove(id: string): void {
     this.items.update((items) => items.filter((i) => i.id !== id));
   }
 
-  updateQuantity(id: number, quantity: number): void {
+  updateQuantity(id: string, quantity: number): void {
     if (quantity <= 0) {
       this.remove(id);
       return;

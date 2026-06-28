@@ -157,6 +157,15 @@ body {
      which would otherwise turn body into its own scroll container and break
      window-scroll detection (e.g. the sticky header's scrolled state). */
   overflow-x: clip;
+  /* Stop the rubber-band bounce on mobile so overscrolling can't reveal anything
+     behind the document (the white flash above the dark footer on swipe-down). */
+  overscroll-behavior-y: none;
+}
+
+/* Fallback for browsers that still bounce despite overscroll-behavior: match the
+   footer's color so any sliver revealed at the bottom blends in instead of flashing white. */
+html {
+  background: var(--pine);
 }
 
 body {
@@ -211,8 +220,15 @@ svg {
 }
 
 :focus-visible {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+// Angular Material's mat-form-field already draws its own focus outline (the notched
+// border turning pink) — keeping the global box-shadow too would draw a second ring
+// directly on the native input/textarea inside it.
+.mat-mdc-form-field :focus-visible {
+  box-shadow: none;
 }
 
 .container {
@@ -242,6 +258,12 @@ svg {
 
 .btn:active {
   transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
 }
 
 .btn-primary {

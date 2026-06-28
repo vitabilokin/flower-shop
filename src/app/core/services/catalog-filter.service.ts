@@ -1,10 +1,11 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { Bouquet } from './bouquet.service';
+import { toMillis } from './firestore-helpers';
 
 export type SortOption = 'popular' | 'cheap' | 'expensive' | 'new';
 
 export const PRICE_MIN = 0;
-export const PRICE_MAX = 2000;
+export const PRICE_MAX = 100000;
 
 @Injectable({ providedIn: 'root' })
 export class CatalogFilterService {
@@ -125,23 +126,30 @@ export class CatalogFilterService {
     };
   }
 
-  /** Filters and sorts a bouquet list according to the current filter state. */
-  apply(bouquets: Bouquet[]): Bouquet[] {
+  /** A bouquet's flower type can come from its main classification or from its composition list. */
+  private matchesType(b: Bouquet, types: ReadonlySet<string>): boolean {
+    if (!types.size) return true;
+    if (types.has(b.type)) return true;
+    return b.composition.some((c) => types.has(c.type));
+  }
+
+  private matchesStrict(b: Bouquet): boolean {
     const occasions = this.occasions();
-    const types = this.types();
     const colors = this.colors();
-    const min = this.priceMin();
-    const max = this.priceMax();
+    if (occasions.size && !occasions.has(b.occasion)) return false;
+    if (!this.matchesType(b, this.types())) return false;
+    if (colors.size && !colors.has(b.color)) return false;
+    if (b.price < this.priceMin() || b.price > this.priceMax()) return false;
+    return true;
+  }
 
-    const filtered = bouquets.filter((b) => {
-      if (occasions.size && !occasions.has(b.occasion)) return false;
-      if (types.size && !types.has(b.type)) return false;
-      if (colors.size && !colors.has(b.color)) return false;
-      if (b.price < min || b.price > max) return false;
-      return true;
-    });
+  /** True if at least one bouquet satisfies every active filter exactly. */
+  hasExactMatches(bouquets: Bouquet[]): boolean {
+    return bouquets.some((b) => this.matchesStrict(b));
+  }
 
-    const sorted = [...filtered];
+  private sortBouquets(bouquets: Bouquet[]): Bouquet[] {
+    const sorted = [...bouquets];
     switch (this.sort()) {
       case 'cheap':
         sorted.sort((a, b) => a.price - b.price);
@@ -150,7 +158,7 @@ export class CatalogFilterService {
         sorted.sort((a, b) => b.price - a.price);
         break;
       case 'new':
-        sorted.sort((a, b) => b.id - a.id);
+        sorted.sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt));
         break;
       default:
         sorted.sort((a, b) => {
@@ -160,6 +168,36 @@ export class CatalogFilterService {
         });
     }
     return sorted;
+  }
+
+  /**
+   * Filters and sorts a bouquet list according to the current filter state. If nothing
+   * matches every criterion exactly, falls back to the closest bouquets (most matching
+   * criteria) instead of showing an empty grid.
+   */
+  apply(bouquets: Bouquet[]): Bouquet[] {
+    const exact = bouquets.filter((b) => this.matchesStrict(b));
+    if (exact.length > 0 || this.activeFilterCount() === 0) {
+      return this.sortBouquets(exact);
+    }
+
+    const occasions = this.occasions();
+    const types = this.types();
+    const colors = this.colors();
+    const min = this.priceMin();
+    const max = this.priceMax();
+
+    const scored = bouquets.map((b) => {
+      let score = 0;
+      if (occasions.size && occasions.has(b.occasion)) score++;
+      if (types.size && this.matchesType(b, types)) score++;
+      if (colors.size && colors.has(b.color)) score++;
+      if (b.price >= min && b.price <= max) score++;
+      return { b, score };
+    });
+    const bestScore = Math.max(...scored.map((s) => s.score));
+    const closest = scored.filter((s) => s.score === bestScore).map((s) => s.b);
+    return this.sortBouquets(closest);
   }
 
   private toggleInSet(sig: typeof this.occasions, value: string): void {

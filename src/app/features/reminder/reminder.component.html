@@ -6,20 +6,32 @@
       Залиш контакт — і ми нагадаємо завчасно, щоб букет встиг приїхати вчасно.
     </p>
 
-    <form class="reminder__form" (ngSubmit)="submit()">
+    <form class="reminder__form" #reminderForm="ngForm" (ngSubmit)="submit(reminderForm)" novalidate>
       <label class="field">
-        <span class="field__label">Ім'я</span>
-        <input type="text" name="name" [(ngModel)]="name" required placeholder="Ваше ім'я" />
+        <span class="field__label">Ім'я *</span>
+        <input
+          type="text"
+          name="name"
+          #nameField="ngModel"
+          [(ngModel)]="name"
+          required
+          placeholder="Ваше ім'я"
+        />
+        @if (nameField.invalid && nameField.touched) {
+          <span class="field__error">Вкажіть, будь ласка, ваше ім'я</span>
+        }
       </label>
 
       <label class="field">
-        <span class="field__label">Дата</span>
+        <span class="field__label">Дата *</span>
         <mat-form-field appearance="outline" class="posy-datepicker">
           <input
             matInput
             readonly
             [matDatepicker]="picker"
+            [min]="minDate"
             name="date"
+            #dateField="ngModel"
             [(ngModel)]="date"
             required
             placeholder="Оберіть дату в календарі"
@@ -28,10 +40,13 @@
           <mat-datepicker-toggle matIconSuffix [for]="picker" />
           <mat-datepicker #picker />
         </mat-form-field>
+        @if (dateField.invalid && dateField.touched) {
+          <span class="field__error">Оберіть дату в календарі</span>
+        }
       </label>
 
       <div class="field">
-        <span class="field__label">Як з вами зв'язатись?</span>
+        <span class="field__label">Як з вами зв'язатись? *</span>
         <div class="method-switch">
           <button
             type="button"
@@ -53,17 +68,28 @@
       </div>
 
       <label class="field">
-        <span class="field__label">{{ contactMethod() === 'phone' ? 'Номер телефону' : 'Telegram-тег' }}</span>
+        <span class="field__label">{{ contactMethod() === 'phone' ? 'Номер телефону' : 'Telegram-тег' }} *</span>
         <input
           type="text"
           name="contact"
-          [(ngModel)]="contact"
+          #contactField="ngModel"
+          [ngModel]="contact"
+          (ngModelChange)="onContactChange($event)"
           required
-          [placeholder]="contactMethod() === 'phone' ? '+380...' : '@username'"
+          [minlength]="contactMinLength()"
+          [attr.maxlength]="contactMaxLength()"
+          [placeholder]="contactMethod() === 'phone' ? '+380501234567' : '@username'"
         />
+        @if (contactField.invalid && contactField.touched) {
+          <span class="field__error">
+            {{ contactMethod() === 'phone' ? 'Вкажіть повний номер телефону' : 'Вкажіть Telegram-тег' }}
+          </span>
+        }
       </label>
 
-      <button type="submit" class="btn btn-primary reminder__submit">Нагадати мені</button>
+      <button type="submit" class="btn btn-primary reminder__submit" [disabled]="submitting()">
+        {{ submitting() ? 'Надсилаємо...' : 'Нагадати мені' }}
+      </button>
     </form>
   </div>
 </section>

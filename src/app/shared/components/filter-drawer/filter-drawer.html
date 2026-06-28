@@ -79,29 +79,34 @@
       </button>
       @if (isSectionOpen('price')) {
         <div class="accordion__body">
-          <div class="price-range">
-            <label>
-              Від
+          <div class="price-slider">
+            <div class="price-slider__values">
+              <span>{{ filterService.priceMin() }} грн</span>
+              <span>{{ filterService.priceMax() }} грн</span>
+            </div>
+            <div class="price-slider__track">
+              <div
+                class="price-slider__range"
+                [style.left.%]="minPercent()"
+                [style.right.%]="100 - maxPercent()"
+              ></div>
               <input
-                type="number"
+                type="range"
+                class="price-slider__input"
                 [min]="priceMinLimit"
                 [max]="priceMaxLimit"
                 [ngModel]="filterService.priceMin()"
                 (ngModelChange)="onPriceMinChange($event)"
               />
-            </label>
-            <span class="price-range__sep">—</span>
-            <label>
-              До
               <input
-                type="number"
+                type="range"
+                class="price-slider__input"
                 [min]="priceMinLimit"
                 [max]="priceMaxLimit"
                 [ngModel]="filterService.priceMax()"
                 (ngModelChange)="onPriceMaxChange($event)"
               />
-            </label>
-            <span class="price-range__unit">грн</span>
+            </div>
           </div>
         </div>
       }
@@ -124,7 +129,11 @@
                 [attr.aria-label]="option.label"
                 [title]="option.label"
                 (click)="filterService.toggleColor(option.value)"
-              ></button>
+              >
+                @if (filterService.colors().has(option.value)) {
+                  <span class="color-swatch__check">✓</span>
+                }
+              </button>
             }
           </div>
         </div>

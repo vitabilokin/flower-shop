@@ -25,15 +25,7 @@
                   [disabled]="!constructorService.canAddMore()"
                   (click)="addFlower(flower)"
                 >
-                  <svg
-                    class="flower-card__icon"
-                    viewBox="-25 -25 50 50"
-                    appFlowerIcon
-                    [type]="flower.type"
-                    [petalColor]="flower.petalColor"
-                    [centerColor]="flower.centerColor"
-                    [showStem]="false"
-                  ></svg>
+                  <img class="flower-card__icon" [src]="flower.img" [alt]="flower.name" loading="lazy" />
                   <span class="flower-card__name">{{ flower.name }}</span>
                   <span class="flower-card__price">{{ flower.price }} ₴</span>
                 </button>

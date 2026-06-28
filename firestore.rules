@@ -1,0 +1,37 @@
+rules_version = '2';
+
+// Suggested security rules for the Posy Firestore project. This file isn't deployed
+// automatically — copy it into Firebase Console > Firestore Database > Rules (or deploy
+// with `firebase deploy --only firestore:rules` if you set up firebase-tools), since this
+// repo has no CLI access to your project.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null;
+    }
+
+    // Public catalog data: anyone can read, only a signed-in admin can write.
+    match /bouquets/{bouquetId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /season_hits/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Anyone can submit a reminder request (it's a public contact form), but only an
+    // admin can read the list back or mark one as done — customers must not be able to
+    // see or edit each other's submissions.
+    match /reminders/{reminderId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}

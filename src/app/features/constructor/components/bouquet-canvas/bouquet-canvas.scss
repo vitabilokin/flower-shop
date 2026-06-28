@@ -20,11 +20,22 @@
   color: var(--ink);
 }
 
+.canvas__stage {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  margin-top: var(--space-2);
+}
+
 .canvas__svg {
   width: 100%;
   max-width: 600px;
   height: auto;
-  margin-top: var(--space-2);
+  display: block;
+  margin: 0 auto;
 }
 
 .vase,
@@ -50,7 +61,7 @@
 .flower-instance__bloom {
   transform-box: fill-box;
   transform-origin: center;
-  animation: flower-bloom-in 0.5s var(--ease-bloom) both;
+  animation: flower-appear 0.6s cubic-bezier(0.34, 1.32, 0.5, 1) both;
 
   &--removing {
     animation: flower-fade-out 0.3s var(--ease-out) forwards;
@@ -64,20 +75,17 @@
   }
 }
 
-@keyframes flower-bloom-in {
+@keyframes flower-appear {
   0% {
     opacity: 0;
-    scale: 0.1;
-    rotate: -180deg;
+    scale: 0.05;
   }
   60% {
     opacity: 1;
     scale: 1.15;
-    rotate: 10deg;
   }
   100% {
     opacity: 1;
     scale: 1;
-    rotate: 0deg;
   }
 }

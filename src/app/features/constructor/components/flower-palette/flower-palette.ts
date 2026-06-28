@@ -7,13 +7,11 @@ import {
   Size,
   Wrapping,
 } from '../../../../core/services/constructor.service';
-import { FlowerIcon } from '../../../../shared/components/flower-icon/flower-icon';
 
-type Tab = 'flowers' | 'wrapping' | 'ribbon' | 'size';
+type Tab = 'size' | 'flowers' | 'wrapping' | 'ribbon';
 
 @Component({
   selector: 'app-flower-palette',
-  imports: [FlowerIcon],
   templateUrl: './flower-palette.html',
   styleUrl: './flower-palette.scss',
 })
@@ -21,13 +19,13 @@ export class FlowerPalette {
   readonly constructorService = inject(ConstructorService);
 
   readonly tabs: { id: Tab; label: string }[] = [
+    { id: 'size', label: 'Розмір' },
     { id: 'flowers', label: 'Квіти' },
     { id: 'wrapping', label: 'Упаковка' },
     { id: 'ribbon', label: 'Стрічка' },
-    { id: 'size', label: 'Розмір' },
   ];
 
-  readonly activeTab = signal<Tab>('flowers');
+  readonly activeTab = signal<Tab>('size');
   readonly openGroups = signal<ReadonlySet<FlowerType>>(new Set<FlowerType>(['rose']));
 
   setTab(tab: Tab): void {
@@ -68,5 +66,6 @@ export class FlowerPalette {
 
   selectSize(size: Size): void {
     this.constructorService.setSize(size);
+    this.setTab('flowers');
   }
 }

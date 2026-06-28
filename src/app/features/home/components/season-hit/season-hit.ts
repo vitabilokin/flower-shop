@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BouquetService } from '../../../../core/services/bouquet.service';
 
@@ -11,7 +11,7 @@ import { BouquetService } from '../../../../core/services/bouquet.service';
 export class SeasonHit {
   private readonly bouquetService = inject(BouquetService);
 
-  readonly bouquet = this.bouquetService.getAll().find((b) => b.tag === 'Сезонне');
+  readonly bouquet = computed(() => this.bouquetService.getAll().find((b) => b.tag === 'Сезонне'));
 
   // Dedicated hero photo for this promo card — kept separate from the catalog bouquet's own
   // photo so changing it here doesn't affect the catalog/detail pages for the same bouquet.

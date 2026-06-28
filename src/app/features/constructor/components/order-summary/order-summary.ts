@@ -52,7 +52,7 @@ export class OrderSummary {
   addToCart(): void {
     if (this.constructorService.totalCount() === 0) return;
     this.cartService.add({
-      id: -Date.now(),
+      id: `custom-${Date.now()}`,
       name: 'Індивідуальний букет',
       price: this.constructorService.totalPrice(),
     });
