@@ -3,10 +3,11 @@ import { RouterLink } from '@angular/router';
 import { CartItem, CartService } from '../../../core/services/cart.service';
 
 @Component({
+  standalone: true,
   selector: 'app-cart-drawer',
   imports: [RouterLink],
-  templateUrl: './cart-drawer.html',
-  styleUrl: './cart-drawer.scss',
+  templateUrl: './cart-drawer.component.html',
+  styleUrl: './cart-drawer.component.scss',
 })
 export class CartDrawer {
   readonly cartService = inject(CartService);

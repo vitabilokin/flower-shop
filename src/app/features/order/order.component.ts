@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 
-// Easy-to-find placeholders — replace with the real Telegram username and phone number
-// (international format, digits only for the tel:/viber: links) before going live.
 const TELEGRAM_USERNAME = 'TELEGRAM_USERNAME';
 const PHONE_NUMBER = 'PHONE_NUMBER';
 
@@ -115,6 +113,7 @@ const FAQ_ITEMS: FaqItem[] = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'app-order',
   imports: [MatIconModule, MatExpansionModule],
   templateUrl: './order.component.html',

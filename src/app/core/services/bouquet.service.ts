@@ -159,8 +159,6 @@ const COLLECTION = 'bouquets';
 export class BouquetService {
   private readonly firestore = inject(Firestore);
 
-  // Normalizes documents written before status/deleted/composition existed (they only had
-  // a legacy boolean `active` field), so older data doesn't crash or silently disappear.
   private readonly allDocs = computed(() =>
     this.rawDocs().map((b) => ({
       ...b,
@@ -175,13 +173,10 @@ export class BouquetService {
     initialValue: [] as Bouquet[],
   });
 
-  /** Non-deleted bouquets, regardless of status — used by the admin panel. */
   readonly active = computed(() => this.allDocs().filter((b) => !b.deleted));
 
-  /** Soft-deleted bouquets, kept for the admin archive/restore view. */
   readonly archived = computed(() => this.allDocs().filter((b) => b.deleted));
 
-  /** What the public site is allowed to show: not deleted, not hidden. */
   readonly publicBouquets = computed(() => this.active().filter((b) => b.status !== 'hidden'));
 
   getAll(): Bouquet[] {
@@ -217,8 +212,6 @@ export class BouquetService {
   getStatusOptions() {
     return STATUS_OPTIONS;
   }
-
-  // ---- Admin CRUD (operates on the same Firestore collection as the public reads above) ----
 
   async addBouquet(data: Omit<Bouquet, 'id'>): Promise<void> {
     await addDoc(collection(this.firestore, COLLECTION), { ...data, createdAt: new Date() });

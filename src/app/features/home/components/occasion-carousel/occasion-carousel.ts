@@ -5,10 +5,11 @@ import { BouquetService, OccasionCard } from '../../../../core/services/bouquet.
 const END_EPSILON = 4;
 
 @Component({
+  standalone: true,
   selector: 'app-occasion-carousel',
   imports: [],
-  templateUrl: './occasion-carousel.html',
-  styleUrl: './occasion-carousel.scss',
+  templateUrl: './occasion-carousel.component.html',
+  styleUrl: './occasion-carousel.component.scss',
 })
 export class OccasionCarousel {
   private readonly bouquetService = inject(BouquetService);

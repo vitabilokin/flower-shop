@@ -40,8 +40,6 @@ export interface Size {
   multiplier: number;
 }
 
-// Photos are verified, properly-licensed closeups from Wikimedia Commons (not hotlinked stock
-// search results — those turned out to 404 or show unrelated subjects when checked).
 export const FLOWERS: Flower[] = [
   {
     id: 'rose-red',
@@ -51,7 +49,7 @@ export const FLOWERS: Flower[] = [
     price: 85,
     petalColor: '#e53935',
     centerColor: '#ffcdd2',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Red_Rose_-_Flickr_-_maticsteve.jpg/330px-Red_Rose_-_Flickr_-_maticsteve.jpg',
+    img: 'flowers/svg/rose-red.svg',
   },
   {
     id: 'rose-pink',
@@ -61,7 +59,7 @@ export const FLOWERS: Flower[] = [
     price: 85,
     petalColor: '#f06292',
     centerColor: '#fce4ec',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Pretty_Pink_Rose_Closeup.jpg/330px-Pretty_Pink_Rose_Closeup.jpg',
+    img: 'flowers/svg/rose-pink.svg',
   },
   {
     id: 'rose-white',
@@ -71,7 +69,7 @@ export const FLOWERS: Flower[] = [
     price: 90,
     petalColor: '#f5f5f5',
     centerColor: '#fff9c4',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/The_beautiful_white_rose_flower.jpg/330px-The_beautiful_white_rose_flower.jpg',
+    img: 'flowers/svg/rose-white.svg',
   },
   {
     id: 'rose-yellow',
@@ -81,7 +79,7 @@ export const FLOWERS: Flower[] = [
     price: 85,
     petalColor: '#ffd740',
     centerColor: '#fff9c4',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Yellow_Graham_Thomas_Rosebud.jpg/330px-Yellow_Graham_Thomas_Rosebud.jpg',
+    img: 'flowers/svg/rose-yellow.svg',
   },
   {
     id: 'tulip-pink',
@@ -91,7 +89,7 @@ export const FLOWERS: Flower[] = [
     price: 55,
     petalColor: '#f48fb1',
     centerColor: '#fce4ec',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Pink_tulip_flower.jpg/330px-Pink_tulip_flower.jpg',
+    img: 'flowers/svg/tulip-pink.svg',
   },
   {
     id: 'tulip-red',
@@ -101,7 +99,7 @@ export const FLOWERS: Flower[] = [
     price: 55,
     petalColor: '#ef5350',
     centerColor: '#ffcdd2',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/02_Small_red_tulip.jpg/330px-02_Small_red_tulip.jpg',
+    img: 'flowers/svg/tulip-red.svg',
   },
   {
     id: 'tulip-purple',
@@ -111,7 +109,7 @@ export const FLOWERS: Flower[] = [
     price: 60,
     petalColor: '#ab47bc',
     centerColor: '#f3e5f5',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Perfect_Tulip_%2833617469%29.jpeg/330px-Perfect_Tulip_%2833617469%29.jpeg',
+    img: 'flowers/svg/tulip-purple.svg',
   },
   {
     id: 'tulip-white',
@@ -121,7 +119,7 @@ export const FLOWERS: Flower[] = [
     price: 55,
     petalColor: '#eceff1',
     centerColor: '#e3f2fd',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/White_Tulip_%28256167597%29.jpeg/330px-White_Tulip_%28256167597%29.jpeg',
+    img: 'flowers/svg/tulip-white.svg',
   },
   {
     id: 'sunflower',
@@ -131,7 +129,7 @@ export const FLOWERS: Flower[] = [
     price: 65,
     petalColor: '#ffd740',
     centerColor: '#5d4037',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Closeup_of_field_sunflower.jpg/330px-Closeup_of_field_sunflower.jpg',
+    img: 'flowers/svg/sunflower.svg',
   },
   {
     id: 'peony-pink',
@@ -141,7 +139,7 @@ export const FLOWERS: Flower[] = [
     price: 120,
     petalColor: '#f48fb1',
     centerColor: '#fce4ec',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Pink_Peony_Flower_and_unopened_bud.jpg/330px-Pink_Peony_Flower_and_unopened_bud.jpg',
+    img: 'flowers/svg/peony-pink.svg',
   },
   {
     id: 'peony-white',
@@ -151,7 +149,7 @@ export const FLOWERS: Flower[] = [
     price: 125,
     petalColor: '#fafafa',
     centerColor: '#fff9c4',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Paeonia_rockii_2011_G1.jpg/330px-Paeonia_rockii_2011_G1.jpg',
+    img: 'flowers/svg/peony-white.svg',
   },
   {
     id: 'peony-red',
@@ -161,7 +159,7 @@ export const FLOWERS: Flower[] = [
     price: 120,
     petalColor: '#e53935',
     centerColor: '#ffcdd2',
-    img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Paeonia_%27Red_Emperor%27_%287330044482%29.jpg/330px-Paeonia_%27Red_Emperor%27_%287330044482%29.jpg",
+    img: 'flowers/svg/peony-red.svg',
   },
   {
     id: 'lily-white',
@@ -171,7 +169,7 @@ export const FLOWERS: Flower[] = [
     price: 95,
     petalColor: '#f5f5f5',
     centerColor: '#fff9c4',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Easter_lily_%28Lilium_longiflorum%29.jpg/330px-Easter_lily_%28Lilium_longiflorum%29.jpg',
+    img: 'flowers/svg/lily-white.svg',
   },
   {
     id: 'lily-orange',
@@ -181,7 +179,7 @@ export const FLOWERS: Flower[] = [
     price: 95,
     petalColor: '#ff7043',
     centerColor: '#fff9c4',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Orange_Lilies_%28Lilium_bulbiferum%29%2C_Omagh_-_geograph.org.uk_-_863482.jpg/330px-Orange_Lilies_%28Lilium_bulbiferum%29%2C_Omagh_-_geograph.org.uk_-_863482.jpg',
+    img: 'flowers/svg/lily-orange.svg',
   },
   {
     id: 'orchid-purple',
@@ -191,7 +189,7 @@ export const FLOWERS: Flower[] = [
     price: 150,
     petalColor: '#ce93d8',
     centerColor: '#f3e5f5',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Delicate_purple_orchid_%2828319606920%29.jpg/330px-Delicate_purple_orchid_%2828319606920%29.jpg',
+    img: 'flowers/svg/orchid-purple.svg',
   },
   {
     id: 'orchid-white',
@@ -201,7 +199,7 @@ export const FLOWERS: Flower[] = [
     price: 150,
     petalColor: '#f5f5f5',
     centerColor: '#e1bee7',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/White_Orchid_Flower.jpg/330px-White_Orchid_Flower.jpg',
+    img: 'flowers/svg/orchid-white.svg',
   },
   {
     id: 'gerbera-orange',
@@ -211,7 +209,7 @@ export const FLOWERS: Flower[] = [
     price: 70,
     petalColor: '#ff7043',
     centerColor: '#ffd740',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Gerbera_daisy_orange001.jpg/330px-Gerbera_daisy_orange001.jpg',
+    img: 'flowers/svg/gerbera-orange.svg',
   },
   {
     id: 'gerbera-pink',
@@ -221,7 +219,7 @@ export const FLOWERS: Flower[] = [
     price: 70,
     petalColor: '#f06292',
     centerColor: '#ffd740',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Barberton_daisy_%28reddish_pink%29.jpg/330px-Barberton_daisy_%28reddish_pink%29.jpg',
+    img: 'flowers/svg/gerbera-pink.svg',
   },
 ];
 
@@ -265,10 +263,10 @@ export class ConstructorService {
   readonly wrappingOptions = WRAPPING;
   readonly ribbonOptions = RIBBONS;
   readonly sizeOptions = SIZES;
-  readonly flowerGroups = FLOWER_GROUPS;
+  readonly flowerTypeGroups = FLOWER_GROUPS;
 
   readonly selectedFlowers = signal<SelectedFlower[]>([]);
-  readonly selectedWrapping = signal<Wrapping>(WRAPPING[0]);
+  readonly selectedWrapping = signal<Wrapping>(WRAPPING[3]);
   readonly selectedRibbon = signal<Ribbon>(RIBBONS[0]);
   readonly selectedSize = signal<Size>(SIZES[1]);
 
@@ -279,14 +277,27 @@ export class ConstructorService {
 
   readonly totalCount = computed(() => this.selectedFlowers().length);
 
-  readonly canAddMore = computed(() => this.selectedFlowers().length < this.selectedSize().maxFlowers);
+  readonly canAddMore = computed(() => true);
+
+  readonly showVisualBouquet = computed(() => this.selectedFlowers().length <= 20);
+
+  readonly selectedGrouped = computed(() => {
+    const counts: Record<string, { flower: Flower; count: number }> = {};
+    this.selectedFlowers().forEach((f) => {
+      if (counts[f.flower.id]) {
+        counts[f.flower.id].count++;
+      } else {
+        counts[f.flower.id] = { flower: f.flower, count: 1 };
+      }
+    });
+    return Object.values(counts);
+  });
 
   flowersByType(type: FlowerType): Flower[] {
     return this.flowers.filter((f) => f.type === type);
   }
 
   addFlower(flower: Flower): void {
-    if (!this.canAddMore()) return;
     const id = `${flower.id}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     this.selectedFlowers.update((f) => [...f, { flower, id }]);
   }
@@ -329,9 +340,6 @@ export class ConstructorService {
 
   setSize(size: Size): void {
     this.selectedSize.set(size);
-    if (this.selectedFlowers().length > size.maxFlowers) {
-      this.selectedFlowers.update((f) => f.slice(0, size.maxFlowers));
-    }
   }
 
   clear(): void {

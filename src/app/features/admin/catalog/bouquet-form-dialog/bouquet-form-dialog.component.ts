@@ -16,6 +16,7 @@ const TAG_OPTIONS = ['', 'Хіт', 'Сезонне', 'Новинка', 'Прем
 type PhotoSource = 'url' | 'upload';
 
 @Component({
+  standalone: true,
   selector: 'app-bouquet-form-dialog',
   imports: [FormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule],
   templateUrl: './bouquet-form-dialog.component.html',

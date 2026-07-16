@@ -9,6 +9,7 @@ import { BouquetService } from '../../../core/services/bouquet.service';
 import { seedDatabase } from '../../../core/scripts/seed';
 
 @Component({
+  standalone: true,
   selector: 'app-admin-settings',
   imports: [FormsModule, MatFormFieldModule, MatInputModule, MatSnackBarModule],
   templateUrl: './settings.component.html',

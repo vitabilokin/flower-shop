@@ -7,6 +7,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { Logo } from '../../../shared/components/logo/logo';
 
 @Component({
+  standalone: true,
   selector: 'app-admin-login',
   imports: [FormsModule, MatFormFieldModule, MatInputModule, Logo],
   templateUrl: './login.component.html',

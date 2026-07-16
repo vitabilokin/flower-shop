@@ -25,10 +25,11 @@ const CARDS: AboutCard[] = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'app-about',
   imports: [],
-  templateUrl: './about.html',
-  styleUrl: './about.scss',
+  templateUrl: './about.component.html',
+  styleUrl: './about.component.scss',
 })
 export class About {
   readonly cards = CARDS;

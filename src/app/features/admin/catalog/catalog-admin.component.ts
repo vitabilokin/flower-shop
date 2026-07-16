@@ -10,6 +10,7 @@ import { BouquetFormDialogComponent, BouquetFormResult } from './bouquet-form-di
 type Tab = 'active' | 'archive';
 
 @Component({
+  standalone: true,
   selector: 'app-admin-catalog',
   imports: [FormsModule, MatDialogModule, MatIconModule, MatSnackBarModule],
   templateUrl: './catalog-admin.component.html',

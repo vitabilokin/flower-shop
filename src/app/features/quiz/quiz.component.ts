@@ -6,6 +6,7 @@ import { Bouquet } from '../../core/services/bouquet.service';
 import { CartService } from '../../core/services/cart.service';
 
 @Component({
+  standalone: true,
   selector: 'app-quiz',
   imports: [RouterLink, MatIconModule],
   templateUrl: './quiz.component.html',

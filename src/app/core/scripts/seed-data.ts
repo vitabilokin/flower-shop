@@ -1,7 +1,5 @@
 import { Bouquet } from '../services/bouquet.service';
 
-// The original demo catalog, used only to seed a fresh/empty Firestore project. Once
-// seeded, the live BouquetService reads from Firestore, not from this file.
 export const SEED_BOUQUETS: Omit<Bouquet, 'id' | 'status' | 'deleted' | 'composition' | 'createdAt'>[] = [
   {
     name: 'Для найкращої мами',

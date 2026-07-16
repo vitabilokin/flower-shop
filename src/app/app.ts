@@ -9,6 +9,7 @@ import { CartDrawer } from './shared/components/cart-drawer/cart-drawer';
 import { CartService } from './core/services/cart.service';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
   imports: [RouterOutlet, Nav, Footer, ToastComponent, CartDrawer],
   template: `

@@ -21,6 +21,7 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'app-admin-dashboard',
   imports: [RouterOutlet, RouterLink, RouterLinkActive, MatIconModule, Logo],
   templateUrl: './dashboard.component.html',

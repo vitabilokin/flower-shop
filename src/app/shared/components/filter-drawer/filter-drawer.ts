@@ -6,10 +6,11 @@ import { CatalogFilterService, PRICE_MAX, PRICE_MIN, SortOption } from '../../..
 type Section = 'sort' | 'occasion' | 'type' | 'price' | 'color';
 
 @Component({
+  standalone: true,
   selector: 'app-filter-drawer',
   imports: [FormsModule],
-  templateUrl: './filter-drawer.html',
-  styleUrl: './filter-drawer.scss',
+  templateUrl: './filter-drawer.component.html',
+  styleUrl: './filter-drawer.component.scss',
 })
 export class FilterDrawer {
   readonly filterService = inject(CatalogFilterService);

@@ -9,7 +9,6 @@ export interface CartItem {
   imageUrl?: string;
 }
 
-/** Anything addable to the cart only needs to look like this — a catalog Bouquet already does. */
 export interface CartAddable {
   id: string;
   name: string;
@@ -31,7 +30,6 @@ export class CartService {
 
   readonly totalPrice = computed(() => this.items().reduce((sum, i) => sum + i.price * i.quantity, 0));
 
-  // Always reflects whatever the admin has saved in Налаштування — never a stale hardcoded value.
   get telegramUsername(): string {
     return this.settingsService.settings().telegram.replace('@', '');
   }

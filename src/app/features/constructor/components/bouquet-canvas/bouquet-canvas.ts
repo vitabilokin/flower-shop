@@ -1,107 +1,110 @@
 import { Component, computed, inject } from '@angular/core';
-import { ConstructorService, SelectedFlower } from '../../../../core/services/constructor.service';
+import { ConstructorService, Flower, SelectedFlower } from '../../../../core/services/constructor.service';
 
 interface FlowerPosition {
   x: number;
   y: number;
   rotation: number;
-  radius: number;
+  size: number;
+  midBend: number;
 }
 
 interface PlacedFlower extends SelectedFlower {
   x: number;
   y: number;
   rotation: number;
-  radius: number;
+  size: number;
   stemPath: string;
   leafPaths: string[];
 }
 
 const VASE_X = 300;
-const VASE_TOP_Y = 430;
-// Keeps the topmost row's blooms (radius + jitter included) from poking above y=0.
-const MAX_BOUQUET_HEIGHT = 330;
+const VASE_NECK_Y = 435;
+
+const ROWS = [
+  { yOffset: 85,  maxCount: 4, spread: 140 },
+  { yOffset: 145, maxCount: 5, spread: 160 },
+  { yOffset: 200, maxCount: 5, spread: 150 },
+  { yOffset: 250, maxCount: 4, spread: 130 },
+  { yOffset: 295, maxCount: 4, spread: 110 },
+  { yOffset: 332, maxCount: 3, spread: 90  },
+  { yOffset: 362, maxCount: 3, spread: 70  },
+];
+const VASE_TOP = 420;
 
 @Component({
+  standalone: true,
   selector: 'app-bouquet-canvas',
-  templateUrl: './bouquet-canvas.html',
-  styleUrl: './bouquet-canvas.scss',
+  templateUrl: './bouquet-canvas.component.html',
+  styleUrl: './bouquet-canvas.component.scss',
 })
 export class BouquetCanvas {
   readonly constructorService = inject(ConstructorService);
 
-  // Jitter must stay the same for a given flower instance across re-renders (e.g. when
-  // another flower is added/removed), otherwise already-placed flowers would visibly
-  // "jump" every time the bouquet changes. Cached here, keyed by the flower's stable id.
-  private readonly jitterCache = new Map<string, { dx: number; dy: number }>();
+  private readonly jitterCache = new Map<string, { dx: number; dy: number; rotation: number; midBend: number }>();
 
-  private getJitter(id: string): { dx: number; dy: number } {
-    let jitter = this.jitterCache.get(id);
-    if (!jitter) {
-      jitter = { dx: (Math.random() - 0.5) * 14, dy: (Math.random() - 0.5) * 10 };
-      this.jitterCache.set(id, jitter);
+  private getJitter(id: string) {
+    let j = this.jitterCache.get(id);
+    if (!j) {
+      j = {
+        dx: (Math.random() - 0.5) * 22,
+        dy: (Math.random() - 0.5) * 18,
+        rotation: (Math.random() - 0.5) * 40,
+        midBend: (Math.random() - 0.5) * 15,
+      };
+      this.jitterCache.set(id, j);
     }
-    return jitter;
+    return j;
   }
 
   readonly placedFlowers = computed<PlacedFlower[]>(() => {
     const flowers = this.constructorService.selectedFlowers();
-    const positions = this.getFlowerPositions(flowers, (f) => f.id);
+    const visible = flowers.slice(0, 28);
+    const positions = this.buildPositions(visible.length, (i) => visible[i].id);
 
-    const placed = flowers.map((f, i) => {
-      const pos = positions[i];
-      return {
-        ...f,
-        x: pos.x,
-        y: pos.y,
-        rotation: pos.rotation,
-        radius: pos.radius,
-        stemPath: this.getStemPath(pos.x, pos.y, pos.radius),
-        leafPaths: [this.getLeafPath(pos.x, pos.y, 'left'), this.getLeafPath(pos.x, pos.y, 'right')],
-      };
-    });
-
-    // Lower (larger Y) flowers are drawn first so higher ones layer naturally on top.
-    return placed.sort((a, b) => b.y - a.y);
+    return visible
+      .map((f, i) => {
+        const pos = positions[i];
+        return {
+          ...f,
+          x: pos.x,
+          y: pos.y,
+          rotation: pos.rotation,
+          size: pos.size,
+          stemPath: this.getStemPath(pos.x, pos.y, pos.size, pos.midBend),
+          leafPaths: [this.getLeafPath(pos.x, pos.y, 'left'), this.getLeafPath(pos.x, pos.y, 'right')],
+        };
+      })
+      .sort((a, b) => b.y - a.y);
   });
 
-  readonly isEmpty = computed(() => this.constructorService.totalCount() === 0);
   readonly isBoxWrapping = computed(() => this.constructorService.selectedWrapping().id === 'box');
   readonly isKraftWrapping = computed(() => this.constructorService.selectedWrapping().id === 'kraft');
   readonly isOrganzaWrapping = computed(() => this.constructorService.selectedWrapping().id === 'organza');
+  readonly showVase = computed(() => !this.isKraftWrapping() && !this.isBoxWrapping());
   readonly showRibbon = computed(() => this.constructorService.selectedRibbon().id !== 'none');
+  readonly showGeneralRibbon = computed(() => this.showRibbon() && this.showVase());
 
-  private getFlowerPositions<T>(items: T[], idOf: (item: T) => string): FlowerPosition[] {
-    const count = items.length;
-    if (count === 0) return [];
-
-    const centerX = VASE_X;
-    const totalRows = Math.max(1, Math.ceil(count / 4));
-    const rowHeight = Math.min(85, MAX_BOUQUET_HEIGHT / totalRows);
-
-    const rows = Array.from({ length: totalRows }, (_, r) => ({
-      y: VASE_TOP_Y - 70 - r * rowHeight,
-      maxCount: 4,
-      spread: Math.max(60, 160 - r * 15),
-      radius: r === 0 ? 35 : r === 1 ? 32 : 28,
-    }));
-
+  private buildPositions(count: number, idOf: (i: number) => string): FlowerPosition[] {
     const positions: FlowerPosition[] = [];
     let placed = 0;
-    for (const row of rows) {
-      if (placed >= count) break;
 
+    for (const row of ROWS) {
+      if (placed >= count) break;
       const inRow = Math.min(row.maxCount, count - placed);
+      const rowY = VASE_TOP - row.yOffset;
+
       for (let i = 0; i < inRow; i++) {
-        const fraction = inRow === 1 ? 0.5 : i / (inRow - 1);
-        const baseX = centerX - row.spread / 2 + fraction * row.spread;
-        const jitter = this.getJitter(idOf(items[placed]));
+        const frac = inRow === 1 ? 0.5 : i / (inRow - 1);
+        const baseX = VASE_X - row.spread / 2 + frac * row.spread;
+        const j = this.getJitter(idOf(placed));
 
         positions.push({
-          x: baseX + jitter.dx,
-          y: row.y + jitter.dy,
-          rotation: (placed % 2 === 0 ? 1 : -1) * (5 + (placed * 7) % 15),
-          radius: row.radius,
+          x: baseX + j.dx,
+          y: rowY + j.dy,
+          rotation: j.rotation,
+          size: placed < 4 ? 46 : placed < 12 ? 42 : 36,
+          midBend: j.midBend,
         });
         placed++;
       }
@@ -110,21 +113,31 @@ export class BouquetCanvas {
     return positions;
   }
 
-  private getStemPath(flowerX: number, flowerY: number, radius: number): string {
-    const endY = flowerY + radius * 0.9;
-    const cp1x = VASE_X + (flowerX - VASE_X) * 0.2;
-    const cp1y = VASE_TOP_Y - 30;
-    const cp2x = flowerX - (flowerX - VASE_X) * 0.1;
-    const cp2y = endY + 50;
-    return `M ${VASE_X},${VASE_TOP_Y} C ${cp1x},${cp1y} ${cp2x},${cp2y} ${flowerX},${endY}`;
+  private getStemPath(fx: number, fy: number, size: number, midBend: number): string {
+    const midX = (VASE_X + fx) / 2 + midBend;
+    const midY = (VASE_NECK_Y + fy) / 2 - 20;
+    return `M ${VASE_X},${VASE_NECK_Y} Q ${midX},${midY} ${fx},${fy + size * 0.4}`;
   }
 
   private getLeafPath(flowerX: number, flowerY: number, side: 'left' | 'right'): string {
     const midX = (VASE_X + flowerX) / 2;
-    const midY = (VASE_TOP_Y + flowerY) / 2;
-    const offset = side === 'left' ? -25 : 25;
+    const midY = (VASE_NECK_Y + flowerY) / 2;
+    const offset = side === 'left' ? -20 : 20;
+    return `M ${midX} ${midY} Q ${midX + offset} ${midY - 16} ${midX + offset * 1.4} ${midY + 7} Q ${midX + offset * 0.4} ${midY + 3} ${midX} ${midY} Z`;
+  }
 
-    return `M ${midX} ${midY} Q ${midX + offset} ${midY - 20} ${midX + offset * 1.5} ${midY + 10} Q ${midX + offset * 0.5} ${midY + 5} ${midX} ${midY} Z`;
+  increment(flower: Flower): void {
+    this.constructorService.addFlower(flower);
+  }
+
+  decrement(flower: Flower): void {
+    this.constructorService.removeOneByFlowerId(flower.id);
+  }
+
+  removeAll(flower: Flower): void {
+    this.constructorService.selectedFlowers.update((f) =>
+      f.filter((item) => item.flower.id !== flower.id),
+    );
   }
 
   clear(): void {

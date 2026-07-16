@@ -11,9 +11,10 @@ import {
 type Tab = 'size' | 'flowers' | 'wrapping' | 'ribbon';
 
 @Component({
+  standalone: true,
   selector: 'app-flower-palette',
-  templateUrl: './flower-palette.html',
-  styleUrl: './flower-palette.scss',
+  templateUrl: './flower-palette.component.html',
+  styleUrl: './flower-palette.component.scss',
 })
 export class FlowerPalette {
   readonly constructorService = inject(ConstructorService);

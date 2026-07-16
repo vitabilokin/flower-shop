@@ -22,6 +22,7 @@ const MONTH_NAMES = [
 const MAX_PER_MONTH = 3;
 
 @Component({
+  standalone: true,
   selector: 'app-admin-season',
   imports: [MatCheckboxModule],
   templateUrl: './season.component.html',
@@ -35,7 +36,6 @@ export class SeasonComponent {
   readonly selectedMonth = signal(1);
 
   readonly seasonHits = toSignal(this.seasonService.getSeasonHits(), { initialValue: undefined as SeasonHits | undefined });
-  // Only bouquets a customer could actually buy make sense as a "season hit".
   readonly bouquets = computed(() => this.bouquetService.active().filter((b) => b.status === 'active'));
 
   readonly savedFlash = signal(false);

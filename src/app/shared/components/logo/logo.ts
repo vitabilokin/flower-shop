@@ -1,6 +1,7 @@
 import { Component, input } from '@angular/core';
 
 @Component({
+  standalone: true,
   selector: 'app-logo',
   template: `
     <span class="app-logo" [style.fontSize.px]="size()" [style.color]="color()">

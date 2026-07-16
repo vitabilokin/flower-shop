@@ -3,10 +3,11 @@ import { RouterLink } from '@angular/router';
 import { SettingsService } from '../../../../core/services/settings.service';
 
 @Component({
+  standalone: true,
   selector: 'app-contacts',
   imports: [RouterLink],
-  templateUrl: './contacts.html',
-  styleUrl: './contacts.scss',
+  templateUrl: './contacts.component.html',
+  styleUrl: './contacts.component.scss',
 })
 export class Contacts {
   readonly settingsService = inject(SettingsService);

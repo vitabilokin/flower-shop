@@ -9,10 +9,11 @@ interface GroupedFlower {
 }
 
 @Component({
+  standalone: true,
   selector: 'app-order-summary',
   imports: [],
-  templateUrl: './order-summary.html',
-  styleUrl: './order-summary.scss',
+  templateUrl: './order-summary.component.html',
+  styleUrl: './order-summary.component.scss',
 })
 export class OrderSummary {
   readonly constructorService = inject(ConstructorService);

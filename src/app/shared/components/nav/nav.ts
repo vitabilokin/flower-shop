@@ -5,10 +5,11 @@ import { CartService } from '../../../core/services/cart.service';
 import { CatalogFilterService } from '../../../core/services/catalog-filter.service';
 
 @Component({
+  standalone: true,
   selector: 'app-nav',
   imports: [RouterLink, RouterLinkActive],
-  templateUrl: './nav.html',
-  styleUrl: './nav.scss',
+  templateUrl: './nav.component.html',
+  styleUrl: './nav.component.scss',
 })
 export class Nav {
   private readonly router = inject(Router);
@@ -20,7 +21,6 @@ export class Nav {
   readonly badgeBump = signal(false);
   readonly menuOpen = signal(false);
 
-  // Solid (ivory) header everywhere except the home page's transparent hero overlay.
   readonly solid = computed(() => this.scrolled() || !this.isHome());
 
   private previousCount = 0;

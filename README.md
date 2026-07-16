@@ -1,68 +1,73 @@
-# FlowerShop
+# Posy — Flower Shop
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.13.
+A modern full-stack flower shop website with a product catalog, bouquet builder, and admin panel — built as a portfolio project to demonstrate production-ready Angular development.
 
-## Дизайн-система Posy — правила верстки
+---
 
-- **Адаптивність обов'язкова для будь-якого нового компонента.** Перевіряй вигляд щонайменше на 3 ширинах: ~375px (мобільний), ~800px (планшет), ~1280px+ (десктоп).
-- Для сіток карток використовуй `grid-template-columns: repeat(auto-fit, minmax(<мін-ширина>, 1fr))` замість набору фіксованих `@media`-брейкпоінтів — це адаптується плавно під будь-яку ширину.
-- Для розмірів шрифтів і відступів, де доречно, використовуй `clamp()` (як у `--text-4xl`, `.hero__title`, `.not-found__code`).
-- **Будь-який блок тексту чи кнопок усередині картки/контейнера повинен мати власний внутрішній `padding`** — не покладайся лише на `gap` грід-контейнера чи padding секції. Інакше на вузьких екранах (single-column) текст і кнопки розтягуються край-в-край без "повітря" (саме ця помилка була виправлена в картках каталогу й топ-букетів — додано обгортки `.card__text` / `.top-card__text` з горизонтальним padding).
-- Кнопки в групах (`.hero__actions`, `.card__actions` тощо) мають отримувати `flex-wrap: wrap`, щоб не виходити за межі екрана на вузьких ширинах.
-- Перевіряй, що жоден елемент не задає фіксовану ширину в `px` без `max-width: 100%` чи `clamp()` — інакше на малих екранах буде горизонтальний скрол.
+## About
 
-## Development server
+Posy is a customer-facing web app for a Ukrainian flower shop. It covers the full user journey: browsing and filtering bouquets, getting personalized recommendations, building a custom bouquet, placing an order, and scheduling a reminder for upcoming occasions.
 
-To start a local development server, run:
+The admin panel lets the shop owner manage the catalog, control seasonal highlights, and view reminder requests — all in real time via Firebase.
 
-```bash
-ng serve
+---
+
+## Features
+
+**Customer-facing**
+- **Catalog** with multi-parameter filtering (occasion, flower type, color, price range) and URL-synced filter state
+- **Bouquet detail pages** with add-to-cart and quick-order via Telegram/Viber
+- **Quiz** — 5-step flower preference quiz that recommends matching bouquets
+- **Bouquet builder** — interactive SVG canvas to compose a custom bouquet from 18 flower types with wrapping and ribbon options; supports unlimited flowers with a visual mode up to 20
+- **Shopping cart** — slide-in drawer with quantity controls and one-tap order via Telegram or Viber
+- **Reminder** — form to schedule a flower delivery reminder for birthdays or anniversaries, saved to Firestore
+
+**Admin panel** (protected by Firebase Auth)
+- Catalog management: create, edit, toggle visibility, soft-delete bouquets with photo upload to Firebase Storage
+- Season hits: set featured bouquets per calendar month
+- Reminders: view and mark customer reminder requests as done
+- Site settings: update contact info, working hours, and social links — reflected live across the site
+
+---
+
+## Tech Stack
+
+| Layer | Choice |
+|---|---|
+| Framework | Angular 21 (standalone components) |
+| Language | TypeScript |
+| Styling | SCSS with a custom Posy design system (CSS tokens) |
+| UI components | Angular Material |
+| State | Angular Signals (`signal`, `computed`, `effect`) |
+| Backend | Firebase — Firestore, Authentication, Storage |
+| Build | Angular CLI, lazy-loaded routes |
+
+---
+
+## Architecture
+
+```
+src/app/
+├── core/          # Services, guards, Firebase helpers
+├── features/      # Lazy-loaded pages (catalog, constructor, admin, quiz…)
+└── shared/        # Nav, cart drawer, filter drawer, footer, confirm dialog
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+**Key decisions:**
+- **Feature-based folder structure** — each page is a self-contained folder with its component, template, styles, and child components
+- **Lazy loading** on every route — initial bundle stays small regardless of how many admin pages exist
+- **Angular Signals throughout** — no NgRx, no RxJS Subject chains; reactive state is local and explicit
+- **Custom Firestore helpers** — thin `onSnapshot` wrappers instead of `@angular/fire` collection helpers, which have a known type mismatch in this firebase/angular-fire version combination
+- **CSS design system** — all spacing, color, and typography defined as `--token` variables in a single `tokens.scss`; no hardcoded values in component styles
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Screenshots
 
-```bash
-ng generate component component-name
-```
+> _Coming soon — live demo link and screenshots_
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## Author
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Built by **Vita Bilokin** · [GitHub](https://github.com/vitabilokin)

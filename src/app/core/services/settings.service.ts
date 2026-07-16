@@ -32,8 +32,6 @@ export class SettingsService {
 
   private readonly remoteSettings = toSignal(docDataPlain<SiteSettings>(this.docRef), { initialValue: undefined });
 
-  // Falls back to sane defaults until Firestore has been seeded with real settings,
-  // so the public site never shows blank contact info.
   readonly settings = () => ({ ...DEFAULT_SETTINGS, ...this.remoteSettings() });
 
   async save(data: SiteSettings): Promise<void> {

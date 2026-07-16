@@ -3,10 +3,11 @@ import { RouterLink } from '@angular/router';
 import { BouquetService } from '../../../../core/services/bouquet.service';
 
 @Component({
+  standalone: true,
   selector: 'app-top-bouquets',
   imports: [RouterLink],
-  templateUrl: './top-bouquets.html',
-  styleUrl: './top-bouquets.scss',
+  templateUrl: './top-bouquets.component.html',
+  styleUrl: './top-bouquets.component.scss',
 })
 export class TopBouquets {
   private readonly bouquetService = inject(BouquetService);

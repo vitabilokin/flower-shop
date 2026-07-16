@@ -9,7 +9,7 @@
 
   <div class="palette__body">
     @if (activeTab() === 'flowers') {
-      @for (group of constructorService.flowerGroups; track group.type) {
+      @for (group of constructorService.flowerTypeGroups; track group.type) {
         <div class="flower-group" [class.flower-group--open]="isGroupOpen(group.type)">
           <button class="flower-group__head" (click)="toggleGroup(group.type)">
             <span>{{ group.label }}</span>

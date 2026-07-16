@@ -14,21 +14,20 @@ const PREFIX: Record<ContactMethod, string> = {
   telegram: '@',
 };
 
-// Ukrainian mobile numbers without the country code are 10 digits starting with 0
-// (e.g. 0501234567), so the full contact is always "+38" + exactly 10 digits.
 const PHONE_DIGITS = 10;
 
 const MIN_CONTACT_LENGTH: Record<ContactMethod, number> = {
   phone: PREFIX.phone.length + PHONE_DIGITS,
-  telegram: 4, // @abc — bare "@" alone shouldn't count as a real contact.
+  telegram: 4,
 };
 
 const MAX_CONTACT_LENGTH: Record<ContactMethod, number> = {
   phone: PREFIX.phone.length + PHONE_DIGITS,
-  telegram: 33, // @ + up to 32 chars, Telegram's own username limit.
+  telegram: 33,
 };
 
 @Component({
+  standalone: true,
   selector: 'app-reminder',
   imports: [FormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatSnackBarModule],
   templateUrl: './reminder.component.html',
@@ -57,8 +56,6 @@ export class ReminderComponent {
     this.contact = PREFIX[method];
   }
 
-  // Keeps the "+38"/"@" prefix from ever being edited or deleted, and for phone numbers
-  // only allows the 10 digits that come after it.
   onContactChange(value: string): void {
     const method = this.contactMethod();
     const prefix = PREFIX[method];

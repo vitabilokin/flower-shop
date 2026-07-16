@@ -1,11 +1,6 @@
 import { CollectionReference, DocumentData, DocumentReference, Query, onSnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
-// @angular/fire's docData()/collectionData() helpers currently throw
-// "Expected type '_Query'/'_CollectionReference'..." against this firebase/@angular-fire
-// version combo (their internal _zoneWrap mishandles the ref). These call the plain
-// firebase/firestore onSnapshot API directly instead, which works correctly.
-
 export function docDataPlain<T>(ref: DocumentReference<DocumentData>): Observable<T | undefined> {
   return new Observable((subscriber) => {
     return onSnapshot(
@@ -26,7 +21,6 @@ export function collectionDataPlain<T>(ref: CollectionReference<DocumentData> | 
   });
 }
 
-/** Normalizes a Firestore Timestamp, JS Date, or unset field into a comparable epoch ms value. */
 export function toMillis(value: unknown): number {
   if (!value) return 0;
   if (value instanceof Date) return value.getTime();

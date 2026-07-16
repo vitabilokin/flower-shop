@@ -4,6 +4,7 @@ import { BouquetService } from '../../../core/services/bouquet.service';
 import { CartService } from '../../../core/services/cart.service';
 
 @Component({
+  standalone: true,
   selector: 'app-bouquet-detail',
   imports: [RouterLink],
   templateUrl: './bouquet-detail.component.html',

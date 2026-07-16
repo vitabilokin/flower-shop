@@ -2,10 +2,11 @@ import { Component, computed, inject } from '@angular/core';
 import { SettingsService } from '../../../core/services/settings.service';
 
 @Component({
+  standalone: true,
   selector: 'app-footer',
   imports: [],
-  templateUrl: './footer.html',
-  styleUrl: './footer.scss',
+  templateUrl: './footer.component.html',
+  styleUrl: './footer.component.scss',
 })
 export class Footer {
   readonly year = new Date().getFullYear();

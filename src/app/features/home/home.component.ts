@@ -7,6 +7,7 @@ import { About } from './components/about/about';
 import { Contacts } from './components/contacts/contacts';
 
 @Component({
+  standalone: true,
   selector: 'app-home',
   imports: [Hero, OccasionCarousel, SeasonHit, TopBouquets, About, Contacts],
   templateUrl: './home.component.html',

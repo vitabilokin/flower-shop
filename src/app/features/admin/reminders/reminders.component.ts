@@ -6,6 +6,7 @@ import { Reminder, ReminderService } from '../../../core/services/reminder.servi
 type StatusFilter = 'all' | 'new' | 'done';
 
 @Component({
+  standalone: true,
   selector: 'app-admin-reminders',
   imports: [DatePipe],
   templateUrl: './reminders.component.html',

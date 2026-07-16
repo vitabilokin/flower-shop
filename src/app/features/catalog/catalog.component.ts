@@ -12,6 +12,7 @@ interface FilterChip {
 }
 
 @Component({
+  standalone: true,
   selector: 'app-catalog',
   imports: [RouterLink, FilterDrawer],
   templateUrl: './catalog.component.html',
@@ -25,8 +26,6 @@ export class CatalogComponent {
   private readonly router = inject(Router);
   readonly filterService = inject(CatalogFilterService);
 
-  // Reads BouquetService's Firestore-backed signal, so this stays current once data
-  // arrives (the bouquet list is empty for an instant on first load).
   private readonly allBouquets = computed(() => this.bouquetService.getAll());
   private readonly occasionOptions = this.bouquetService.getOccasionOptions();
   private readonly typeOptions = this.bouquetService.getTypeOptions();
@@ -36,8 +35,6 @@ export class CatalogComponent {
   readonly highlightedId = this.highlight.highlightedId;
   readonly addedIds = signal<ReadonlySet<string>>(new Set());
 
-  // True when nothing matches every active filter exactly, so the shown bouquets are the
-  // closest fallback rather than a real match — lets the template explain the substitution.
   readonly isFallback = computed(
     () =>
       this.filterService.activeFilterCount() > 0 &&
@@ -84,7 +81,6 @@ export class CatalogComponent {
     this.isApplyingFromUrl = false;
 
     effect(() => {
-      // touch all filter signals so this effect reruns on every change
       const queryParams = this.filterService.toQueryParams();
       if (this.isApplyingFromUrl) {
         return;
