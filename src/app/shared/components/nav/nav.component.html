@@ -1,18 +1,7 @@
 <header class="nav" [class.nav--scrolled]="solid()">
   <div class="nav__inner">
-    <a class="nav__logo logo" routerLink="/">
-      <span>P</span>
-      <svg width="28" height="28" viewBox="0 0 30 30">
-        <g class="bloom-petals" fill="#ff4d8d">
-          <circle cx="15" cy="7" r="5" />
-          <circle cx="22.61" cy="12.53" r="5" />
-          <circle cx="19.7" cy="21.47" r="5" />
-          <circle cx="10.3" cy="21.47" r="5" />
-          <circle cx="7.39" cy="12.53" r="5" />
-        </g>
-        <circle cx="15" cy="15" r="5" fill="#ffce3f" />
-      </svg>
-      <span>sy</span>
+    <a class="nav__logo" routerLink="/">
+      <app-logo [size]="28" />
     </a>
 
     <nav class="nav__links">

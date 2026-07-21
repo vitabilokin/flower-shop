@@ -19,16 +19,26 @@
           @if (isGroupOpen(group.type)) {
             <div class="flower-group__grid">
               @for (flower of flowersOf(group.type); track flower.id) {
-                <button
-                  class="flower-card"
-                  [class.flower-card--disabled]="!constructorService.canAddMore()"
-                  [disabled]="!constructorService.canAddMore()"
-                  (click)="addFlower(flower)"
-                >
+                <div class="flower-card">
                   <img class="flower-card__icon" [src]="flower.img" [alt]="flower.name" loading="lazy" />
                   <span class="flower-card__name">{{ flower.name }}</span>
                   <span class="flower-card__price">{{ flower.price }} ₴</span>
-                </button>
+                  <div class="flower-card__counter">
+                    <button class="flower-card__step"
+                            (click)="decrement(flower)"
+                            [disabled]="getCount(flower.id) === 0"
+                            aria-label="Зменшити">−</button>
+                    <input class="flower-card__count-input"
+                           type="number" min="0"
+                           [value]="getCount(flower.id)"
+                           (change)="onCountChange(flower, $event)"
+                           (click)="$event.stopPropagation()" />
+                    <button class="flower-card__step"
+                            (click)="increment(flower)"
+                            [disabled]="!constructorService.canAddMore()"
+                            aria-label="Збільшити">+</button>
+                  </div>
+                </div>
               }
             </div>
           }
@@ -87,6 +97,26 @@
             <span class="size-card__label">{{ option.label }}</span>
           </button>
         }
+
+        <div class="size-card size-card--custom"
+             [class.size-card--active]="constructorService.selectedSize().id === 'custom'">
+          <button class="size-card__custom-top" (click)="applyCustomSize()">
+            <span class="size-card__name">Власний</span>
+            <span class="size-card__label">задайте кількість квіток</span>
+          </button>
+          <div class="size-card__counter">
+            <button class="size-card__step"
+                    (click)="decrementCustom()"
+                    [disabled]="customMaxFlowers() <= 1">−</button>
+            <input class="size-card__count-input"
+                   type="number" min="1"
+                   [value]="customMaxFlowers()"
+                   (change)="onCustomSizeChange($event)" />
+            <button class="size-card__step"
+                    (click)="incrementCustom()">+</button>
+            <span class="size-card__unit">квіток</span>
+          </div>
+        </div>
       </div>
     }
   </div>

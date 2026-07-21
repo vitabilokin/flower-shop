@@ -54,53 +54,8 @@
 }
 
 .nav__logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 28px;
-  color: #ff4d8d;
-  letter-spacing: -0.01em;
   flex-shrink: 0;
-
-  svg {
-    flex-shrink: 0;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 22px;
-
-    svg {
-      width: 22px;
-      height: 22px;
-    }
-  }
-}
-
-@keyframes bloom-spin {
-  0% {
-    transform: rotate(-90deg) scale(0);
-    opacity: 0;
-  }
-  70% {
-    transform: rotate(10deg) scale(1.1);
-    opacity: 1;
-  }
-  100% {
-    transform: rotate(0deg) scale(1);
-    opacity: 1;
-  }
-}
-
-.bloom-petals {
-  animation: bloom-spin 0.7s cubic-bezier(0.34, 1.32, 0.5, 1) forwards;
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-.logo:hover .bloom-petals {
-  animation: bloom-spin 0.7s cubic-bezier(0.34, 1.32, 0.5, 1) forwards;
+  line-height: 1;
 }
 
 .nav__links {

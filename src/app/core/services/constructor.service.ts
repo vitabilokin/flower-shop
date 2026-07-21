@@ -1,4 +1,5 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { FlowerPricesService } from './flower-prices.service';
 
 export type FlowerType = 'rose' | 'tulip' | 'sunflower' | 'peony' | 'lily' | 'orchid' | 'gerbera';
 
@@ -259,7 +260,13 @@ export const FLOWER_GROUPS: { type: FlowerType; label: string }[] = [
 
 @Injectable({ providedIn: 'root' })
 export class ConstructorService {
-  readonly flowers = FLOWERS;
+  private readonly pricesService = inject(FlowerPricesService);
+
+  readonly flowers = computed(() => {
+    const overrides = this.pricesService.overrides();
+    return FLOWERS.map((f) => ({ ...f, price: overrides[f.id] ?? f.price }));
+  });
+
   readonly wrappingOptions = WRAPPING;
   readonly ribbonOptions = RIBBONS;
   readonly sizeOptions = SIZES;
@@ -277,7 +284,7 @@ export class ConstructorService {
 
   readonly totalCount = computed(() => this.selectedFlowers().length);
 
-  readonly canAddMore = computed(() => true);
+  readonly canAddMore = computed(() => this.totalCount() < this.selectedSize().maxFlowers);
 
   readonly showVisualBouquet = computed(() => this.selectedFlowers().length <= 20);
 
@@ -294,7 +301,7 @@ export class ConstructorService {
   });
 
   flowersByType(type: FlowerType): Flower[] {
-    return this.flowers.filter((f) => f.type === type);
+    return this.flowers().filter((f) => f.type === type);
   }
 
   addFlower(flower: Flower): void {
@@ -308,7 +315,7 @@ export class ConstructorService {
     this.selectedFlowers.update((f) => f.filter((item) => item.id !== id));
   }
 
-  /** Marks a flower as leaving so the canvas can play a shrink/fade-out animation before it's actually removed. */
+  
   requestRemove(id: string): void {
     if (this.removingIds().has(id)) return;
     this.removingIds.update((set) => new Set(set).add(id));

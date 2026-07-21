@@ -1,0 +1,42 @@
+<div class="flower-prices">
+  <div class="flower-prices__header">
+    <div class="flower-prices__actions">
+      @if (error()) {
+        <span class="flower-prices__error">{{ error() }}</span>
+      }
+      @if (saved()) {
+        <span class="flower-prices__ok">Збережено</span>
+      }
+      <button class="btn btn-primary" (click)="save()" [disabled]="saving()">
+        {{ saving() ? 'Збереження...' : 'Зберегти' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="flower-prices__grid">
+    @for (flower of prices(); track flower.id) {
+      <div class="fp-card">
+        <img class="fp-card__img" [src]="flower.img" [alt]="flower.name" />
+        <div class="fp-card__info">
+          <span class="fp-card__name">{{ flower.name }}</span>
+          <span class="fp-card__default">За замовч.: {{ flower.defaultPrice }} ₴</span>
+        </div>
+        <div class="fp-card__price-row">
+          <button class="fp-card__step" (click)="setPrice(flower.id, getPrice(flower.id) - 1)" [disabled]="getPrice(flower.id) <= 1">−</button>
+          <input
+            class="fp-card__input"
+            type="number"
+            min="1"
+            [value]="getPrice(flower.id)"
+            (change)="setPrice(flower.id, +($event.target)!.value)"
+          />
+          <button class="fp-card__step" (click)="setPrice(flower.id, getPrice(flower.id) + 1)">+</button>
+          <span class="fp-card__currency">₴</span>
+          @if (getPrice(flower.id) !== flower.defaultPrice) {
+            <button class="fp-card__reset" (click)="reset(flower.id)" title="Скинути до стандартного">↩</button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

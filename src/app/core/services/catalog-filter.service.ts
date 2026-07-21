@@ -97,8 +97,7 @@ export class CatalogFilterService {
     this.priceMax.set(PRICE_MAX);
   }
 
-  /** Seeds filter state from URL query params (used on initial catalog load). */
-  applyFromQueryParams(params: {
+    applyFromQueryParams(params: {
     occasion?: string;
     type?: string;
     color?: string;
@@ -114,8 +113,7 @@ export class CatalogFilterService {
     this.priceMax.set(params.max ? Number(params.max) : PRICE_MAX);
   }
 
-  /** Builds a plain query-params object reflecting the current filter state. */
-  toQueryParams(): Record<string, string | null> {
+    toQueryParams(): Record<string, string | null> {
     return {
       occasion: this.occasions().size ? Array.from(this.occasions()).join(',') : null,
       type: this.types().size ? Array.from(this.types()).join(',') : null,
@@ -126,8 +124,7 @@ export class CatalogFilterService {
     };
   }
 
-  /** A bouquet's flower type can come from its main classification or from its composition list. */
-  private matchesType(b: Bouquet, types: ReadonlySet<string>): boolean {
+    private matchesType(b: Bouquet, types: ReadonlySet<string>): boolean {
     if (!types.size) return true;
     if (types.has(b.type)) return true;
     return b.composition.some((c) => types.has(c.type));
@@ -143,8 +140,7 @@ export class CatalogFilterService {
     return true;
   }
 
-  /** True if at least one bouquet satisfies every active filter exactly. */
-  hasExactMatches(bouquets: Bouquet[]): boolean {
+    hasExactMatches(bouquets: Bouquet[]): boolean {
     return bouquets.some((b) => this.matchesStrict(b));
   }
 
@@ -170,11 +166,7 @@ export class CatalogFilterService {
     return sorted;
   }
 
-  /**
-   * Filters and sorts a bouquet list according to the current filter state. If nothing
-   * matches every criterion exactly, falls back to the closest bouquets (most matching
-   * criteria) instead of showing an empty grid.
-   */
+  
   apply(bouquets: Bouquet[]): Bouquet[] {
     const exact = bouquets.filter((b) => this.matchesStrict(b));
     if (exact.length > 0 || this.activeFilterCount() === 0) {

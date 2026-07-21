@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 .palette__tabs {
@@ -64,39 +66,29 @@
 
 .flower-card {
   width: 100%;
-  aspect-ratio: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 2px;
-  padding: var(--space-1);
+  padding: var(--space-1) var(--space-1) 6px;
   border-radius: var(--radius-sm);
   border: 1.5px solid var(--line);
   background: var(--paper-2);
-  transition: border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  transition: border-color var(--dur-fast) var(--ease-out);
 
-  &:hover:not(&--disabled) {
+  &:has(.flower-card__step:not(:disabled):hover) {
     border-color: var(--pink);
-    transform: scale(1.05);
-  }
-
-  &--disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
   }
 }
 
 .flower-card__icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 34px;
+  height: 34px;
   object-fit: cover;
-  box-shadow: 0 0 0 1px var(--line) inset;
 }
 
 .flower-card__name {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   color: var(--ink);
   text-align: center;
@@ -104,9 +96,71 @@
 }
 
 .flower-card__price {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: var(--pink);
+}
+
+.flower-card__counter {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 3px;
+}
+
+.flower-card__step {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  flex-shrink: 0;
+
+  &:hover:not(:disabled) {
+    background: var(--pink);
+    color: #fff;
+    border-color: var(--pink);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.flower-card__count-input {
+  width: 26px;
+  height: 22px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  flex-shrink: 0;
+
+  -moz-appearance: textfield;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &:focus {
+    outline: 2px solid var(--pink);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
 }
 
 .wrapping-list {
@@ -166,7 +220,7 @@
 .ribbon-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
 .ribbon-swatch {
@@ -226,6 +280,16 @@
     border-color: var(--pink);
     background: var(--pink-100);
   }
+
+  &--custom {
+    padding: 0;
+  }
+}
+
+.size-card__custom-top {
+  width: 100%;
+  text-align: left;
+  padding: var(--space-4) var(--space-4) var(--space-2);
 }
 
 .size-card__name {
@@ -238,5 +302,70 @@
   display: block;
   margin-top: var(--space-1);
   font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.size-card__counter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4) var(--space-3);
+}
+
+.size-card__step {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+
+  &:hover:not(:disabled) {
+    background: var(--pink);
+    color: #fff;
+    border-color: var(--pink);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.size-card__count-input {
+  width: 54px;
+  height: 30px;
+  text-align: center;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: var(--ink);
+
+  -moz-appearance: textfield;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &:focus {
+    outline: 2px solid var(--pink);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+}
+
+.size-card__unit {
+  font-size: var(--text-xs);
   color: var(--muted);
 }

@@ -1,5 +1,6 @@
 .constructor-page {
   padding: var(--section-y) 0 var(--space-7);
+  overflow-x: hidden;
 }
 
 .constructor-page__head {
@@ -44,12 +45,9 @@
 }
 
 .constructor-page__pane--canvas {
-  background: #e8e0d5;
+  background: #f5ede3;
   display: flex;
 
-  // The flex row's main axis is horizontal, so without this the single child
-  // (the bouquet-canvas host) only shrinks to its content width instead of
-  // filling the pane — which is what was pushing the vase off-center.
   > * {
     flex: 1;
     min-width: 0;
@@ -75,5 +73,12 @@
 
   .constructor-page__pane--palette {
     min-height: 420px;
+  }
+}
+
+@media (max-width: 480px) {
+  .constructor-page__layout {
+    padding: 0 var(--space-2);
+    gap: var(--space-3);
   }
 }

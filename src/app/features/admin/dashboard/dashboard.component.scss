@@ -81,6 +81,7 @@
 }
 
 .admin__logout {
+  display: none;
   align-self: flex-start;
   margin: 0 var(--space-4) var(--space-4);
   font-size: var(--text-sm);
@@ -106,11 +107,27 @@
 
 .admin__header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   padding: var(--space-4) var(--space-5);
   border-bottom: 1px solid var(--line);
   background: var(--paper-2);
+}
+
+.admin__header-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.admin__header-logout {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--pink);
+
+  &:hover {
+    color: var(--pink-300);
+  }
 }
 
 .admin__header-title {
@@ -218,8 +235,13 @@
   }
 
   .admin__logout {
+    display: inline-flex;
     margin: 0 0 0 auto;
     flex-shrink: 0;
+  }
+
+  .admin__header-logout {
+    display: none;
   }
 
   .admin__nav-backdrop {

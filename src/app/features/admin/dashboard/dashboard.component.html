@@ -39,7 +39,10 @@
   <div class="admin__main">
     <header class="admin__header">
       <h1 class="admin__header-title">{{ currentLabel() }}</h1>
-      <span class="admin__header-date">{{ today }}</span>
+      <div class="admin__header-meta">
+        <span class="admin__header-date">{{ today }}</span>
+        <button class="admin__header-logout" (click)="logout()">Вийти</button>
+      </div>
     </header>
 
     <div class="admin__content">

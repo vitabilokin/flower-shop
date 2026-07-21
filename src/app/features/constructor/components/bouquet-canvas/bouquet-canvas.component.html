@@ -7,76 +7,9 @@
   <div class="canvas__stage">
     <svg class="canvas__svg" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid meet">
 
-      @if (showVase()) {
-        <g class="vase" transform="translate(300, 600) scale(0.75)">
-          <ellipse cx="0" cy="10" rx="90" ry="15" fill="rgba(0,0,0,0.08)" />
-          <path
-            d="M-80,-220 C-82,-220 -90,-180 -90,-100 C-90,0 -85,10 0,10 C85,10 90,0 90,-100 C90,-180 82,-220 80,-220 Z"
-            fill="#e8ddd0" stroke="#c4a882" stroke-width="2"
-          />
-          <ellipse cx="0" cy="-220" rx="80" ry="12" fill="#d4c4b0" stroke="#c4a882" stroke-width="1.5" />
-          <path d="M-88,-120 C-88,-120 -85,8 0,8 C85,8 88,-120 88,-120 Z" fill="rgba(180,220,240,0.25)" />
-          <path d="M-65,-200 C-72,-160 -74,-80 -68,-20" stroke="rgba(255,255,255,0.6)" stroke-width="8" fill="none" stroke-linecap="round" />
-          <path d="M-50,-210 C-54,-190 -55,-170 -52,-150" stroke="rgba(255,255,255,0.4)" stroke-width="4" fill="none" stroke-linecap="round" />
-        </g>
-      }
-
-      @if (isKraftWrapping()) {
-        <g transform="translate(300, 0)">
-          <ellipse cx="0" cy="695" rx="75" ry="12" fill="rgba(0,0,0,0.08)" />
-          <path d="M-85,420 C-82,450 -78,500 -70,560 C-60,630 -45,680 0,690 C45,680 60,630 70,560 C78,500 82,450 85,420 Z"
-                fill="#c8a97a"/>
-          <path d="M-80,450 C-40,445 40,445 80,450" stroke="#b8956a" stroke-width="0.8" fill="none" opacity="0.4"/>
-          <path d="M-78,480 C-40,475 40,475 78,480" stroke="#b8956a" stroke-width="0.8" fill="none" opacity="0.4"/>
-          <path d="M-75,510 C-40,505 40,505 75,510" stroke="#b8956a" stroke-width="0.8" fill="none" opacity="0.4"/>
-          <path d="M-72,540 C-38,535 38,535 72,540" stroke="#b8956a" stroke-width="0.8" fill="none" opacity="0.4"/>
-          <path d="M-68,570 C-35,565 35,565 68,570" stroke="#b8956a" stroke-width="0.8" fill="none" opacity="0.4"/>
-          <path d="M-62,600 C-30,595 30,595 62,600" stroke="#b8956a" stroke-width="0.8" fill="none" opacity="0.4"/>
-          <path d="M-55,630 C-25,625 25,625 55,630" stroke="#b8956a" stroke-width="0.8" fill="none" opacity="0.4"/>
-          <path d="M-85,420 C-90,440 -88,480 -82,530 C-76,580 -68,630 -60,670 C-50,690 -20,695 0,690"
-                fill="#b8956a" opacity="0.6"/>
-          <path d="M85,420 C90,440 88,480 82,530 C76,580 68,630 60,670 C50,690 20,695 0,690"
-                fill="#b8956a" opacity="0.6"/>
-          <path d="M-70,440 C-74,480 -74,540 -68,590"
-                stroke="rgba(255,255,255,0.25)" stroke-width="8" fill="none" stroke-linecap="round"/>
-          @if (showRibbon()) {
-            <rect x="-85" y="516" width="170" height="18"
-                  [attr.fill]="constructorService.selectedRibbon().color" opacity="0.85"/>
-            <path d="M-15,525 L-30,510 L-8,522 Z"
-                  [attr.fill]="constructorService.selectedRibbon().color" opacity="0.8"/>
-            <path d="M15,525 L30,510 L8,522 Z"
-                  [attr.fill]="constructorService.selectedRibbon().color" opacity="0.8"/>
-            <circle cx="0" cy="525" r="8"
-                    [attr.fill]="constructorService.selectedRibbon().color"
-                    stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
-          }
-        </g>
-      }
-
-      @if (isBoxWrapping()) {
-        <g transform="translate(300, 0)">
-          <rect x="-80" y="465" width="160" height="225" rx="8"
-                fill="#ffcc80" stroke="#e6a817" stroke-width="1.5"/>
-          <rect x="-88" y="440" width="176" height="35" rx="6"
-                fill="#ffa726" stroke="#e6a817" stroke-width="1.5"/>
-          <rect x="-9" y="440" width="18" height="250"
-                [attr.fill]="showRibbon() ? constructorService.selectedRibbon().color : '#ff4d8d'"
-                opacity="0.8"/>
-          <rect x="-88" y="540" width="176" height="16"
-                [attr.fill]="showRibbon() ? constructorService.selectedRibbon().color : '#ff4d8d'"
-                opacity="0.8"/>
-          <path d="M-28,458 C-38,438 -16,430 0,440 C16,430 38,438 28,458"
-                [attr.fill]="showRibbon() ? constructorService.selectedRibbon().color : '#ff4d8d'"
-                opacity="0.9"/>
-          <circle cx="0" cy="458" r="8"
-                  [attr.fill]="showRibbon() ? constructorService.selectedRibbon().color : '#ff4d8d'"
-                  stroke="rgba(0,0,0,0.15)" stroke-width="1" opacity="0.9"/>
-          <path d="M-70,475 L-70,680" stroke="rgba(255,255,255,0.3)" stroke-width="6" stroke-linecap="round"/>
-        </g>
-      }
-
       @if (constructorService.showVisualBouquet()) {
 
+        <!-- 1. Stems & leaves — rendered first so packaging covers their bottoms -->
         @for (item of placedFlowers(); track item.id) {
           <path [attr.d]="item.stemPath"
                 stroke="#5a8a3c" stroke-width="1.8" fill="none" stroke-linecap="round" />
@@ -85,25 +18,104 @@
           }
         }
 
-        @if (isOrganzaWrapping()) {
-          <path d="M236,435 C230,460 222,530 232,595 C244,648 268,668 300,670 C332,668 356,648 368,595 C378,530 370,460 364,435 Z"
-                fill="rgba(252,228,236,0.38)" stroke="#f48fb1" stroke-width="1.2"/>
-        }
-
-        @if (showGeneralRibbon()) {
-          <g class="ribbon">
-            <rect x="220" y="492" width="160" height="14"
-                  [attr.fill]="constructorService.selectedRibbon().color" />
-            <path d="M280 480 L300 499 L280 516 Z"
-                  [attr.fill]="constructorService.selectedRibbon().color" />
-            <path d="M320 480 L300 499 L320 516 Z"
-                  [attr.fill]="constructorService.selectedRibbon().color" />
-            <circle cx="300" cy="499" r="7"
-                    [attr.fill]="constructorService.selectedRibbon().color"
-                    stroke="#0003" stroke-width="1" />
+        <!-- 2. Packaging — covers stem bottoms, creating the "stems inside" illusion -->
+        @if (isKraftWrapping()) {
+          <g transform="translate(300, 0)">
+            <ellipse cx="0" cy="686" rx="66" ry="9" fill="rgba(0,0,0,0.08)"/>
+            <path d="M-80,430 C-82,460 -78,530 -68,595 C-55,640 -35,672 0,676 C35,672 55,640 68,595 C78,530 82,460 80,430 Z"
+                  fill="#c4956a"/>
+            <path d="M-80,430 C-82,462 -78,535 -70,596 C-60,632 -44,660 -24,670 C-42,662 -57,636 -66,590 C-76,528 -80,462 -80,430 Z"
+                  fill="#a07248"/>
+            <path d="M80,430 C82,462 78,535 70,596 C60,632 44,660 24,670 C42,662 57,636 66,590 C76,528 80,462 80,430 Z"
+                  fill="#a07248"/>
+            <path d="M0,430 C0,510 0,600 0,676" stroke="#a07248" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <path d="M-44,433 C-46,505 -44,580 -39,640" stroke="#a07248" stroke-width="1" fill="none" opacity="0.4"/>
+            <path d="M44,433 C46,505 44,580 39,640" stroke="#a07248" stroke-width="1" fill="none" opacity="0.4"/>
+            <path d="M-77,468 C-38,463 38,463 77,468" stroke="#8f6035" stroke-width="0.7" fill="none" opacity="0.35"/>
+            <path d="M-74,510 C-36,505 36,505 74,510" stroke="#8f6035" stroke-width="0.7" fill="none" opacity="0.35"/>
+            <path d="M-69,555 C-35,550 35,550 69,555" stroke="#8f6035" stroke-width="0.7" fill="none" opacity="0.35"/>
+            <path d="M-61,600 C-30,595 30,595 61,600" stroke="#8f6035" stroke-width="0.7" fill="none" opacity="0.35"/>
+            <path d="M-62,442 C-66,500 -64,570 -58,622" stroke="rgba(255,255,255,0.2)" stroke-width="10" fill="none" stroke-linecap="round"/>
+            @if (showRibbon()) {
+              <rect x="-78" y="508" width="156" height="16"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.85"/>
+              <path d="M-12,516 L-26,502 L-7,514 Z"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.8"/>
+              <path d="M12,516 L26,502 L7,514 Z"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.8"/>
+              <circle cx="0" cy="516" r="7"
+                      [attr.fill]="constructorService.selectedRibbon().color"
+                      stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+            }
           </g>
         }
 
+        @if (isOrganzaWrapping()) {
+          <g transform="translate(300, 0)">
+            <path d="M-68,430 C-72,470 -76,528 -70,590 C-58,636 -36,658 0,661 C36,658 58,636 70,590 C76,528 72,470 68,430 Z"
+                  fill="rgba(252,228,236,0.45)" stroke="#f48fb1" stroke-width="1"/>
+            <path d="M-37,435 C-39,496 -37,570 -33,630" stroke="rgba(244,143,177,0.35)" stroke-width="1.5" fill="none"/>
+            <path d="M-13,433 C-14,496 -13,570 -11,633" stroke="rgba(244,143,177,0.35)" stroke-width="1.5" fill="none"/>
+            <path d="M13,433 C14,496 13,570 11,633" stroke="rgba(244,143,177,0.35)" stroke-width="1.5" fill="none"/>
+            <path d="M37,435 C39,496 37,570 33,630" stroke="rgba(244,143,177,0.35)" stroke-width="1.5" fill="none"/>
+            <path d="M-50,440 C-53,505 -51,574 -46,622" stroke="rgba(255,255,255,0.5)" stroke-width="6" fill="none" stroke-linecap="round"/>
+            @if (showRibbon()) {
+              <rect x="-66" y="514" width="132" height="14"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.8"/>
+              <path d="M-10,521 L-22,508 L-5,517 Z"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.9"/>
+              <path d="M10,521 L22,508 L5,517 Z"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.9"/>
+              <circle cx="0" cy="521" r="6"
+                      [attr.fill]="constructorService.selectedRibbon().color"
+                      stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+            }
+          </g>
+        }
+
+        @if (isBoxWrapping()) {
+          <g transform="translate(300, 0)">
+            <ellipse cx="0" cy="702" rx="78" ry="11" fill="rgba(0,0,0,0.09)"/>
+            <rect x="-82" y="448" width="164" height="250" rx="4" fill="#f5e6d3" stroke="#e0c9a6" stroke-width="1.5"/>
+            <rect x="-82" y="448" width="164" height="20" rx="4" fill="rgba(0,0,0,0.06)"/>
+            <rect x="-90" y="428" width="180" height="38" rx="5" fill="#e8d5b7" stroke="#d4b896" stroke-width="1.5"/>
+            <rect x="-82" y="432" width="164" height="8" rx="3" fill="rgba(255,255,255,0.3)"/>
+            <path d="M-70,453 L-70,680" stroke="rgba(255,255,255,0.3)" stroke-width="6" stroke-linecap="round"/>
+            @if (showRibbon()) {
+              <rect x="-10" y="428" width="20" height="272"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.85"/>
+              <rect x="-90" y="530" width="180" height="16"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.85"/>
+              <path d="M-28,446 C-40,428 -22,418 0,428 C22,418 40,428 28,446 C18,436 10,432 0,436 C-10,432 -18,436 -28,446 Z"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.9"/>
+              <circle cx="0" cy="438" r="7"
+                      [attr.fill]="constructorService.selectedRibbon().color"
+                      stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+            }
+            @if (!showRibbon()) {
+              <rect x="-10" y="428" width="20" height="272" fill="#d4b896" opacity="0.5"/>
+              <rect x="-90" y="530" width="180" height="10" fill="#d4b896" opacity="0.5"/>
+            }
+          </g>
+        }
+
+        @if (showVase()) {
+          <g class="vase" transform="translate(300, 600) scale(0.75)">
+            <ellipse cx="0" cy="10" rx="90" ry="15" fill="rgba(0,0,0,0.08)"/>
+            <path d="M-80,-220 C-82,-220 -90,-180 -90,-100 C-90,0 -85,10 0,10 C85,10 90,0 90,-100 C90,-180 82,-220 80,-220 Z"
+                  fill="#e8ddd0" stroke="#c4a882" stroke-width="2"/>
+            <ellipse cx="0" cy="-220" rx="80" ry="12" fill="#d4c4b0" stroke="#c4a882" stroke-width="1.5"/>
+            <path d="M-88,-120 C-88,-120 -85,8 0,8 C85,8 88,-120 88,-120 Z" fill="rgba(180,220,240,0.25)"/>
+            <path d="M-65,-200 C-72,-160 -74,-80 -68,-20" stroke="rgba(255,255,255,0.6)" stroke-width="8" fill="none" stroke-linecap="round"/>
+            <path d="M-50,-210 C-54,-190 -55,-170 -52,-150" stroke="rgba(255,255,255,0.4)" stroke-width="4" fill="none" stroke-linecap="round"/>
+          </g>
+          @if (showRibbon()) {
+            <rect x="242" y="440" width="116" height="12" rx="6"
+                  [attr.fill]="constructorService.selectedRibbon().color" opacity="0.85"/>
+          }
+        }
+
+        <!-- 3. Flowers — rendered last, always on top -->
         @for (item of placedFlowers(); track item.id) {
           <g class="flower-instance"
              [attr.transform]="'translate(' + item.x + ',' + item.y + ') rotate(' + item.rotation + ')'">

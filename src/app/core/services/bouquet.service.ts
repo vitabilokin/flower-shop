@@ -49,7 +49,6 @@ export type BouquetColor =
   | 'coral'
   | 'mixed';
 
-/** active = shown and orderable; out_of_stock = shown with a badge but can't be ordered; hidden = not shown at all. */
 export type BouquetStatus = 'active' | 'out_of_stock' | 'hidden';
 
 export interface CompositionItem {
@@ -68,13 +67,10 @@ export interface Bouquet {
   color: BouquetColor;
   tag?: string;
   tagTone?: 'pink' | 'teal' | 'spark';
-  /** Used by the mood quiz to score how well a bouquet matches the answers. */
-  tags: string[];
+    tags: string[];
   status: BouquetStatus;
-  /** Soft-deleted bouquets are kept around (in an admin "archive") so they can be restored. */
-  deleted: boolean;
-  /** What's actually in the bouquet, e.g. "Троянди" x11, "Гіпсофіла" x5. */
-  composition: CompositionItem[];
+    deleted: boolean;
+    composition: CompositionItem[];
   createdAt?: unknown;
 }
 
@@ -221,8 +217,7 @@ export class BouquetService {
     await updateDoc(doc(this.firestore, COLLECTION, id), data);
   }
 
-  /** Soft delete — moves the bouquet into the admin archive instead of erasing it. */
-  async archiveBouquet(id: string): Promise<void> {
+    async archiveBouquet(id: string): Promise<void> {
     await updateDoc(doc(this.firestore, COLLECTION, id), { deleted: true });
   }
 
@@ -230,8 +225,7 @@ export class BouquetService {
     await updateDoc(doc(this.firestore, COLLECTION, id), { deleted: false });
   }
 
-  /** Permanently erases a bouquet — only meant to be called from the archive view. */
-  async deleteForever(id: string): Promise<void> {
+    async deleteForever(id: string): Promise<void> {
     await deleteDoc(doc(this.firestore, COLLECTION, id));
   }
 }

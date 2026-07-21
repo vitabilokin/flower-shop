@@ -3,11 +3,12 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/ro
 import { filter } from 'rxjs';
 import { CartService } from '../../../core/services/cart.service';
 import { CatalogFilterService } from '../../../core/services/catalog-filter.service';
+import { Logo } from '../logo/logo';
 
 @Component({
   standalone: true,
   selector: 'app-nav',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, Logo],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.scss',
 })

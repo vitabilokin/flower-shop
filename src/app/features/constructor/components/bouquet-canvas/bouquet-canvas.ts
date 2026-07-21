@@ -19,7 +19,6 @@ interface PlacedFlower extends SelectedFlower {
 }
 
 const VASE_X = 300;
-const VASE_NECK_Y = 435;
 
 const ROWS = [
   { yOffset: 85,  maxCount: 4, spread: 140 },
@@ -61,6 +60,7 @@ export class BouquetCanvas {
     const flowers = this.constructorService.selectedFlowers();
     const visible = flowers.slice(0, 28);
     const positions = this.buildPositions(visible.length, (i) => visible[i].id);
+    const neckY = this.constructorService.selectedWrapping().id === 'none' ? 510 : 438;
 
     return visible
       .map((f, i) => {
@@ -71,8 +71,8 @@ export class BouquetCanvas {
           y: pos.y,
           rotation: pos.rotation,
           size: pos.size,
-          stemPath: this.getStemPath(pos.x, pos.y, pos.size, pos.midBend),
-          leafPaths: [this.getLeafPath(pos.x, pos.y, 'left'), this.getLeafPath(pos.x, pos.y, 'right')],
+          stemPath: this.getStemPath(pos.x, pos.y, pos.size, pos.midBend, neckY),
+          leafPaths: [this.getLeafPath(pos.x, pos.y, 'left', neckY), this.getLeafPath(pos.x, pos.y, 'right', neckY)],
         };
       })
       .sort((a, b) => b.y - a.y);
@@ -81,9 +81,8 @@ export class BouquetCanvas {
   readonly isBoxWrapping = computed(() => this.constructorService.selectedWrapping().id === 'box');
   readonly isKraftWrapping = computed(() => this.constructorService.selectedWrapping().id === 'kraft');
   readonly isOrganzaWrapping = computed(() => this.constructorService.selectedWrapping().id === 'organza');
-  readonly showVase = computed(() => !this.isKraftWrapping() && !this.isBoxWrapping());
+  readonly showVase = computed(() => this.constructorService.selectedWrapping().id === 'none');
   readonly showRibbon = computed(() => this.constructorService.selectedRibbon().id !== 'none');
-  readonly showGeneralRibbon = computed(() => this.showRibbon() && this.showVase());
 
   private buildPositions(count: number, idOf: (i: number) => string): FlowerPosition[] {
     const positions: FlowerPosition[] = [];
@@ -113,15 +112,15 @@ export class BouquetCanvas {
     return positions;
   }
 
-  private getStemPath(fx: number, fy: number, size: number, midBend: number): string {
+  private getStemPath(fx: number, fy: number, size: number, midBend: number, neckY: number): string {
     const midX = (VASE_X + fx) / 2 + midBend;
-    const midY = (VASE_NECK_Y + fy) / 2 - 20;
-    return `M ${VASE_X},${VASE_NECK_Y} Q ${midX},${midY} ${fx},${fy + size * 0.4}`;
+    const midY = (neckY + fy) / 2 - 20;
+    return `M ${VASE_X},${neckY} Q ${midX},${midY} ${fx},${fy + size * 0.4}`;
   }
 
-  private getLeafPath(flowerX: number, flowerY: number, side: 'left' | 'right'): string {
+  private getLeafPath(flowerX: number, flowerY: number, side: 'left' | 'right', neckY: number): string {
     const midX = (VASE_X + flowerX) / 2;
-    const midY = (VASE_NECK_Y + flowerY) / 2;
+    const midY = (neckY + flowerY) / 2;
     const offset = side === 'left' ? -20 : 20;
     return `M ${midX} ${midY} Q ${midX + offset} ${midY - 16} ${midX + offset * 1.4} ${midY + 7} Q ${midX + offset * 0.4} ${midY + 3} ${midX} ${midY} Z`;
   }
@@ -141,7 +140,7 @@ export class BouquetCanvas {
   }
 
   clear(): void {
-    this.constructorService.selectedFlowers.set([]);
+    this.constructorService.clear();
     this.jitterCache.clear();
   }
 }

@@ -1,23 +1,11 @@
 <section class="hero" id="hero">
+  <video #heroVideo class="hero__video" autoplay muted loop playsinline poster="videos/hero-poster.jpg">
+    <source src="videos/hero.mp4" type="video/mp4" />
+  </video>
   <div class="hero__bg"></div>
   <div class="hero__veil"></div>
 
-  <div class="hero__blooms">
-    @for (f of flowers; track f) {
-      <div class="bloom bloom--{{ f }}">
-        <svg class="bloom__float" viewBox="0 0 100 100">
-          <circle class="bloom__petal" cx="50" cy="28" r="16" />
-          <circle class="bloom__petal" cx="69" cy="40" r="16" />
-          <circle class="bloom__petal" cx="62" cy="62" r="16" />
-          <circle class="bloom__petal" cx="38" cy="62" r="16" />
-          <circle class="bloom__petal" cx="31" cy="40" r="16" />
-          <circle class="bloom__center" cx="50" cy="50" r="10" />
-        </svg>
-      </div>
-    }
-  </div>
-
-  <div class="hero__content">
+<div class="hero__content">
     <h1 class="hero__title">{{ settingsService.settings().slogan }}</h1>
     <p class="hero__subtitle">
       Свіжі букети ручної роботи — збираємо щоранку й доставляємо по місту за годину.

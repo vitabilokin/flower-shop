@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild, afterNextRender, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SettingsService } from '../../../../core/services/settings.service';
 
@@ -10,6 +10,20 @@ import { SettingsService } from '../../../../core/services/settings.service';
   styleUrl: './hero.component.scss',
 })
 export class Hero {
-  readonly flowers = [1, 2, 3, 4, 5, 6];
   readonly settingsService = inject(SettingsService);
+
+  @ViewChild('heroVideo') videoRef?: ElementRef<HTMLVideoElement>;
+
+  constructor() {
+    afterNextRender(() => {
+      const video = this.videoRef?.nativeElement;
+      if (!video) return;
+      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (mq.matches) video.pause();
+      mq.addEventListener('change', (e) => {
+        if (e.matches) video.pause();
+        else video.play().catch(() => {});
+      });
+    });
+  }
 }

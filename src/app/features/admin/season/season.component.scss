@@ -169,8 +169,6 @@
   }
 }
 
-// Below this, even a fixed-width price column doesn't leave the wrapping name enough
-// room — stack the price under the name instead of fighting for the same line.
 @media (max-width: 420px) {
   .season__item-info {
     flex-direction: column;

@@ -52,10 +52,14 @@ export class OrderSummary {
 
   addToCart(): void {
     if (this.constructorService.totalCount() === 0) return;
+    const flowerDescription = this.groupedFlowers()
+      .map((g) => `  • ${g.flower.name} × ${g.count}`)
+      .join('\n');
     this.cartService.add({
       id: `custom-${Date.now()}`,
       name: 'Індивідуальний букет',
       price: this.constructorService.totalPrice(),
+      description: flowerDescription,
     });
     this.addedToCart.set(true);
     setTimeout(() => this.addedToCart.set(false), 1500);

@@ -7,6 +7,7 @@ export interface CartItem {
   price: number;
   quantity: number;
   imageUrl?: string;
+  description?: string;
 }
 
 export interface CartAddable {
@@ -14,6 +15,7 @@ export interface CartAddable {
   name: string;
   price: number;
   photo?: string;
+  description?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -47,7 +49,7 @@ export class CartService {
     } else {
       this.items.update((items) => [
         ...items,
-        { id: bouquet.id, name: bouquet.name, price: bouquet.price, quantity: 1, imageUrl: bouquet.photo },
+        { id: bouquet.id, name: bouquet.name, price: bouquet.price, quantity: 1, imageUrl: bouquet.photo, description: bouquet.description },
       ]);
     }
   }
@@ -81,7 +83,10 @@ export class CartService {
   }
 
   getTelegramMessage(): string {
-    const lines = this.items().map((i) => `— "${i.name}" × ${i.quantity} — ${i.price * i.quantity} грн`);
+    const lines = this.items().map((i) => {
+      const base = `— "${i.name}" × ${i.quantity} — ${i.price * i.quantity} грн`;
+      return i.description ? `${base}\n${i.description}` : base;
+    });
     return encodeURIComponent(`Привіт! Хочу замовити:\n${lines.join('\n')}\nРазом: ${this.totalPrice()} грн`);
   }
 

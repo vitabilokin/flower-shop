@@ -7,8 +7,7 @@ import { ConfirmDialogComponent, ConfirmDialogData } from '../../shared/componen
 export class ConfirmService {
   private readonly dialog = inject(MatDialog);
 
-  /** Shows an in-app confirm dialog instead of the browser's native confirm(). */
-  async confirm(data: ConfirmDialogData): Promise<boolean> {
+    async confirm(data: ConfirmDialogData): Promise<boolean> {
     const ref = this.dialog.open<ConfirmDialogComponent, ConfirmDialogData, boolean>(ConfirmDialogComponent, {
       data,
       width: '95vw',
