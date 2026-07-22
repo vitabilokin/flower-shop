@@ -35,8 +35,21 @@
       <div class="order-steps__row">
         @for (step of steps; track step.title; let last = $last) {
           <div class="order-step">
-            <span class="order-step__number" aria-hidden="true">{{ $index + 1 }}</span>
-            <mat-icon class="order-step__icon">{{ step.icon }}</mat-icon>
+            <svg class="order-step__number" viewBox="0 0 80 80"
+                 fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true">
+              @switch ($index + 1) {
+                @case (1) {
+                  <path stroke-width="13" d="M 24,24 L 42,8 L 42,72 M 18,72 L 60,72"/>
+                }
+                @case (2) {
+                  <path stroke-width="13" d="M 18,24 C 14,2 64,2 64,28 C 64,48 28,60 18,72 L 64,72"/>
+                }
+                @case (3) {
+                  <path stroke-width="13" d="M 18,10 C 58,2 68,18 60,34 C 56,46 44,42 42,42 M 42,42 C 60,42 68,60 58,70 C 50,78 18,76 18,68"/>
+                }
+              }
+            </svg>
             <h3 class="order-step__title">{{ step.title }}</h3>
             <p class="order-step__text">{{ step.text }}</p>
           </div>

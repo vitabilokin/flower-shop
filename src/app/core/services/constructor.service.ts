@@ -1,5 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { FlowerPricesService } from './flower-prices.service';
+import { WrappingMaterialsService } from './wrapping-materials.service';
 
 export type FlowerType = 'rose' | 'tulip' | 'sunflower' | 'peony' | 'lily' | 'orchid' | 'gerbera';
 
@@ -25,6 +26,7 @@ export interface Wrapping {
   price: number;
   color: string;
   description: string;
+  available?: boolean;
 }
 
 export interface Ribbon {
@@ -261,13 +263,21 @@ export const FLOWER_GROUPS: { type: FlowerType; label: string }[] = [
 @Injectable({ providedIn: 'root' })
 export class ConstructorService {
   private readonly pricesService = inject(FlowerPricesService);
+  private readonly materialsService = inject(WrappingMaterialsService);
 
   readonly flowers = computed(() => {
     const overrides = this.pricesService.overrides();
     return FLOWERS.map((f) => ({ ...f, price: overrides[f.id] ?? f.price }));
   });
 
-  readonly wrappingOptions = WRAPPING;
+  readonly wrappingOptions = computed(() => {
+    const overrides = this.materialsService.overrides();
+    return WRAPPING.map((w) => ({
+      ...w,
+      price: overrides[w.id]?.price ?? w.price,
+      available: overrides[w.id]?.available ?? true,
+    }));
+  });
   readonly ribbonOptions = RIBBONS;
   readonly sizeOptions = SIZES;
   readonly flowerTypeGroups = FLOWER_GROUPS;

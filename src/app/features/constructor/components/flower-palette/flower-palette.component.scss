@@ -184,6 +184,11 @@
     border-color: var(--pink);
     background: var(--pink-100);
   }
+
+  &--unavailable {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
 }
 
 .wrapping-card__swatch {

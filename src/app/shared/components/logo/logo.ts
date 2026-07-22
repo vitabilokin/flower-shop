@@ -7,13 +7,17 @@ import { Component, input } from '@angular/core';
     <span class="app-logo" [style.fontSize.px]="size()" [style.color]="color()">
       <span>P</span>
       <svg [attr.width]="size() * 0.82" [attr.height]="size() * 0.82" viewBox="0 0 30 30">
-        <g fill="#ff4d8d">
-          <circle cx="15" cy="7" r="6" />
-          <circle cx="22.61" cy="12.53" r="6" />
-          <circle cx="19.7" cy="21.47" r="6" />
-          <circle cx="10.3" cy="21.47" r="6" />
-          <circle cx="7.39" cy="12.53" r="6" />
-        </g>
+        <defs>
+          <mask id="posy-flower-mask">
+            <circle cx="15" cy="6"     r="6" fill="white"/>
+            <circle cx="23.56" cy="12.22" r="6" fill="white"/>
+            <circle cx="20.29" cy="22.28" r="6" fill="white"/>
+            <circle cx="9.71"  cy="22.28" r="6" fill="white"/>
+            <circle cx="6.44"  cy="12.22" r="6" fill="white"/>
+            <circle cx="15"    cy="15"    r="5.2" fill="black"/>
+          </mask>
+        </defs>
+        <rect x="0" y="0" width="30" height="30" [attr.fill]="color()" mask="url(#posy-flower-mask)"/>
       </svg>
       <span>sy</span>
     </span>

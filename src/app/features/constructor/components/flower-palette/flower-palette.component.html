@@ -48,16 +48,18 @@
 
     @if (activeTab() === 'wrapping') {
       <div class="wrapping-list">
-        @for (option of constructorService.wrappingOptions; track option.id) {
+        @for (option of constructorService.wrappingOptions(); track option.id) {
           <button
             class="wrapping-card"
             [class.wrapping-card--active]="constructorService.selectedWrapping().id === option.id"
+            [class.wrapping-card--unavailable]="!option.available"
+            [disabled]="!option.available"
             (click)="selectWrapping(option)"
           >
             <span class="wrapping-card__swatch" [style.background]="option.color"></span>
             <span class="wrapping-card__info">
               <span class="wrapping-card__name">{{ option.name }}</span>
-              <span class="wrapping-card__desc">{{ option.description }}</span>
+              <span class="wrapping-card__desc">{{ !option.available ? 'Немає в наявності' : option.description }}</span>
             </span>
             <span class="wrapping-card__price">{{ option.price > 0 ? '+' + option.price + ' грн' : 'безкоштовно' }}</span>
           </button>

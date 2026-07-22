@@ -58,7 +58,7 @@ const ORDER_METHODS: OrderMethod[] = [
     icon: 'phone',
     title: 'Подзвонити',
     text: 'Пн-Нд з 08:00 до 21:00. Приймаємо замовлення на будь-який час',
-    buttonLabel: PHONE_NUMBER,
+    buttonLabel: 'Зателефонувати',
     href: `tel:${PHONE_NUMBER}`,
     accent: 'pink',
   },

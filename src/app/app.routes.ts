@@ -72,6 +72,11 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/admin/flower-prices/flower-prices.component').then((m) => m.FlowerPricesComponent),
           },
+          {
+            path: 'materials',
+            loadComponent: () =>
+              import('./features/admin/materials/materials.component').then((m) => m.MaterialsComponent),
+          },
         ],
       },
     ],

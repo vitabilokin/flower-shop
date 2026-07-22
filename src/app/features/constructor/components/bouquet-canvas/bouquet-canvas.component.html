@@ -37,13 +37,21 @@
             <path d="M-61,600 C-30,595 30,595 61,600" stroke="#8f6035" stroke-width="0.7" fill="none" opacity="0.35"/>
             <path d="M-62,442 C-66,500 -64,570 -58,622" stroke="rgba(255,255,255,0.2)" stroke-width="10" fill="none" stroke-linecap="round"/>
             @if (showRibbon()) {
-              <rect x="-78" y="508" width="156" height="16"
+              <rect x="-78" y="508" width="156" height="10"
                     [attr.fill]="constructorService.selectedRibbon().color" opacity="0.85"/>
-              <path d="M-12,516 L-26,502 L-7,514 Z"
-                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.8"/>
-              <path d="M12,516 L26,502 L7,514 Z"
-                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.8"/>
-              <circle cx="0" cy="516" r="7"
+              <!-- Bow left loop -->
+              <path d="M0,508 C-4,493 -26,495 -21,508 C-16,514 -4,511 0,508 Z"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.9"/>
+              <!-- Bow right loop -->
+              <path d="M0,508 C4,493 26,495 21,508 C16,514 4,511 0,508 Z"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.9"/>
+              <!-- Tails -->
+              <path d="M-1,518 L-9,531 Q-13,537 -7,539"
+                    [attr.stroke]="constructorService.selectedRibbon().color" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M1,518 L9,531 Q13,537 7,539"
+                    [attr.stroke]="constructorService.selectedRibbon().color" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <!-- Knot -->
+              <circle cx="0" cy="513" r="5"
                       [attr.fill]="constructorService.selectedRibbon().color"
                       stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
             }
@@ -60,13 +68,21 @@
             <path d="M37,435 C39,496 37,570 33,630" stroke="rgba(244,143,177,0.35)" stroke-width="1.5" fill="none"/>
             <path d="M-50,440 C-53,505 -51,574 -46,622" stroke="rgba(255,255,255,0.5)" stroke-width="6" fill="none" stroke-linecap="round"/>
             @if (showRibbon()) {
-              <rect x="-66" y="514" width="132" height="14"
+              <rect x="-66" y="514" width="132" height="10"
                     [attr.fill]="constructorService.selectedRibbon().color" opacity="0.8"/>
-              <path d="M-10,521 L-22,508 L-5,517 Z"
+              <!-- Bow left loop -->
+              <path d="M0,514 C-4,499 -26,501 -21,514 C-16,520 -4,517 0,514 Z"
                     [attr.fill]="constructorService.selectedRibbon().color" opacity="0.9"/>
-              <path d="M10,521 L22,508 L5,517 Z"
+              <!-- Bow right loop -->
+              <path d="M0,514 C4,499 26,501 21,514 C16,520 4,517 0,514 Z"
                     [attr.fill]="constructorService.selectedRibbon().color" opacity="0.9"/>
-              <circle cx="0" cy="521" r="6"
+              <!-- Tails -->
+              <path d="M-1,524 L-9,537 Q-13,543 -7,545"
+                    [attr.stroke]="constructorService.selectedRibbon().color" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M1,524 L9,537 Q13,543 7,545"
+                    [attr.stroke]="constructorService.selectedRibbon().color" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <!-- Knot -->
+              <circle cx="0" cy="519" r="5"
                       [attr.fill]="constructorService.selectedRibbon().color"
                       stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
             }
@@ -84,7 +100,7 @@
             @if (showRibbon()) {
               <rect x="-10" y="428" width="20" height="272"
                     [attr.fill]="constructorService.selectedRibbon().color" opacity="0.85"/>
-              <rect x="-90" y="530" width="180" height="16"
+              <rect x="-82" y="530" width="164" height="16"
                     [attr.fill]="constructorService.selectedRibbon().color" opacity="0.85"/>
               <path d="M-28,446 C-40,428 -22,418 0,428 C22,418 40,428 28,446 C18,436 10,432 0,436 C-10,432 -18,436 -28,446 Z"
                     [attr.fill]="constructorService.selectedRibbon().color" opacity="0.9"/>
@@ -100,18 +116,42 @@
         }
 
         @if (showVase()) {
+          <!-- Glass vase: stems rendered before this group, so they show through transparent glass -->
           <g class="vase" transform="translate(300, 600) scale(0.75)">
-            <ellipse cx="0" cy="10" rx="90" ry="15" fill="rgba(0,0,0,0.08)"/>
-            <path d="M-80,-220 C-82,-220 -90,-180 -90,-100 C-90,0 -85,10 0,10 C85,10 90,0 90,-100 C90,-180 82,-220 80,-220 Z"
-                  fill="#e8ddd0" stroke="#c4a882" stroke-width="2"/>
-            <ellipse cx="0" cy="-220" rx="80" ry="12" fill="#d4c4b0" stroke="#c4a882" stroke-width="1.5"/>
-            <path d="M-88,-120 C-88,-120 -85,8 0,8 C85,8 88,-120 88,-120 Z" fill="rgba(180,220,240,0.25)"/>
-            <path d="M-65,-200 C-72,-160 -74,-80 -68,-20" stroke="rgba(255,255,255,0.6)" stroke-width="8" fill="none" stroke-linecap="round"/>
-            <path d="M-50,-210 C-54,-190 -55,-170 -52,-150" stroke="rgba(255,255,255,0.4)" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <ellipse cx="0" cy="10" rx="90" ry="15" fill="rgba(0,0,0,0.07)"/>
+            <!-- Glass body — semi-transparent so stems are visible inside -->
+            <path d="M-80,-220 C-82,-220 -90,-180 -90,-100 C-90,0 -85,10 0,10 C85,10 90,0 90,-100 C90,-180 82,-220 80,-220 Q 0,-234 -80,-220 Z"
+                  fill="rgba(210,238,252,0.30)" stroke="#9ec8df" stroke-width="2.5"/>
+            <!-- Water fill — tints submerged stems to a slightly different shade -->
+            <path d="M-88,-110 C-88,-110 -85,8 0,8 C85,8 88,-110 88,-110 Z"
+                  fill="rgba(130,195,240,0.45)"/>
+            <!-- Glass left highlight shine -->
+            <path d="M-65,-200 C-72,-160 -74,-80 -68,-20" stroke="rgba(255,255,255,0.75)" stroke-width="10" fill="none" stroke-linecap="round"/>
+            <path d="M-50,-210 C-54,-190 -55,-170 -52,-150" stroke="rgba(255,255,255,0.5)" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <!-- Glass right-edge reflection -->
+            <path d="M72,-200 C75,-160 76,-80 70,-30" stroke="rgba(180,220,250,0.3)" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <!-- Rim — drawn last inside group so it appears in front of stems at the opening -->
+            <ellipse cx="0" cy="-220" rx="82" ry="13"
+                     fill="rgba(175,218,242,0.12)" stroke="#7ab2cf" stroke-width="2"/>
           </g>
           @if (showRibbon()) {
-            <rect x="242" y="440" width="116" height="12" rx="6"
-                  [attr.fill]="constructorService.selectedRibbon().color" opacity="0.85"/>
+            <!-- Single ribbon body: top edge curves up 2px at centre, bottom curves down 2px,
+                 so the band is 6px tall at the sides and 10px at the front-centre,
+                 naturally suggesting the ribbon wraps around the cylinder -->
+            <path d="M234,486 Q300,484 366,486 L366,492 Q300,494 234,492 Z"
+                  [attr.fill]="constructorService.selectedRibbon().color" opacity="0.88"/>
+            <!-- Bow loops, tails, knot -->
+            <path d="M300,484 C296,467 272,470 278,484 C283,492 296,489 300,484 Z"
+                  [attr.fill]="constructorService.selectedRibbon().color" opacity="0.92"/>
+            <path d="M300,484 C304,467 328,470 322,484 C317,492 304,489 300,484 Z"
+                  [attr.fill]="constructorService.selectedRibbon().color" opacity="0.92"/>
+            <path d="M299,493 L289,507 Q285,513 292,515"
+                  [attr.stroke]="constructorService.selectedRibbon().color" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M301,493 L311,507 Q315,513 308,515"
+                  [attr.stroke]="constructorService.selectedRibbon().color" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <circle cx="300" cy="488" r="5"
+                    [attr.fill]="constructorService.selectedRibbon().color"
+                    stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
           }
         }
 

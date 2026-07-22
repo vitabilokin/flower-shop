@@ -18,6 +18,7 @@ const NAV_ITEMS: NavItem[] = [
   { path: 'season', label: 'Хіт сезону', icon: 'star' },
   { path: 'reminders', label: 'Нагадування', icon: 'notifications' },
   { path: 'flowers', label: 'Ціни квіток', icon: 'local_florist' },
+  { path: 'materials', label: 'Матеріали', icon: 'inventory' },
   { path: 'settings', label: 'Налаштування', icon: 'settings' },
 ];
 
