@@ -1,0 +1,41 @@
+<div class="season">
+  <aside class="season__months">
+    @for (month of months; track month.number) {
+      <button
+        class="season__month"
+        [class.season__month--active]="selectedMonth() === month.number"
+        (click)="selectMonth(month.number)"
+      >
+        <span>{{ month.name }}</span>
+        <span class="season__month-count">{{ countFor(month.number) }}/3</span>
+      </button>
+    }
+  </aside>
+
+  <div class="season__picker">
+    <div class="season__picker-head">
+      <h2>{{ months[selectedMonth() - 1].name }} — хіт сезону</h2>
+      @if (savedFlash()) {
+        <span class="season__saved">Збережено ✓</span>
+      }
+    </div>
+    <p class="season__hint">Оберіть до 3 букетів, які показуватимуться як «хіт сезону» цього місяця.</p>
+
+    <div class="season__list">
+      @for (bouquet of bouquets(); track bouquet.id) {
+        <label class="season__item" [class.season__item--disabled]="isMaxedOut(bouquet.id)">
+          <mat-checkbox [checked]="isChecked(bouquet.id)" [disabled]="isMaxedOut(bouquet.id)" (change)="toggle(bouquet.id)" />
+          @if (bouquet.photo) {
+            <img class="season__item-photo" [src]="bouquet.photo" [alt]="bouquet.name" />
+          }
+          <span class="season__item-info">
+            <span class="season__item-name">{{ bouquet.name }}</span>
+            <span class="season__item-price">{{ bouquet.price }} грн</span>
+          </span>
+        </label>
+      } @empty {
+        <p class="season__empty">Немає букетів. Додайте їх у розділі «Каталог».</p>
+      }
+    </div>
+  </div>
+</div>

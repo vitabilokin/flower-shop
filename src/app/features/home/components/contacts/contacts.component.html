@@ -1,0 +1,24 @@
+<section class="contacts" id="contacts">
+  <div class="container contacts__grid">
+    <div class="contacts__info">
+      <span class="contacts__eyebrow">Контакти</span>
+      <h2 class="contacts__title">Завжди на зв'язку</h2>
+
+      <a class="contacts__phone" [href]="telHref()">{{ settingsService.settings().phone }}</a>
+
+      <div class="contacts__socials">
+        <a [href]="viberHref()" aria-label="Viber"><img src="https://cdn.simpleicons.org/viber/07b3a3" alt="Viber" /></a>
+        <a [href]="telegramHref()" aria-label="Telegram"><img src="https://cdn.simpleicons.org/telegram/07b3a3" alt="Telegram" /></a>
+        <a [href]="instagramHref()" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/ff4d8d" alt="Instagram" /></a>
+      </div>
+    </div>
+
+    <div class="contacts__reminder-card">
+      <h3 class="contacts__form-title">Нагадай мені про дату</h3>
+      <p class="contacts__reminder-text">
+        Не хочеш забути про важливу дату? Залиш контакт — і ми нагадаємо завчасно.
+      </p>
+      <a class="btn btn-primary" routerLink="/reminder">Нагадати мені</a>
+    </div>
+  </div>
+</section>

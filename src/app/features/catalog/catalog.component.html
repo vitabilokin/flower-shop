@@ -1,0 +1,102 @@
+<section class="catalog" id="catalog">
+  <div class="container">
+    <span class="catalog__eyebrow">Каталог</span>
+    <h2 class="catalog__title">Букети на будь-який настрій</h2>
+
+    <div class="catalog__toolbar">
+      <button class="filter-btn" (click)="toggleFilters()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M4 6h16M7 12h10M10 18h4"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          />
+        </svg>
+        Фільтр та сортування
+        @if (filterService.activeFilterCount() > 0) {
+          <span class="filter-btn__count">{{ filterService.activeFilterCount() }}</span>
+        }
+      </button>
+
+      <div class="columns-switch">
+        <button
+          class="columns-switch__btn"
+          [class.columns-switch__btn--active]="filterService.gridColumns() === 2"
+          (click)="setColumns(2)"
+          aria-label="2 колонки"
+        >
+          <span class="dots dots--2"><span></span><span></span></span>
+        </button>
+        <button
+          class="columns-switch__btn"
+          [class.columns-switch__btn--active]="filterService.gridColumns() === 3"
+          (click)="setColumns(3)"
+          aria-label="3 колонки"
+        >
+          <span class="dots dots--3"><span></span><span></span><span></span></span>
+        </button>
+        <button
+          class="columns-switch__btn"
+          [class.columns-switch__btn--active]="filterService.gridColumns() === 4"
+          (click)="setColumns(4)"
+          aria-label="4 колонки"
+        >
+          <span class="dots dots--4"><span></span><span></span><span></span><span></span></span>
+        </button>
+      </div>
+    </div>
+
+    @if (activeChips().length > 0) {
+      <div class="catalog__chips">
+        @for (chip of activeChips(); track chip.label) {
+          <button class="chip-filter" (click)="chip.remove()">
+            {{ chip.label }}
+            <span class="chip-filter__remove">×</span>
+          </button>
+        }
+        <button class="chip-filter-reset" (click)="filterService.resetAll()">Скинути всі</button>
+      </div>
+    }
+
+    @if (isFallback()) {
+      <p class="catalog__fallback-note">
+        Точних збігів за обраними фільтрами немає — ось найближчі варіанти, які можуть сподобатись.
+      </p>
+    }
+
+    <div class="catalog__grid" [style.--cols]="filterService.gridColumns()">
+      @for (b of bouquets(); track b.id) {
+        <article class="card" [class.card--highlight]="highlightedId() === b.id">
+          <a [routerLink]="['/catalog', b.id]" class="card__link">
+            <div class="card__photo">
+              <img [src]="b.photo" [alt]="b.name" loading="lazy" />
+              @if (isOutOfStock(b)) {
+                <span class="card__tag card__tag--oos">Немає в наявності</span>
+              } @else if (b.tag) {
+                <span class="card__tag card__tag--{{ b.tagTone }}">{{ b.tag }}</span>
+              }
+            </div>
+            <div class="card__text">
+              <h3 class="card__name">{{ b.name }}</h3>
+              <p class="card__price">{{ b.price }} ₴</p>
+              <p class="card__subtitle">{{ b.subtitle }}</p>
+            </div>
+          </a>
+          <div class="card__actions">
+            <button class="btn btn-primary card__btn" [disabled]="isOutOfStock(b)" (click)="addToCart(b)">
+              {{ isOutOfStock(b) ? 'Немає в наявності' : addedIds().has(b.id) ? 'Додано ✓' : 'Додати в корзину' }}
+            </button>
+            <button class="btn btn-ghost-pink card__btn" [disabled]="isOutOfStock(b)" (click)="quickOrder(b)">Швидке замовлення</button>
+          </div>
+        </article>
+      } @empty {
+        <p class="catalog__empty">Нічого не знайдено за обраними фільтрами.</p>
+      }
+    </div>
+  </div>
+</section>
+
+@if (filterService.isOpen()) {
+  <app-filter-drawer />
+}

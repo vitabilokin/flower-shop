@@ -1,0 +1,122 @@
+<h2 class="dialog__title">{{ existing ? 'Редагувати букет' : 'Додати букет' }}</h2>
+
+<div mat-dialog-content class="dialog__content">
+  <mat-form-field appearance="outline" class="dialog__field">
+    <mat-label>Назва</mat-label>
+    <input matInput name="name" [(ngModel)]="model.name" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="dialog__field">
+    <mat-label>Підзаголовок / опис</mat-label>
+    <textarea matInput name="subtitle" rows="3" [(ngModel)]="model.subtitle"></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="dialog__field">
+    <mat-label>Ціна, грн</mat-label>
+    <input matInput type="number" name="price" [(ngModel)]="model.price" required />
+  </mat-form-field>
+
+  <div class="dialog__photo-source">
+    <button type="button" class="dialog__source-btn" [class.dialog__source-btn--active]="photoSource() === 'url'" (click)="setPhotoSource('url')">
+      Посилання на фото
+    </button>
+    <button type="button" class="dialog__source-btn" [class.dialog__source-btn--active]="photoSource() === 'upload'" (click)="setPhotoSource('upload')">
+      Завантажити з пристрою
+    </button>
+  </div>
+
+  @if (photoSource() === 'url') {
+    <mat-form-field appearance="outline" class="dialog__field">
+      <mat-label>URL фото</mat-label>
+      <input matInput name="photo" [(ngModel)]="model.photo" />
+    </mat-form-field>
+  } @else {
+    <input type="file" accept="image/*" class="dialog__file-input" (change)="onFileSelected($event)" />
+    @if (uploading()) {
+      <p class="dialog__upload-status">Завантаження...</p>
+    }
+    @if (uploadError()) {
+      <p class="dialog__upload-error">{{ uploadError() }}</p>
+    }
+  }
+
+  @if (model.photo) {
+    <img class="dialog__preview" [src]="model.photo" alt="Прев'ю букета" />
+  }
+
+  <div class="dialog__grid">
+    <mat-form-field appearance="outline" class="dialog__field">
+      <mat-label>Привід</mat-label>
+      <mat-select name="occasion" [(ngModel)]="model.occasion">
+        @for (option of occasionOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="dialog__field">
+      <mat-label>Тип квіток</mat-label>
+      <mat-select name="type" [(ngModel)]="model.type">
+        @for (option of typeOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="dialog__field">
+      <mat-label>Колір</mat-label>
+      <mat-select name="color" [(ngModel)]="model.color">
+        @for (option of colorOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="dialog__field">
+      <mat-label>Тег</mat-label>
+      <mat-select name="tag" [(ngModel)]="model.tag">
+        @for (option of tagOptions; track option) {
+          <mat-option [value]="option">{{ option || 'Без тегу' }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field appearance="outline" class="dialog__field">
+    <mat-label>Статус</mat-label>
+    <mat-select name="status" [(ngModel)]="model.status">
+      @for (option of statusOptions; track option.value) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <div class="dialog__composition">
+    <span class="dialog__composition-label">Склад букету</span>
+
+    @for (item of model.composition; track $index) {
+      <div class="dialog__composition-row">
+        <mat-form-field appearance="outline" class="dialog__field dialog__field--type">
+          <mat-select [(ngModel)]="item.type" [name]="'comp-type-' + $index">
+            @for (option of typeOptions; track option.value) {
+              <mat-option [value]="option.value">{{ option.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="dialog__field dialog__field--count">
+          <input matInput type="number" min="1" [(ngModel)]="item.count" [name]="'comp-count-' + $index" />
+        </mat-form-field>
+
+        <button type="button" class="dialog__composition-remove" (click)="removeCompositionRow($index)" aria-label="Видалити">×</button>
+      </div>
+    }
+
+    <button type="button" class="dialog__composition-add" (click)="addCompositionRow()">+ Додати квітку до складу</button>
+  </div>
+</div>
+
+<div mat-dialog-actions class="dialog__actions">
+  <button type="button" class="dialog__btn dialog__btn--ghost" (click)="cancel()">Скасувати</button>
+  <button type="button" class="dialog__btn dialog__btn--pink" (click)="save()">Зберегти</button>
+</div>

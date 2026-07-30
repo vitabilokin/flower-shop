@@ -1,0 +1,35 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Peony: many wide nearly-round petals at non-systematic angles, no visible center -->
+  <!-- Outer layer: 8 large petals -->
+  <ellipse cx="50" cy="21" rx="13" ry="15" fill="#fce4ec" transform="rotate(0,50,50)" opacity="0.80"/>
+  <ellipse cx="50" cy="21" rx="13" ry="15" fill="#fce4ec" transform="rotate(45,50,50)" opacity="0.80"/>
+  <ellipse cx="50" cy="21" rx="13" ry="15" fill="#fce4ec" transform="rotate(90,50,50)" opacity="0.80"/>
+  <ellipse cx="50" cy="21" rx="13" ry="15" fill="#fce4ec" transform="rotate(135,50,50)" opacity="0.80"/>
+  <ellipse cx="50" cy="21" rx="13" ry="15" fill="#fce4ec" transform="rotate(180,50,50)" opacity="0.80"/>
+  <ellipse cx="50" cy="21" rx="13" ry="15" fill="#fce4ec" transform="rotate(225,50,50)" opacity="0.80"/>
+  <ellipse cx="50" cy="21" rx="13" ry="15" fill="#fce4ec" transform="rotate(270,50,50)" opacity="0.80"/>
+  <ellipse cx="50" cy="21" rx="13" ry="15" fill="#fce4ec" transform="rotate(315,50,50)" opacity="0.80"/>
+  <!-- Mid-outer: 7 petals at irregular offset — creates chaotic look -->
+  <ellipse cx="50" cy="27" rx="12" ry="14" fill="#f48fb1" transform="rotate(23,50,50)" opacity="0.86"/>
+  <ellipse cx="50" cy="27" rx="12" ry="14" fill="#f48fb1" transform="rotate(71,50,50)" opacity="0.86"/>
+  <ellipse cx="50" cy="27" rx="12" ry="14" fill="#f48fb1" transform="rotate(116,50,50)" opacity="0.86"/>
+  <ellipse cx="50" cy="27" rx="12" ry="14" fill="#f48fb1" transform="rotate(162,50,50)" opacity="0.86"/>
+  <ellipse cx="50" cy="27" rx="12" ry="14" fill="#f48fb1" transform="rotate(209,50,50)" opacity="0.86"/>
+  <ellipse cx="50" cy="27" rx="12" ry="14" fill="#f48fb1" transform="rotate(254,50,50)" opacity="0.86"/>
+  <ellipse cx="50" cy="27" rx="12" ry="14" fill="#f48fb1" transform="rotate(298,50,50)" opacity="0.86"/>
+  <!-- Middle: 6 petals at yet another offset -->
+  <ellipse cx="50" cy="33" rx="12" ry="13" fill="#ec407a" transform="rotate(38,50,50)" opacity="0.90"/>
+  <ellipse cx="50" cy="33" rx="12" ry="13" fill="#ec407a" transform="rotate(97,50,50)" opacity="0.90"/>
+  <ellipse cx="50" cy="33" rx="12" ry="13" fill="#ec407a" transform="rotate(148,50,50)" opacity="0.90"/>
+  <ellipse cx="50" cy="33" rx="12" ry="13" fill="#ec407a" transform="rotate(207,50,50)" opacity="0.90"/>
+  <ellipse cx="50" cy="33" rx="12" ry="13" fill="#ec407a" transform="rotate(263,50,50)" opacity="0.90"/>
+  <ellipse cx="50" cy="33" rx="12" ry="13" fill="#ec407a" transform="rotate(312,50,50)" opacity="0.90"/>
+  <!-- Inner: 5 petals covering center — same color as middle, no dark center -->
+  <ellipse cx="50" cy="39" rx="11" ry="12" fill="#e91e8c" transform="rotate(18,50,50)"/>
+  <ellipse cx="50" cy="39" rx="11" ry="12" fill="#e91e8c" transform="rotate(89,50,50)"/>
+  <ellipse cx="50" cy="39" rx="11" ry="12" fill="#e91e8c" transform="rotate(155,50,50)"/>
+  <ellipse cx="50" cy="39" rx="11" ry="12" fill="#e91e8c" transform="rotate(228,50,50)"/>
+  <ellipse cx="50" cy="39" rx="11" ry="12" fill="#e91e8c" transform="rotate(294,50,50)"/>
+  <!-- Center: SAME pink — no dark spot (key difference from rose) -->
+  <circle cx="50" cy="50" r="9" fill="#e91e8c"/>
+</svg>

@@ -1,0 +1,25 @@
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <span class="footer__logo">{{ settingsService.settings().shopName }}</span>
+      <p class="footer__tagline">{{ settingsService.settings().slogan }}</p>
+    </div>
+
+    <div class="footer__col">
+      <h4>Контакти</h4>
+      <a [href]="telHref()">{{ settingsService.settings().phone }}</a>
+      <a [href]="instagramHref()">Instagram</a>
+      <a [href]="telegramHref()">Telegram</a>
+    </div>
+
+    <div class="footer__col">
+      <h4>Графік роботи</h4>
+      <p>{{ settingsService.settings().workingHours }}</p>
+      <p>{{ settingsService.settings().address }}</p>
+    </div>
+  </div>
+
+  <div class="container footer__copy">
+    © {{ year }} {{ settingsService.settings().shopName }}. Усі права захищено.
+  </div>
+</footer>

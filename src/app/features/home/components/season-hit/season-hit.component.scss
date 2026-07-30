@@ -1,0 +1,60 @@
+.season-hit {
+  padding: var(--section-y) 0;
+  background: var(--paper-3);
+}
+
+.season-hit__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: var(--space-7);
+  align-items: center;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.season-hit__photo {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.season-hit__eyebrow {
+  display: inline-block;
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--teal-deep);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.season-hit__title {
+  margin-top: var(--space-2);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+}
+
+.season-hit__subtitle {
+  margin-top: var(--space-3);
+  color: var(--muted);
+  font-size: var(--text-md);
+  line-height: 1.6;
+}
+
+.season-hit__price {
+  margin-top: var(--space-3);
+  font-weight: 800;
+  font-size: var(--text-lg);
+}
+
+.season-hit__text .btn {
+  margin-top: var(--space-5);
+}

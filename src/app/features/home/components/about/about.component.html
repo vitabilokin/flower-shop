@@ -1,0 +1,18 @@
+<section class="about" id="about">
+  <div class="container">
+    <span class="about__eyebrow">З любов'ю до деталей</span>
+    <h2 class="about__title">Майстерня, де кожен букет — історія</h2>
+
+    <div class="about__grid">
+      @for (card of cards; track card.title) {
+        <div class="about-card">
+          <div class="about-card__photo">
+            <img [src]="card.photo" [alt]="card.title" loading="lazy" />
+          </div>
+          <h3 class="about-card__title">{{ card.title }}</h3>
+          <p class="about-card__text">{{ card.text }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>

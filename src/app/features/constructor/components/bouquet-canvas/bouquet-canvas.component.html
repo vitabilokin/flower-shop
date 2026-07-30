@@ -1,0 +1,219 @@
+<div class="canvas">
+  <div class="canvas__toolbar">
+    <button class="btn btn-ghost-pink canvas__clear" (click)="clear()">Очистити</button>
+    <span class="canvas__count">{{ constructorService.totalCount() }} квіток</span>
+  </div>
+
+  <div class="canvas__stage">
+    <svg class="canvas__svg" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid meet">
+
+      @if (constructorService.showVisualBouquet()) {
+
+        <!-- 1. Stems & leaves — rendered first so packaging covers their bottoms -->
+        @for (item of placedFlowers(); track item.id) {
+          <path [attr.d]="item.stemPath"
+                stroke="#5a8a3c" stroke-width="1.8" fill="none" stroke-linecap="round" />
+          @for (leaf of item.leafPaths; track $index) {
+            <path [attr.d]="leaf" fill="#6fae46" opacity="0.85" />
+          }
+        }
+
+        <!-- 2. Packaging — covers stem bottoms, creating the "stems inside" illusion -->
+        @if (isKraftWrapping()) {
+          <g transform="translate(300, 0)">
+            <ellipse cx="0" cy="686" rx="66" ry="9" fill="rgba(0,0,0,0.08)"/>
+            <path d="M-80,430 C-82,460 -78,530 -68,595 C-55,640 -35,672 0,676 C35,672 55,640 68,595 C78,530 82,460 80,430 Z"
+                  fill="#c4956a"/>
+            <path d="M-80,430 C-82,462 -78,535 -70,596 C-60,632 -44,660 -24,670 C-42,662 -57,636 -66,590 C-76,528 -80,462 -80,430 Z"
+                  fill="#a07248"/>
+            <path d="M80,430 C82,462 78,535 70,596 C60,632 44,660 24,670 C42,662 57,636 66,590 C76,528 80,462 80,430 Z"
+                  fill="#a07248"/>
+            <path d="M0,430 C0,510 0,600 0,676" stroke="#a07248" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <path d="M-44,433 C-46,505 -44,580 -39,640" stroke="#a07248" stroke-width="1" fill="none" opacity="0.4"/>
+            <path d="M44,433 C46,505 44,580 39,640" stroke="#a07248" stroke-width="1" fill="none" opacity="0.4"/>
+            <path d="M-77,468 C-38,463 38,463 77,468" stroke="#8f6035" stroke-width="0.7" fill="none" opacity="0.35"/>
+            <path d="M-74,510 C-36,505 36,505 74,510" stroke="#8f6035" stroke-width="0.7" fill="none" opacity="0.35"/>
+            <path d="M-69,555 C-35,550 35,550 69,555" stroke="#8f6035" stroke-width="0.7" fill="none" opacity="0.35"/>
+            <path d="M-61,600 C-30,595 30,595 61,600" stroke="#8f6035" stroke-width="0.7" fill="none" opacity="0.35"/>
+            <path d="M-62,442 C-66,500 -64,570 -58,622" stroke="rgba(255,255,255,0.2)" stroke-width="10" fill="none" stroke-linecap="round"/>
+            @if (showRibbon()) {
+              <rect x="-78" y="508" width="156" height="10"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.85"/>
+              <!-- Bow left loop -->
+              <path d="M0,508 C-4,493 -26,495 -21,508 C-16,514 -4,511 0,508 Z"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.9"/>
+              <!-- Bow right loop -->
+              <path d="M0,508 C4,493 26,495 21,508 C16,514 4,511 0,508 Z"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.9"/>
+              <!-- Tails -->
+              <path d="M-1,518 L-9,531 Q-13,537 -7,539"
+                    [attr.stroke]="constructorService.selectedRibbon().color" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M1,518 L9,531 Q13,537 7,539"
+                    [attr.stroke]="constructorService.selectedRibbon().color" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <!-- Knot -->
+              <circle cx="0" cy="513" r="5"
+                      [attr.fill]="constructorService.selectedRibbon().color"
+                      stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+            }
+          </g>
+        }
+
+        @if (isOrganzaWrapping()) {
+          <g transform="translate(300, 0)">
+            <path d="M-68,430 C-72,470 -76,528 -70,590 C-58,636 -36,658 0,661 C36,658 58,636 70,590 C76,528 72,470 68,430 Z"
+                  fill="rgba(252,228,236,0.45)" stroke="#f48fb1" stroke-width="1"/>
+            <path d="M-37,435 C-39,496 -37,570 -33,630" stroke="rgba(244,143,177,0.35)" stroke-width="1.5" fill="none"/>
+            <path d="M-13,433 C-14,496 -13,570 -11,633" stroke="rgba(244,143,177,0.35)" stroke-width="1.5" fill="none"/>
+            <path d="M13,433 C14,496 13,570 11,633" stroke="rgba(244,143,177,0.35)" stroke-width="1.5" fill="none"/>
+            <path d="M37,435 C39,496 37,570 33,630" stroke="rgba(244,143,177,0.35)" stroke-width="1.5" fill="none"/>
+            <path d="M-50,440 C-53,505 -51,574 -46,622" stroke="rgba(255,255,255,0.5)" stroke-width="6" fill="none" stroke-linecap="round"/>
+            @if (showRibbon()) {
+              <rect x="-66" y="514" width="132" height="10"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.8"/>
+              <!-- Bow left loop -->
+              <path d="M0,514 C-4,499 -26,501 -21,514 C-16,520 -4,517 0,514 Z"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.9"/>
+              <!-- Bow right loop -->
+              <path d="M0,514 C4,499 26,501 21,514 C16,520 4,517 0,514 Z"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.9"/>
+              <!-- Tails -->
+              <path d="M-1,524 L-9,537 Q-13,543 -7,545"
+                    [attr.stroke]="constructorService.selectedRibbon().color" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M1,524 L9,537 Q13,543 7,545"
+                    [attr.stroke]="constructorService.selectedRibbon().color" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <!-- Knot -->
+              <circle cx="0" cy="519" r="5"
+                      [attr.fill]="constructorService.selectedRibbon().color"
+                      stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+            }
+          </g>
+        }
+
+        @if (isBoxWrapping()) {
+          <g transform="translate(300, 0)">
+            <ellipse cx="0" cy="702" rx="78" ry="11" fill="rgba(0,0,0,0.09)"/>
+            <rect x="-82" y="448" width="164" height="250" rx="4" fill="#f5e6d3" stroke="#e0c9a6" stroke-width="1.5"/>
+            <rect x="-82" y="448" width="164" height="20" rx="4" fill="rgba(0,0,0,0.06)"/>
+            <rect x="-90" y="428" width="180" height="38" rx="5" fill="#e8d5b7" stroke="#d4b896" stroke-width="1.5"/>
+            <rect x="-82" y="432" width="164" height="8" rx="3" fill="rgba(255,255,255,0.3)"/>
+            <path d="M-70,453 L-70,680" stroke="rgba(255,255,255,0.3)" stroke-width="6" stroke-linecap="round"/>
+            @if (showRibbon()) {
+              <rect x="-10" y="428" width="20" height="272"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.85"/>
+              <rect x="-82" y="530" width="164" height="16"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.85"/>
+              <path d="M-28,446 C-40,428 -22,418 0,428 C22,418 40,428 28,446 C18,436 10,432 0,436 C-10,432 -18,436 -28,446 Z"
+                    [attr.fill]="constructorService.selectedRibbon().color" opacity="0.9"/>
+              <circle cx="0" cy="438" r="7"
+                      [attr.fill]="constructorService.selectedRibbon().color"
+                      stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+            }
+            @if (!showRibbon()) {
+              <rect x="-10" y="428" width="20" height="272" fill="#d4b896" opacity="0.5"/>
+              <rect x="-90" y="530" width="180" height="10" fill="#d4b896" opacity="0.5"/>
+            }
+          </g>
+        }
+
+        @if (showVase()) {
+          <!-- Glass vase: stems rendered before this group, so they show through transparent glass -->
+          <g class="vase" transform="translate(300, 600) scale(0.75)">
+            <ellipse cx="0" cy="10" rx="90" ry="15" fill="rgba(0,0,0,0.07)"/>
+            <!-- Glass body — semi-transparent so stems are visible inside -->
+            <path d="M-80,-220 C-82,-220 -90,-180 -90,-100 C-90,0 -85,10 0,10 C85,10 90,0 90,-100 C90,-180 82,-220 80,-220 Q 0,-234 -80,-220 Z"
+                  fill="rgba(210,238,252,0.30)" stroke="#9ec8df" stroke-width="2.5"/>
+            <!-- Water fill — tints submerged stems to a slightly different shade -->
+            <path d="M-88,-110 C-88,-110 -85,8 0,8 C85,8 88,-110 88,-110 Z"
+                  fill="rgba(130,195,240,0.45)"/>
+            <!-- Glass left highlight shine -->
+            <path d="M-65,-200 C-72,-160 -74,-80 -68,-20" stroke="rgba(255,255,255,0.75)" stroke-width="10" fill="none" stroke-linecap="round"/>
+            <path d="M-50,-210 C-54,-190 -55,-170 -52,-150" stroke="rgba(255,255,255,0.5)" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <!-- Glass right-edge reflection -->
+            <path d="M72,-200 C75,-160 76,-80 70,-30" stroke="rgba(180,220,250,0.3)" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <!-- Rim — drawn last inside group so it appears in front of stems at the opening -->
+            <ellipse cx="0" cy="-220" rx="82" ry="13"
+                     fill="rgba(175,218,242,0.12)" stroke="#7ab2cf" stroke-width="2"/>
+          </g>
+          @if (showRibbon()) {
+            <!-- Single ribbon body: top edge curves up 2px at centre, bottom curves down 2px,
+                 so the band is 6px tall at the sides and 10px at the front-centre,
+                 naturally suggesting the ribbon wraps around the cylinder -->
+            <path d="M234,486 Q300,484 366,486 L366,492 Q300,494 234,492 Z"
+                  [attr.fill]="constructorService.selectedRibbon().color" opacity="0.88"/>
+            <!-- Bow loops, tails, knot -->
+            <path d="M300,484 C296,467 272,470 278,484 C283,492 296,489 300,484 Z"
+                  [attr.fill]="constructorService.selectedRibbon().color" opacity="0.92"/>
+            <path d="M300,484 C304,467 328,470 322,484 C317,492 304,489 300,484 Z"
+                  [attr.fill]="constructorService.selectedRibbon().color" opacity="0.92"/>
+            <path d="M299,493 L289,507 Q285,513 292,515"
+                  [attr.stroke]="constructorService.selectedRibbon().color" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M301,493 L311,507 Q315,513 308,515"
+                  [attr.stroke]="constructorService.selectedRibbon().color" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <circle cx="300" cy="488" r="5"
+                    [attr.fill]="constructorService.selectedRibbon().color"
+                    stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+          }
+        }
+
+        <!-- 3. Flowers — rendered last, always on top -->
+        @for (item of placedFlowers(); track item.id) {
+          <g class="flower-instance"
+             [attr.transform]="'translate(' + item.x + ',' + item.y + ') rotate(' + item.rotation + ')'">
+            <g class="flower-instance__bloom"
+               [class.flower-instance__bloom--removing]="constructorService.removingIds().has(item.id)">
+              <image
+                [attr.href]="item.flower.img"
+                [attr.x]="-item.size"
+                [attr.y]="-item.size"
+                [attr.width]="item.size * 2"
+                [attr.height]="item.size * 2"
+                preserveAspectRatio="xMidYMid meet"
+              />
+            </g>
+          </g>
+        } @empty {
+          <text x="300" y="260" text-anchor="middle"
+                font-family="Manrope, sans-serif" font-size="15" fill="#9b8e7e">
+            Обери квіти зліва
+          </text>
+          <text x="300" y="285" text-anchor="middle"
+                font-family="Manrope, sans-serif" font-size="13" fill="#b8a898">
+            щоб зібрати свій букет
+          </text>
+        }
+
+      } @else {
+        <text x="300" y="255" text-anchor="middle"
+              font-family="Syne, sans-serif" font-size="17" font-weight="700" fill="#3d2b1f">
+          Ваш кастомний букет
+        </text>
+        <text x="300" y="282" text-anchor="middle"
+              font-family="Manrope, sans-serif" font-size="13" fill="#9b8e7e">
+          {{ constructorService.totalCount() }} квіток
+        </text>
+      }
+
+    </svg>
+  </div>
+
+  @if (!constructorService.showVisualBouquet()) {
+    <div class="custom-list">
+      <p class="custom-list__hint">
+        Більше 20 квіток — флорист збере букет вручну за вашим списком
+      </p>
+      @for (group of constructorService.selectedGrouped(); track group.flower.id) {
+        <div class="custom-list__row">
+          <img class="custom-list__img" [src]="group.flower.img" [alt]="group.flower.name" />
+          <span class="custom-list__name">{{ group.flower.name }}</span>
+          <div class="custom-list__qty">
+            <button class="custom-list__step" (click)="decrement(group.flower)" aria-label="Зменшити">−</button>
+            <span class="custom-list__count">{{ group.count }}</span>
+            <button class="custom-list__step" (click)="increment(group.flower)" aria-label="Збільшити">+</button>
+          </div>
+          <span class="custom-list__price">{{ group.flower.price * group.count }} ₴</span>
+          <button class="custom-list__remove" (click)="removeAll(group.flower)" title="Видалити">×</button>
+        </div>
+      }
+    </div>
+  }
+</div>

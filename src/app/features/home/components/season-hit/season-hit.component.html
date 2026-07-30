@@ -1,0 +1,16 @@
+@if (bouquet()) {
+  <section class="season-hit">
+    <div class="container season-hit__inner">
+      <div class="season-hit__photo">
+        <img [src]="photo" [alt]="bouquet()!.name" loading="lazy" />
+      </div>
+      <div class="season-hit__text">
+        <span class="season-hit__eyebrow">Сезонна пропозиція</span>
+        <h2 class="season-hit__title">{{ bouquet()!.name }}</h2>
+        <p class="season-hit__subtitle">{{ bouquet()!.subtitle }}</p>
+        <p class="season-hit__price">{{ bouquet()!.price }} ₴</p>
+        <a class="btn btn-primary" [routerLink]="['/catalog', bouquet()!.id]">Дивитись букет</a>
+      </div>
+    </div>
+  </section>
+}

@@ -1,0 +1,62 @@
+<div class="login">
+  <div class="login__card">
+    <app-logo [size]="32" />
+    <h1 class="login__title">Адмін панель</h1>
+
+    @if (mode() === 'login') {
+      <form class="login__form" (ngSubmit)="login()" novalidate>
+        <mat-form-field appearance="outline" class="login__field">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" name="email" [ngModel]="email()" (ngModelChange)="email.set($event)" required autocomplete="username" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="login__field">
+          <mat-label>Пароль</mat-label>
+          <input matInput type="password" name="password" [ngModel]="password()" (ngModelChange)="password.set($event)" required autocomplete="current-password" />
+        </mat-form-field>
+
+        <button type="submit" class="login__submit" [disabled]="loading()">
+          {{ loading() ? 'Вхід...' : 'Увійти' }}
+        </button>
+
+        @if (error()) {
+          <p class="login__error">{{ error() }}</p>
+        }
+
+        <button type="button" class="login__forgot" (click)="showResetForm()">Забули пароль?</button>
+      </form>
+    }
+
+    @if (mode() === 'reset') {
+      <form class="login__form" (ngSubmit)="resetPassword()" novalidate>
+        <p class="login__reset-hint">Введіть ваш email — ми надішлемо посилання для відновлення пароля.</p>
+
+        <mat-form-field appearance="outline" class="login__field">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" name="resetEmail" [ngModel]="resetEmail()" (ngModelChange)="resetEmail.set($event)" required autocomplete="username" />
+        </mat-form-field>
+
+        <button type="submit" class="login__submit" [disabled]="resetLoading()">
+          {{ resetLoading() ? 'Надсилання...' : 'Надіслати посилання для відновлення' }}
+        </button>
+
+        @if (resetError()) {
+          <p class="login__error">{{ resetError() }}</p>
+        }
+
+        <button type="button" class="login__forgot" (click)="mode.set('login')">← Назад до входу</button>
+      </form>
+    }
+
+    @if (mode() === 'reset-success') {
+      <div class="login__success">
+        <span class="login__success-icon">✓</span>
+        <p class="login__success-text">
+          Лист для відновлення пароля надіслано на<br />
+          <strong>{{ resetSuccessEmail() }}</strong>
+        </p>
+        <button type="button" class="login__forgot" (click)="mode.set('login')">← Назад до входу</button>
+      </div>
+    }
+  </div>
+</div>

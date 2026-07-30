@@ -1,0 +1,41 @@
+<div class="reminders">
+  <div class="reminders__filters">
+    @for (f of filters; track f.id) {
+      <button class="reminders__filter" [class.reminders__filter--active]="filter() === f.id" (click)="setFilter(f.id)">
+        {{ f.label }}
+      </button>
+    }
+  </div>
+
+  <div class="reminders__table">
+    <div class="reminders__row reminders__row--head">
+      <span>Ім'я</span>
+      <span>Дата події</span>
+      <span>Контакт</span>
+      <span>Подано</span>
+      <span>Статус</span>
+      <span></span>
+    </div>
+
+    @for (reminder of filteredReminders(); track reminder.id) {
+      <div class="reminders__row">
+        <span class="reminders__cell" data-label="Ім'я">{{ reminder.name }}</span>
+        <span class="reminders__cell" data-label="Дата події">{{ toDate(reminder.date) | date: 'd MMMM y' }}</span>
+        <span class="reminders__cell" data-label="Контакт">{{ reminder.contact }}</span>
+        <span class="reminders__cell" data-label="Подано">{{ toDate(reminder.createdAt) | date: 'd MMM y, HH:mm' }}</span>
+        <span class="reminders__cell">
+          <span class="reminders__status" [class.reminders__status--done]="reminder.status === 'done'">
+            {{ reminder.status === 'done' ? 'Оброблено' : 'Нове' }}
+          </span>
+        </span>
+        <span class="reminders__cell">
+          @if (reminder.status === 'new') {
+            <button class="reminders__action" (click)="markDone(reminder)">Позначити як оброблено</button>
+          }
+        </span>
+      </div>
+    } @empty {
+      <p class="reminders__empty">Заявок ще немає.</p>
+    }
+  </div>
+</div>

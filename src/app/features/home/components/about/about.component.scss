@@ -1,0 +1,60 @@
+.about {
+  background: var(--paper-3);
+  padding: var(--section-y) 0;
+  text-align: center;
+}
+
+.about__eyebrow {
+  display: inline-block;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--pink);
+}
+
+.about__title {
+  margin-top: var(--space-2);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+}
+
+.about__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  margin-top: var(--space-7);
+  text-align: left;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.about-card__photo {
+  height: 320px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.about-card__title {
+  margin-top: var(--space-4);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--ink);
+}
+
+.about-card__text {
+  margin-top: var(--space-2);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.6;
+}

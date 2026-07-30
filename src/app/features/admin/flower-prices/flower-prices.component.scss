@@ -1,0 +1,153 @@
+.flower-prices {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.flower-prices__header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.flower-prices__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.flower-prices__ok {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--pine);
+}
+
+.flower-prices__error {
+  font-size: var(--text-sm);
+  color: #e53935;
+}
+
+.flower-prices__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-3);
+}
+
+.fp-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.fp-card__img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.fp-card__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fp-card__name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fp-card__default {
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+
+.fp-card__price-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.fp-card__step {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+
+  &:hover:not(:disabled) {
+    background: var(--pink);
+    color: #fff;
+    border-color: var(--pink);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.fp-card__input {
+  width: 58px;
+  height: 28px;
+  padding: 0 var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: var(--ink);
+  text-align: center;
+
+  -moz-appearance: textfield;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &:focus {
+    outline: 2px solid var(--pink);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+}
+
+.fp-card__currency {
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.fp-card__reset {
+  font-size: 14px;
+  color: var(--muted);
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  transition: color var(--dur-fast) var(--ease-out);
+
+  &:hover {
+    color: var(--pink);
+  }
+}

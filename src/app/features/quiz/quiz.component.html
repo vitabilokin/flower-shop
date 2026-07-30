@@ -1,0 +1,170 @@
+<section class="quiz">
+  <div class="quiz__bg" [style.transform]="'translate(' + (quizService.currentStep() % 2 === 0 ? '0px,0px' : '-12px,8px') + ')'">
+    <svg class="quiz__bg-flower quiz__bg-flower--tl" viewBox="0 0 200 200">
+      <g fill="var(--pink)">
+        <circle cx="100" cy="55" r="45" />
+        <circle cx="145" cy="85" r="45" />
+        <circle cx="128" cy="135" r="45" />
+        <circle cx="72" cy="135" r="45" />
+        <circle cx="55" cy="85" r="45" />
+      </g>
+    </svg>
+    <svg class="quiz__bg-flower quiz__bg-flower--br" viewBox="0 0 200 200">
+      <g fill="var(--pink)">
+        <circle cx="100" cy="55" r="45" />
+        <circle cx="145" cy="85" r="45" />
+        <circle cx="128" cy="135" r="45" />
+        <circle cx="72" cy="135" r="45" />
+        <circle cx="55" cy="85" r="45" />
+      </g>
+    </svg>
+  </div>
+
+  @if (!quizService.showResult()) {
+    <header class="quiz__header">
+      <div class="container quiz__header-inner">
+        <div class="quiz__header-side">
+          @if (!quizService.isFirstQuestion()) {
+            <button class="btn btn-ghost-pink quiz__restart" (click)="restart()">Почати знову</button>
+          }
+        </div>
+        <h1 class="quiz__brand">Підбираємо твій букет</h1>
+        <div class="quiz__header-side quiz__header-side--right">
+          <span class="quiz__counter">Питання {{ quizService.currentStep() + 1 }} з {{ quizService.questions.length }}</span>
+        </div>
+      </div>
+
+      <!-- Segmented progress bar: one segment per question -->
+      <div class="quiz__progress-track">
+        @for (q of quizService.questions; track q.id; let i = $index) {
+          <div
+            class="quiz__progress-segment"
+            [class.quiz__progress-segment--done]="quizService.answers()[i] !== null"
+            [class.quiz__progress-segment--current]="quizService.currentStep() === i && quizService.answers()[i] === null"
+          ></div>
+        }
+      </div>
+    </header>
+
+    <div class="quiz__body">
+      @for (q of [quizService.currentFilteredQuestion()]; track quizService.currentStep()) {
+        <div
+          class="quiz__question-area"
+          [class.question-enter-next]="quizService.direction() === 'next'"
+          [class.question-enter-prev]="quizService.direction() === 'prev'"
+        >
+          <h2 class="quiz__question">{{ q.question }}</h2>
+          <p class="quiz__hint">{{ q.hint }}</p>
+
+          <div class="quiz-options-grid" [class.cols-2]="q.gridCols === 2" [class.cols-3]="q.gridCols === 3">
+            @for (option of q.options; track option.id) {
+              <button
+                class="quiz-option-card"
+                [class.selected]="isSelected(option)"
+                [class.just-selected]="justSelectedId() === option.id"
+                (click)="select(option)"
+              >
+                @if (isSelected(option)) {
+                  <mat-icon class="quiz-option-card__check">check_circle</mat-icon>
+                }
+                <span
+                  class="quiz-option-card__icon-wrap"
+                  [style.background]="(option.color || '#ff4d8d') + '28'"
+                  [style.color]="option.color || '#ff4d8d'"
+                >
+                  <mat-icon>{{ option.icon }}</mat-icon>
+                </span>
+                <span class="label">{{ option.label }}</span>
+              </button>
+            }
+          </div>
+
+          <!-- "Інше" — free-text field shown when that option is selected -->
+          @if (otherSelected()) {
+            <div class="quiz__other-field">
+              <input
+                class="quiz__other-input"
+                type="text"
+                [placeholder]="otherPlaceholder()"
+                [value]="currentOtherText()"
+                (input)="setOtherText($any($event.target).value)"
+                autofocus
+              />
+              <button class="btn btn-primary quiz__other-proceed" (click)="proceedFromOther()">
+                Далі
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    @if (!quizService.isFirstQuestion()) {
+      <button class="quiz__back" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Назад
+      </button>
+    }
+  } @else {
+    <div class="quiz-result">
+      <div class="container">
+        <h2 class="quiz-result__title">{{ resultTitle() }}</h2>
+        <p class="quiz-result__subtitle">На основі твоїх відповідей — ось що сподобається</p>
+
+        <!-- Answer chips: click any to jump back and change that answer -->
+        <div class="quiz-result__answers">
+          @for (q of quizService.questions; track q.id; let i = $index) {
+            @if (quizService.answers()[i]) {
+              <button class="quiz-result__answer-chip" (click)="goToQuestion(i)" [title]="q.question">
+                {{ quizService.answers()[i]!.label }}
+                <mat-icon>edit</mat-icon>
+              </button>
+            }
+          }
+        </div>
+
+        <div class="result-grid">
+          @for (item of result(); track item.bouquet.id) {
+            <article class="result-card" [class.result-card--best]="$index === 0" [style.animation-delay.ms]="$index * 150">
+              @if ($index === 0) {
+                <span class="result-card__badge">Найкращий збіг</span>
+              }
+              <div class="result-card__photo">
+                <img [src]="item.bouquet.photo" [alt]="item.bouquet.name" loading="lazy" />
+              </div>
+              <h3 class="result-card__name">{{ item.bouquet.name }}</h3>
+              <p class="result-card__price">{{ item.bouquet.price }} ₴</p>
+              <p class="result-card__reason">{{ item.reason }}</p>
+              <button class="btn btn-primary result-card__btn" (click)="addToCart(item.bouquet)">
+                {{ addedIds().has(item.bouquet.id) ? 'Додано ✓' : 'Додати в кошик' }}
+              </button>
+              <a class="result-card__link" [routerLink]="['/catalog', item.bouquet.id]">Переглянути в каталозі</a>
+            </article>
+          } @empty {
+            <p class="result-grid__empty">Не вдалось підібрати букет — переглянь весь каталог.</p>
+          }
+        </div>
+
+        <div class="quiz-result__footer">
+          <p>Не те що шукаєш?</p>
+          <div class="quiz-result__footer-actions">
+            <button class="btn btn-ghost-pink" (click)="restart()">Спробувати ще раз</button>
+            <a class="btn btn-primary" routerLink="/catalog">Весь каталог</a>
+          </div>
+
+          <div class="quiz-result__constructor">
+            <div class="quiz-result__constructor-text">
+              <strong>Хочеш щось особливе?</strong>
+              <span>Збери букет власноруч — обери квіти, упаковку і стиль самостійно</span>
+            </div>
+            <a class="btn quiz-result__constructor-btn" routerLink="/constructor">
+              <mat-icon>build</mat-icon>
+              Власний букет
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</section>

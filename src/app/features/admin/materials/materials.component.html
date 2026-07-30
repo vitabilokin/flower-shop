@@ -1,0 +1,65 @@
+<div class="materials">
+  <div class="materials__header">
+    <div class="materials__actions">
+      @if (error()) {
+        <span class="materials__error">{{ error() }}</span>
+      }
+      @if (saved()) {
+        <span class="materials__ok">Збережено</span>
+      }
+      <button class="btn btn-ghost" (click)="resetDraft()" [disabled]="saving()">Скинути</button>
+      <button class="btn btn-primary" (click)="save()" [disabled]="saving()">
+        {{ saving() ? 'Збереження...' : 'Зберегти' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="materials__grid">
+    @for (item of wrappingItems; track item.id) {
+      <div class="mat-card" [class.mat-card--unavailable]="!isAvailable(item.id)">
+        <div class="mat-card__top">
+          <span class="mat-card__swatch"
+                [style.background]="item.color === 'transparent' ? '#f0e6da' : item.color"
+                [style.border]="item.color === 'transparent' ? '2px dashed #c4a882' : 'none'">
+          </span>
+          <div class="mat-card__info">
+            <span class="mat-card__name">{{ item.name }}</span>
+            <span class="mat-card__desc">{{ item.description }}</span>
+          </div>
+          @if (item.id === 'none') {
+            <span class="mat-card__avail-btn mat-card__avail-btn--on" style="cursor: default;" title="Завжди в наявності">
+              <mat-icon>check_circle</mat-icon>
+              <span>В наявності</span>
+            </span>
+          } @else {
+            <button class="mat-card__avail-btn"
+                    [class.mat-card__avail-btn--on]="isAvailable(item.id)"
+                    (click)="toggleAvailable(item.id)"
+                    [title]="isAvailable(item.id) ? 'Є в наявності' : 'Немає'">
+              <mat-icon>{{ isAvailable(item.id) ? 'check_circle' : 'cancel' }}</mat-icon>
+              <span>{{ isAvailable(item.id) ? 'В наявності' : 'Немає' }}</span>
+            </button>
+          }
+        </div>
+
+        @if (item.id !== 'none') {
+          <div class="mat-card__price-row">
+            <button class="mat-card__step"
+                    (click)="setPrice(item.id, getPrice(item.id) - 5)"
+                    [disabled]="getPrice(item.id) <= 5">−</button>
+            <input class="mat-card__input"
+                   type="number" min="0"
+                   [value]="getPrice(item.id)"
+                   (change)="onPriceChange(item.id, $event)" />
+            <span class="mat-card__unit">₴</span>
+            <button class="mat-card__step"
+                    (click)="setPrice(item.id, getPrice(item.id) + 5)">+</button>
+            @if (getPrice(item.id) !== item.price) {
+              <button class="mat-card__reset" (click)="reset(item.id)" title="Скинути до стандарту">↩</button>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

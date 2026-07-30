@@ -1,0 +1,92 @@
+<div class="catalog-admin">
+  <div class="catalog-admin__toolbar">
+    <div class="catalog-admin__tabs">
+      <button class="catalog-admin__tab" [class.catalog-admin__tab--active]="tab() === 'active'" (click)="setTab('active')">
+        Каталог ({{ bouquets().length }})
+      </button>
+      <button class="catalog-admin__tab" [class.catalog-admin__tab--active]="tab() === 'archive'" (click)="setTab('archive')">
+        Архів ({{ archived().length }})
+      </button>
+    </div>
+    @if (tab() === 'active') {
+      <button class="catalog-admin__add" (click)="openAdd()">+ Додати букет</button>
+    }
+  </div>
+
+  @if (tab() === 'active') {
+    <div class="catalog-admin__table">
+      <div class="catalog-admin__row catalog-admin__row--head">
+        <span class="catalog-admin__cell catalog-admin__cell--photo"></span>
+        <span class="catalog-admin__cell catalog-admin__cell--name">Назва</span>
+        <span class="catalog-admin__cell catalog-admin__cell--price">Ціна</span>
+        <span class="catalog-admin__cell catalog-admin__cell--status">Статус</span>
+        <span class="catalog-admin__cell catalog-admin__cell--actions">Дії</span>
+      </div>
+
+      @for (bouquet of bouquets(); track bouquet.id) {
+        <div class="catalog-admin__row">
+          <span class="catalog-admin__cell catalog-admin__cell--photo">
+            @if (bouquet.photo) {
+              <img [src]="bouquet.photo" [alt]="bouquet.name" />
+            }
+          </span>
+          <span class="catalog-admin__cell catalog-admin__cell--name">{{ bouquet.name }}</span>
+          <span class="catalog-admin__cell catalog-admin__cell--price">{{ bouquet.price }} грн</span>
+          <span class="catalog-admin__cell catalog-admin__cell--status">
+            <select
+              class="catalog-admin__status"
+              [class.catalog-admin__status--active]="bouquet.status === 'active'"
+              [class.catalog-admin__status--oos]="bouquet.status === 'out_of_stock'"
+              [class.catalog-admin__status--hidden]="bouquet.status === 'hidden'"
+              [ngModel]="bouquet.status"
+              (ngModelChange)="setStatus(bouquet, $event)"
+            >
+              @for (option of statusOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </span>
+          <span class="catalog-admin__cell catalog-admin__cell--actions">
+            <button class="catalog-admin__icon-btn" (click)="openEdit(bouquet)" aria-label="Редагувати">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button class="catalog-admin__icon-btn" (click)="archive(bouquet)" aria-label="В архів">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </span>
+        </div>
+      } @empty {
+        <p class="catalog-admin__empty">Букетів ще немає. Натисніть «Додати букет» або заповніть початкові дані в Налаштуваннях.</p>
+      }
+    </div>
+  } @else {
+    <div class="catalog-admin__table">
+      <div class="catalog-admin__row catalog-admin__row--head">
+        <span class="catalog-admin__cell catalog-admin__cell--photo"></span>
+        <span class="catalog-admin__cell catalog-admin__cell--name">Назва</span>
+        <span class="catalog-admin__cell catalog-admin__cell--price">Ціна</span>
+        <span class="catalog-admin__cell catalog-admin__cell--actions">Дії</span>
+      </div>
+
+      @for (bouquet of archived(); track bouquet.id) {
+        <div class="catalog-admin__row">
+          <span class="catalog-admin__cell catalog-admin__cell--photo">
+            @if (bouquet.photo) {
+              <img [src]="bouquet.photo" [alt]="bouquet.name" />
+            }
+          </span>
+          <span class="catalog-admin__cell catalog-admin__cell--name">{{ bouquet.name }}</span>
+          <span class="catalog-admin__cell catalog-admin__cell--price">{{ bouquet.price }} грн</span>
+          <span class="catalog-admin__cell catalog-admin__cell--actions">
+            <button class="catalog-admin__restore" (click)="restore(bouquet)">Повернути</button>
+            <button class="catalog-admin__icon-btn" (click)="deleteForever(bouquet)" aria-label="Видалити назавжди">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+          </span>
+        </div>
+      } @empty {
+        <p class="catalog-admin__empty">Архів порожній.</p>
+      }
+    </div>
+  }
+</div>

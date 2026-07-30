@@ -1,17 +1,45 @@
-import { Component } from '@angular/core';
-import { Nav } from './components/nav/nav';
-import { Hero } from './components/hero/hero';
-import { MoodQuiz } from './components/mood-quiz/mood-quiz';
-import { Catalog } from './components/catalog/catalog';
-import { About } from './components/about/about';
-import { Contacts } from './components/contacts/contacts';
-import { Footer } from './components/footer/footer';
-import { ToastComponent } from './components/toast/toast';
+import { Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter, map, startWith } from 'rxjs';
+import { Nav } from './shared/components/nav/nav';
+import { Footer } from './shared/components/footer/footer';
+import { ToastComponent } from './shared/components/toast/toast';
+import { CartDrawer } from './shared/components/cart-drawer/cart-drawer';
+import { CartService } from './core/services/cart.service';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
-  imports: [Nav, Hero, MoodQuiz, Catalog, About, Contacts, Footer, ToastComponent],
-  templateUrl: './app.html',
-  styleUrl: './app.scss',
+  imports: [RouterOutlet, Nav, Footer, ToastComponent, CartDrawer],
+  template: `
+    @if (!isAdminRoute()) {
+      <app-nav />
+    }
+    <main>
+      <router-outlet />
+    </main>
+    @if (!isAdminRoute()) {
+      <app-footer />
+      <app-toast />
+      @if (cartService.isOpen()) {
+        <app-cart-drawer />
+      }
+    }
+  `,
 })
-export class App {}
+export class App {
+  readonly cartService = inject(CartService);
+  private readonly router = inject(Router);
+
+  private readonly url = toSignal(
+    this.router.events.pipe(
+      filter((e) => e instanceof NavigationEnd),
+      map((e) => (e as NavigationEnd).urlAfterRedirects),
+      startWith(this.router.url),
+    ),
+    { initialValue: this.router.url },
+  );
+
+  readonly isAdminRoute = computed(() => this.url().startsWith('/admin'));
+}

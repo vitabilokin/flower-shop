@@ -1,0 +1,148 @@
+<div class="filter-overlay" [class.filter-overlay--closing]="closing()" (click)="requestClose()"></div>
+
+<aside class="filter-drawer" [class.filter-drawer--closing]="closing()">
+  <header class="filter-drawer__header">
+    <h2>Фільтр та сортування</h2>
+    <button class="filter-drawer__close" (click)="requestClose()" aria-label="Закрити">×</button>
+  </header>
+
+  <div class="filter-drawer__body">
+    <div class="accordion" [class.accordion--open]="isSectionOpen('sort')">
+      <button class="accordion__head" (click)="toggleSection('sort')">
+        <span>Сортування</span>
+        <span class="accordion__chevron">⌄</span>
+      </button>
+      @if (isSectionOpen('sort')) {
+        <div class="accordion__body">
+          @for (option of sortOptions; track option.value) {
+            <label class="radio-row">
+              <input
+                type="radio"
+                name="sort"
+                [value]="option.value"
+                [checked]="filterService.sort() === option.value"
+                (change)="filterService.setSort(option.value)"
+              />
+              {{ option.label }}
+            </label>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="accordion" [class.accordion--open]="isSectionOpen('occasion')">
+      <button class="accordion__head" (click)="toggleSection('occasion')">
+        <span>Привід</span>
+        <span class="accordion__chevron">⌄</span>
+      </button>
+      @if (isSectionOpen('occasion')) {
+        <div class="accordion__body">
+          @for (option of occasionOptions; track option.value) {
+            <label class="checkbox-row">
+              <input
+                type="checkbox"
+                [checked]="filterService.occasions().has(option.value)"
+                (change)="filterService.toggleOccasion(option.value)"
+              />
+              {{ option.label }}
+            </label>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="accordion" [class.accordion--open]="isSectionOpen('type')">
+      <button class="accordion__head" (click)="toggleSection('type')">
+        <span>Тип квітів</span>
+        <span class="accordion__chevron">⌄</span>
+      </button>
+      @if (isSectionOpen('type')) {
+        <div class="accordion__body">
+          @for (option of typeOptions; track option.value) {
+            <label class="checkbox-row">
+              <input
+                type="checkbox"
+                [checked]="filterService.types().has(option.value)"
+                (change)="filterService.toggleType(option.value)"
+              />
+              {{ option.label }}
+            </label>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="accordion" [class.accordion--open]="isSectionOpen('price')">
+      <button class="accordion__head" (click)="toggleSection('price')">
+        <span>Ціна</span>
+        <span class="accordion__chevron">⌄</span>
+      </button>
+      @if (isSectionOpen('price')) {
+        <div class="accordion__body">
+          <div class="price-slider">
+            <div class="price-slider__values">
+              <span>{{ filterService.priceMin() }} грн</span>
+              <span>{{ filterService.priceMax() }} грн</span>
+            </div>
+            <div class="price-slider__track">
+              <div
+                class="price-slider__range"
+                [style.left.%]="minPercent()"
+                [style.right.%]="100 - maxPercent()"
+              ></div>
+              <input
+                type="range"
+                class="price-slider__input"
+                [min]="priceMinLimit"
+                [max]="priceMaxLimit"
+                [ngModel]="filterService.priceMin()"
+                (ngModelChange)="onPriceMinChange($event)"
+              />
+              <input
+                type="range"
+                class="price-slider__input"
+                [min]="priceMinLimit"
+                [max]="priceMaxLimit"
+                [ngModel]="filterService.priceMax()"
+                (ngModelChange)="onPriceMaxChange($event)"
+              />
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="accordion" [class.accordion--open]="isSectionOpen('color')">
+      <button class="accordion__head" (click)="toggleSection('color')">
+        <span>Колір</span>
+        <span class="accordion__chevron">⌄</span>
+      </button>
+      @if (isSectionOpen('color')) {
+        <div class="accordion__body">
+          <div class="color-grid">
+            @for (option of colorOptions; track option.value) {
+              <button
+                class="color-swatch"
+                [class.color-swatch--active]="filterService.colors().has(option.value)"
+                [class.color-swatch--border]="option.border"
+                [style.background]="option.swatch"
+                [attr.aria-label]="option.label"
+                [title]="option.label"
+                (click)="filterService.toggleColor(option.value)"
+              >
+                @if (filterService.colors().has(option.value)) {
+                  <span class="color-swatch__check">✓</span>
+                }
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <footer class="filter-drawer__footer">
+    <button class="btn btn-ghost-pink" (click)="resetAll()">Скинути все</button>
+    <button class="btn btn-primary" (click)="showResults()">Показати результати ({{ resultCount() }})</button>
+  </footer>
+</aside>

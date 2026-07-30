@@ -1,0 +1,52 @@
+<header class="nav" [class.nav--scrolled]="solid()" [class.nav--menu-open]="menuOpen()">
+  <div class="nav__inner">
+    <a class="nav__logo" routerLink="/">
+      <app-logo [size]="28" />
+    </a>
+
+    <nav class="nav__links">
+      <a routerLink="/catalog" routerLinkActive="nav__link--active">Каталог</a>
+      <a routerLink="/quiz" routerLinkActive="nav__link--active">Підбір букета</a>
+      <a routerLink="/constructor" routerLinkActive="nav__link--active">Конструктор</a>
+    </nav>
+
+    <div class="nav__actions">
+      <button class="cart-btn" (click)="toggleCart()" aria-label="Корзина">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M3 4h2l1.4 9.4A2 2 0 0 0 8.4 15h8.2a2 2 0 0 0 2-1.6L20 7H6"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <circle cx="9" cy="20" r="1.6" fill="currentColor" />
+          <circle cx="17" cy="20" r="1.6" fill="currentColor" />
+        </svg>
+        @if (cartService.totalCount() > 0) {
+          <span class="cart-badge" [class.cart-badge--bump]="badgeBump()">
+            {{ cartService.totalCount() }}
+          </span>
+        }
+      </button>
+
+      <button class="btn btn-primary nav__order-btn" routerLink="/order">Замовити букет</button>
+
+      <button class="nav__burger" [class.nav__burger--open]="menuOpen()" (click)="toggleMenu()" aria-label="Меню">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+
+  @if (menuOpen()) {
+    <div class="nav__mobile-overlay" (click)="closeMenu()"></div>
+    <nav class="nav__mobile-menu">
+      <a routerLink="/catalog" routerLinkActive="nav__link--active" (click)="closeMenu()">Каталог</a>
+      <a routerLink="/quiz" routerLinkActive="nav__link--active" (click)="closeMenu()">Підбір букета</a>
+      <a routerLink="/constructor" routerLinkActive="nav__link--active" (click)="closeMenu()">Конструктор</a>
+      <button class="btn btn-primary" routerLink="/order" (click)="closeMenu()">Замовити букет</button>
+    </nav>
+  }
+</header>

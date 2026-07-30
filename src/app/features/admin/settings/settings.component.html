@@ -1,0 +1,57 @@
+<div class="settings">
+  <div class="settings__form">
+    <mat-form-field appearance="outline" class="settings__field">
+      <mat-label>Назва магазину</mat-label>
+      <input matInput [ngModel]="model().shopName" (ngModelChange)="updateField('shopName', $event)" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="settings__field">
+      <mat-label>Номер телефону</mat-label>
+      <input matInput [ngModel]="model().phone" (ngModelChange)="updateField('phone', $event)" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="settings__field settings__field--half">
+      <mat-label>Telegram username</mat-label>
+      <input matInput [ngModel]="model().telegram" (ngModelChange)="updateField('telegram', $event)" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="settings__field settings__field--half">
+      <mat-label>Viber номер</mat-label>
+      <input matInput [ngModel]="model().viber" (ngModelChange)="updateField('viber', $event)" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="settings__field">
+      <mat-label>Instagram username</mat-label>
+      <input matInput [ngModel]="model().instagram" (ngModelChange)="updateField('instagram', $event)" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="settings__field">
+      <mat-label>Адреса магазину</mat-label>
+      <input matInput [ngModel]="model().address" (ngModelChange)="updateField('address', $event)" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="settings__field">
+      <mat-label>Графік роботи</mat-label>
+      <input matInput [ngModel]="model().workingHours" (ngModelChange)="updateField('workingHours', $event)" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="settings__field">
+      <mat-label>Текст слогана на головній</mat-label>
+      <input matInput [ngModel]="model().slogan" (ngModelChange)="updateField('slogan', $event)" />
+    </mat-form-field>
+
+    <button class="settings__save" [disabled]="saving()" (click)="save()">
+      {{ saving() ? 'Збереження...' : 'Зберегти зміни' }}
+    </button>
+  </div>
+
+  @if (bouquetCount().length === 0) {
+    <div class="settings__seed">
+      <h3>Початкові дані</h3>
+      <p>Колекція букетів у Firestore порожня. Заповніть її каталогом, який вже є на сайті.</p>
+      <button class="settings__seed-btn" [disabled]="seeding()" (click)="seed()">
+        {{ seeding() ? 'Заповнюємо...' : 'Заповнити початкові дані' }}
+      </button>
+    </div>
+  }
+</div>

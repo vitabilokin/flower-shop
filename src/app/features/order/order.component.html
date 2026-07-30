@@ -1,0 +1,100 @@
+<section class="order-page">
+  <div class="container order-page__head">
+    <span class="order-page__eyebrow">Замовлення</span>
+    <h1 class="order-page__title">Як замовити букет</h1>
+    <p class="order-page__subtitle">Все просто — оберіть зручний спосіб і ми зв'яжемось з вами</p>
+  </div>
+
+  <div class="container order-methods">
+    @for (method of orderMethods; track method.title) {
+      <article class="order-method-card">
+        <span class="order-method-card__icon" [class]="'order-method-card__icon--' + method.accent">
+          @if (method.iconType === 'img') {
+            <img [src]="'https://cdn.simpleicons.org/' + method.icon + '/' + method.iconColor" [alt]="method.title" />
+          } @else {
+            <mat-icon>{{ method.icon }}</mat-icon>
+          }
+        </span>
+        <h3 class="order-method-card__title">{{ method.title }}</h3>
+        <p class="order-method-card__text">{{ method.text }}</p>
+        <a
+          class="order-method-card__btn"
+          [class]="'order-method-card__btn--' + method.accent"
+          [href]="method.href"
+        >
+          {{ method.buttonLabel }}
+        </a>
+      </article>
+    }
+  </div>
+
+  <div class="order-steps">
+    <div class="container">
+      <h2 class="order-steps__title">Як це працює</h2>
+
+      <div class="order-steps__row">
+        @for (step of steps; track step.title; let last = $last) {
+          <div class="order-step">
+            <svg class="order-step__number" viewBox="0 0 80 80"
+                 fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true">
+              @switch ($index + 1) {
+                @case (1) {
+                  <path stroke-width="13" d="M 24,24 L 42,8 L 42,72 M 18,72 L 60,72"/>
+                }
+                @case (2) {
+                  <path stroke-width="13" d="M 18,24 C 14,2 64,2 64,28 C 64,48 28,60 18,72 L 64,72"/>
+                }
+                @case (3) {
+                  <path stroke-width="13" d="M 18,10 C 58,2 68,18 60,34 C 56,46 44,42 42,42 M 42,42 C 60,42 68,60 58,70 C 50,78 18,76 18,68"/>
+                }
+              }
+            </svg>
+            <h3 class="order-step__title">{{ step.title }}</h3>
+            <p class="order-step__text">{{ step.text }}</p>
+          </div>
+          @if (!last) {
+            <mat-icon class="order-steps__arrow" aria-hidden="true">arrow_forward</mat-icon>
+          }
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="container order-delivery">
+    <div class="order-delivery__info">
+      <h2 class="order-delivery__title">Доставка по місту</h2>
+      <ul class="order-delivery__facts">
+        @for (fact of deliveryFacts; track fact.text) {
+          <li class="order-delivery__fact">
+            <mat-icon>{{ fact.icon }}</mat-icon>
+            <span>{{ fact.text }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="order-delivery__urgent">
+      <h3 class="order-delivery__urgent-title">Термінова доставка</h3>
+      <p class="order-delivery__urgent-text">
+        Потрібен букет за 1-2 години? Телефонуйте — постараємось допомогти!
+      </p>
+      <a class="btn btn-primary order-delivery__urgent-btn" [href]="phoneHref">Подзвонити зараз</a>
+    </div>
+  </div>
+
+  <div class="container order-faq">
+    <h2 class="order-faq__title">Часті питання</h2>
+
+    <mat-accordion class="order-faq__accordion">
+      @for (item of faqItems; track item.question) {
+        <mat-expansion-panel class="order-faq__panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ item.question }}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>{{ item.answer }}</p>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  </div>
+</section>

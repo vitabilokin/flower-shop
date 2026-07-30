@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 /* ===== Posy design tokens ===== */
 :root {
   /* colors */
@@ -77,13 +79,93 @@
   --ease-bloom: cubic-bezier(0.34, 1.32, 0.5, 1);
 }
 
+/* ===== Angular Material — custom Posy theme (scoped, does not override Posy tokens) ===== */
+@include mat.core();
+
+$posy-primary: mat.m2-define-palette((
+  50: #ffe1ec,
+  100: #ff9cbf,
+  200: #ff7eb0,
+  300: #ff6ba3,
+  400: #ff4d8d,
+  500: #ff4d8d,
+  600: #ec3b78,
+  700: #d12d66,
+  800: #b01f52,
+  900: #8e1240,
+  contrast: (
+    50: #16241f,
+    100: #16241f,
+    200: #16241f,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+  )
+), 500);
+
+$posy-accent: mat.m2-define-palette((
+  50: #c9f2ee,
+  100: #5fd6cb,
+  200: #07b3a3,
+  300: #069488,
+  400: #057a70,
+  500: #07b3a3,
+  600: #069488,
+  700: #057a70,
+  800: #046158,
+  900: #034940,
+  contrast: (
+    50: #16241f,
+    100: #16241f,
+    200: #ffffff,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+  )
+), 500);
+
+$posy-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $posy-primary,
+    accent: $posy-accent,
+  ),
+  typography: mat.m2-define-typography-config(
+    $font-family: 'Manrope, system-ui, sans-serif',
+  ),
+  density: 0,
+));
+
+@include mat.all-component-themes($posy-theme);
+
 * {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
+  /* clip (not hidden) avoids implicitly setting overflow-y: auto on these elements,
+     which would otherwise turn body into its own scroll container and break
+     window-scroll detection (e.g. the sticky header's scrolled state). */
+  overflow-x: clip;
+  /* Stop the rubber-band bounce on mobile so overscrolling can't reveal anything
+     behind the document (the white flash above the dark footer on swipe-down). */
+  overscroll-behavior-y: none;
+}
+
+/* Fallback for browsers that still bounce despite overscroll-behavior: match the
+   footer's color so any sliver revealed at the bottom blends in instead of flashing white. */
+html {
+  background: var(--pine);
 }
 
 body {
@@ -95,7 +177,21 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4 {
+/* Pin the footer to the bottom of the viewport even when page content is short. */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+app-root > main {
+  flex: 1 0 auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
   font-family: var(--font-display);
   margin: 0;
   color: var(--ink);
@@ -117,14 +213,22 @@ button {
   background: none;
 }
 
-img, svg {
+img,
+svg {
   display: block;
   max-width: 100%;
 }
 
 :focus-visible {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+// Angular Material's mat-form-field already draws its own focus outline (the notched
+// border turning pink) — keeping the global box-shadow too would draw a second ring
+// directly on the native input/textarea inside it.
+.mat-mdc-form-field :focus-visible {
+  box-shadow: none;
 }
 
 .container {
@@ -145,7 +249,8 @@ img, svg {
   font-weight: 700;
   font-size: var(--text-sm);
   white-space: nowrap;
-  transition: background-color var(--dur-fast) var(--ease-out),
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
     color var(--dur-fast) var(--ease-out),
     transform var(--dur-fast) var(--ease-out),
     box-shadow var(--dur-fast) var(--ease-out);
@@ -153,6 +258,12 @@ img, svg {
 
 .btn:active {
   transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
 }
 
 .btn-primary {
@@ -180,4 +291,12 @@ img, svg {
 .btn-ghost:hover {
   background: rgba(255, 255, 255, 0.12);
   transform: translateY(-2px);
+}
+
+/* Material snackbar restyled to match Posy */
+.posy-snackbar {
+  background: var(--ink);
+  color: #f4efe6;
+  border-radius: var(--radius-pill) !important;
+  font-family: var(--font-body);
 }
